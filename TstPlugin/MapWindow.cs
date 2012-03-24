@@ -19,13 +19,15 @@ namespace PxP
         #region MapWindow Variables
         private NChart nChartMap;
         private NPointSeries nPoint;
-        
         #endregion
 
         #region Conturctor
         public MapWindow()
         {
-            MessageBox.Show("MapWindow Conturctor");
+            
+            //MessageBox.Show("MapWindow Conturctor");
+            //SystemVariable.bugPut.WriteLog("MapWindow.cs", "MapWindow-Conturctor", null);
+
             InitializeComponent();
             InitNChart(ref nChart, out nChartMap, out nPoint);
             InitGvFlawClass();

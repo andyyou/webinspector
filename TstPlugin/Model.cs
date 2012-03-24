@@ -99,7 +99,6 @@ namespace PxP
         internal static int MDInver = 0;                            //紀錄是否反轉座標軸
         internal static int CDInver = 0;
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
-
     }
     #endregion
 }

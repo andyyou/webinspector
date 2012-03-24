@@ -38,6 +38,8 @@ namespace PxP
         /// </summary>
         [Import(typeof(IWRMessageLog))]
         IWRMessageLog MsgLog;
+        //Degug
+        DebugPut bugPut = new DebugPut();
         //////////////////////////////////////////////////////////////////////////
 
         #region Initialize Thread
@@ -61,12 +63,15 @@ namespace PxP
         {
             InitializeComponent();
             DefineDataGridView(gvFlaw);
-            MessageBox.Show("PxPTab");
+            //MessageBox.Show("PxPTab");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "PxPTab-Constructor", "PxPTab.cs", 1); 
+            
             //執行緒啟動
             MapThread = new Thread(new ThreadStart(RefreshCheck));
             MapThread.Start();
             PxPThread = new Thread(new ThreadStart(WorkerThread));
             PxPThread.Start();
+            
         }
         #endregion
 
@@ -178,7 +183,10 @@ namespace PxP
         /// <param name="hndl"></param>
         public void GetControlHandle(out IntPtr hndl)
         {
-            MessageBox.Show("IWRPlugIn-GetControlHandle");
+            //MessageBox.Show("IWRPlugIn-GetControlHandle");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "IWRPlugIn-GetControlHandle", "PxPTab.cs", 1); 
+            bugPut.WriteLog("PxPTab.cs", "IWRPlugIn-GetControlHandle", null);
+            //DebugPut.DebugMethod(); //改用static
             hndl = Handle;
         }
         /// <summary>
@@ -188,7 +196,9 @@ namespace PxP
         /// <param name="h"></param>
         public void SetPosition(int w, int h)
         {
-            MessageBox.Show("IWRPlugIn-SetPosition");
+            //MessageBox.Show("IWRPlugIn-SetPosition");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "IWRPlugIn-SetPosition", "PxPTab.cs", 1); 
+            bugPut.WriteLog("PxPTab.cs", "IWRPlugIn-SetPosition", null);
             SetBounds(0, 0, w, h); //Default : w760,h747
         }
 
@@ -199,7 +209,9 @@ namespace PxP
         /// <param name="name"></param>
         public void GetName(e_Language lang, out string name)
         {
-            MessageBox.Show("IWRPlugIn-GetName");
+            //MessageBox.Show("IWRPlugIn-GetName");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "IWRPlugIn-GetName", "PxPTab.cs", 1); 
+            bugPut.WriteLog("PxPTab.cs", "IWRPlugIn-GetName", null);
             switch (lang)
             {
                 case e_Language.Chinese:
@@ -216,7 +228,9 @@ namespace PxP
         /// </summary>
         public void Unplug()
         {
-            MessageBox.Show("IWRPlugIn-Unplug");
+            //MessageBox.Show("IWRPlugIn-Unplug");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "IWRPlugIn-Unplug", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "IWRPlugIn-Unplug", null);
             //trigger on close the window
         }
 
@@ -240,7 +254,9 @@ namespace PxP
         #region IOnFlaws 成員
         public void OnFlaws(IList<IFlawInfo> flaws)
         {
-            MessageBox.Show("IOnFlaws");
+            //MessageBox.Show("IOnFlaws");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnFlaws", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnFlaws", null);
             try
             {
                 MapWindowVariable.Flaws.AddRange(flaws);
@@ -263,7 +279,9 @@ namespace PxP
 
         public void OnEvents(IList<IEventInfo> events)
         {
-            MessageBox.Show("OnEvents");
+            //MessageBox.Show("OnEvents");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnEvents", "PxPTab.cs", 1); 
+            bugPut.WriteLog("PxPTab.cs", "OnEvents", null);
             PxPThreadStatus.IsOnEvents = true;
             PxPThreadEvent.Set();
         }
@@ -274,7 +292,9 @@ namespace PxP
 
         public void OnCut(double md)
         {
-            MessageBox.Show("OnCut");
+            //MessageBox.Show("OnCut");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnCut", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnCut", null);
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
@@ -297,7 +317,10 @@ namespace PxP
              * 2. 啟動並回復執行緒
              */
             #endregion
-            MessageBox.Show("OnJobLoaded");
+            //MessageBox.Show("OnJobLoaded");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnJobLoaded", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnJobLoaded", null);
+
             PxPVariable.FlawTypeName.Clear();
             PxPVariable.FlawTypeName = flawTypes;
             PxPVariable.JobInfo = jobInfo;
@@ -310,7 +333,10 @@ namespace PxP
 
         public void OnJobStarted(int jobKey)
         {
-            MessageBox.Show("OnJobStarted");
+            //MessageBox.Show("OnJobStarted");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnJobStarted", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnJobStarted", null);
+
             PxPVariable.JobKey = jobKey;
             PxPThreadStatus.IsOnJobStarted = true;
             PxPThreadEvent.Set();
@@ -321,7 +347,10 @@ namespace PxP
 
         public void OnLanguageChanged(e_Language language)
         {
-            MessageBox.Show("OnLanguageChanged");
+            //MessageBox.Show("OnLanguageChanged");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnLanguageChanged", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnLanguageChanged", null);
+
             SystemVariable.Language = language;
             PxPThreadEvent.Set();
         }
@@ -332,7 +361,10 @@ namespace PxP
 
         public void OnJobStopped(double md)
         {
-            MessageBox.Show("OnJobStopped");
+            //MessageBox.Show("OnJobStopped");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnJobStopped", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnJobStopped", null);
+
             PxPThreadStatus.IsOnJobStopped = true;
             PxPThreadEvent.Set();
         }
@@ -343,7 +375,10 @@ namespace PxP
 
         public void OnWebDBConnected(IWebDBConnectionInfo info)
         {
-            MessageBox.Show("OnWebDBConnected");
+            //MessageBox.Show("OnWebDBConnected");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnWebDBConnected", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnWebDBConnected", null);
+
             PxPThreadStatus.IsOnWebDBConnected = true;
             PxPThreadEvent.Set();
         }
@@ -354,7 +389,10 @@ namespace PxP
 
         public void OnSync(double md)
         {
-            MessageBox.Show("OnSync");
+            //MessageBox.Show("OnSync");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnSync", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnSync", null);
+
             PxPThreadStatus.IsOnSync = true;
             PxPThreadEvent.Set();
         }
@@ -365,7 +403,10 @@ namespace PxP
 
         public void OnGlassEdges(double md, double le1, double le2, double le3, double leftROI, double rightROI, double re3, double re2, double re1)
         {
-            MessageBox.Show("OnGlassEdges");
+            //MessageBox.Show("OnGlassEdges");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnGlassEdges", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnGlassEdges", null);
+
             PxPThreadStatus.IsOnGlassEdges = true;
             PxPThreadEvent.Set();
         }
@@ -376,7 +417,10 @@ namespace PxP
 
         public void OnOnline(bool isOnline)
         {
-            MessageBox.Show("OnOnline");
+            //MessageBox.Show("OnOnline");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnOnline", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnOnline", null);
+
             PxPThreadStatus.IsOnOnline = true;
             PxPThreadEvent.Set();
         }
@@ -387,7 +431,10 @@ namespace PxP
 
         public void OnUserTermsChanged(IUserTerms terms)
         {
-            MessageBox.Show("OnUserTermsChanged");
+            //MessageBox.Show("OnUserTermsChanged");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnUserTermsChanged", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnUserTermsChanged", null);
+
             PxPThreadStatus.IsOnUserTermsChanged = true;
             PxPThreadEvent.Set();
         }
@@ -398,7 +445,10 @@ namespace PxP
 
         public void OnDoffResult(double md, int doffNumber, bool pass)
         {
-            MessageBox.Show("OnDoffResult");
+            //MessageBox.Show("OnDoffResult");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnDoffResult", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnDoffResult", null);
+
             PxPThreadStatus.IsOnDoffResult = true;
             PxPThreadEvent.Set();
         }
@@ -409,7 +459,10 @@ namespace PxP
 
         public void OnPxPConfig(IPxPInfo info, string unitsXMLPath)
         {
-            MessageBox.Show("OnPxPConfig");
+            //MessageBox.Show("OnPxPConfig");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnPxPConfig", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnPxPConfig", null);
+
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
         }
@@ -420,7 +473,10 @@ namespace PxP
 
         public void OnRollResult(double cd, double md, int doffNumber, int laneNumber, bool pass)
         {
-            MessageBox.Show("OnRollResult");
+            //MessageBox.Show("OnRollResult");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnRollResult", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnRollResult", null);
+
             PxPThreadStatus.IsOnRollResult = true;
             PxPThreadEvent.Set();
         }
@@ -431,7 +487,10 @@ namespace PxP
 
         public void OnOpenHistory(double startMD, double stopMD)
         {
-            MessageBox.Show("OnOpenHistory");
+            //MessageBox.Show("OnOpenHistory");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnOpenHistory", "PxPTab.cs", 1); 
+            bugPut.WriteLog("PxPTab.cs", "OnOpenHistory", null);
+
             PxPThreadStatus.IsOnOpenHistory = true;
             PxPThreadEvent.Set();
         }
@@ -442,7 +501,10 @@ namespace PxP
 
         public void FireEvent(int eventID, double cd, double md)
         {
-            MessageBox.Show("FireEvent");
+            //MessageBox.Show("FireEvent");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "FireEvent", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "FireEvent", null);
+
             PxPThreadStatus.IsFireEvent = true;
             PxPThreadEvent.Set();
 
@@ -453,7 +515,10 @@ namespace PxP
         #region IOnClassifyFlaw 成員
         public void OnClassifyFlaw(ref WRPlugIn.IFlawInfo flaw, ref bool deleteFlaw)
         {
-            MessageBox.Show("OnClassifyFlaw");
+            //MessageBox.Show("OnClassifyFlaw");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnClassifyFlaw", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnClassifyFlaw", null);
+
             PxPThreadStatus.IsOnClassifyFlaw = true;
             PxPThreadEvent.Set();
         }
@@ -463,7 +528,10 @@ namespace PxP
 
         public void OnUnitsChanged()
         {
-            MessageBox.Show("OnUnitsChanged");
+            //MessageBox.Show("OnUnitsChanged");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnUnitsChanged", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnUnitsChanged", null);
+
             PxPThreadStatus.IsOnUnitsChanged = true;
             PxPThreadEvent.Set();
         }
@@ -474,7 +542,10 @@ namespace PxP
 
         public void OnCognitiveScience(Bitmap webImage, int leftEdge, int rightEdge, double md, double scaleFactor)
         {
-            MessageBox.Show("OnCognitiveScience");
+            //MessageBox.Show("OnCognitiveScience");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "OnCognitiveScience", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "OnCognitiveScience", null);
+
             PxPThreadStatus.IsOnCognitiveScience = true;
             PxPThreadEvent.Set();
         }
@@ -486,15 +557,44 @@ namespace PxP
         //主要執行緒,負責處理繼承的介面,接收狀態值切換動作
         private void WorkerThread()
         {
+            //string[] debugEvents = { "BoolOnShutdown", "BoolOnLanguageChanged", "BoolOnJobLoaded", "BoolOnJobStarted", "BoolOnOnline", "BoolOnFlaws", "BoolOnCut", "BoolOnEvents", "BoolOnPxPConfig", "BoolOnWebDBConnected", "BoolOnSync", "BoolOnDoffResult", "BoolOnRollResult", "BoolOnOpenHistory", "BoolOnClassifyFlaw", "BoolFireEvent", "BoolOnUnitsChanged", "BoolOnJobStopped", "IsOnGlassEdges", "BoolOnUserTermsChanged", "BoolOnCognitiveScience" };
+            //bool?[] debugValues = new bool?[21];
             try
             {
                 while (true)
                 {
                     PxPThreadEvent.WaitOne();
+                    //<Debgu>
+                    //debugValues[0] = PxPThreadStatus.IsOnShutdown;
+                    //debugValues[1] = PxPThreadStatus.IsOnLanguageChanged;
+                    //debugValues[2] = PxPThreadStatus.IsOnJobLoaded;
+                    //debugValues[3] = PxPThreadStatus.IsOnJobStarted;
+                    //debugValues[4] = PxPThreadStatus.IsOnOnline;
+                    //debugValues[5] = PxPThreadStatus.IsOnFlaws;
+                    //debugValues[6] = PxPThreadStatus.IsOnCut;
+                    //debugValues[7] = PxPThreadStatus.IsOnEvents;
+                    //debugValues[8] = PxPThreadStatus.IsOnPxPConfig;
+                    //debugValues[9] = PxPThreadStatus.IsOnWebDBConnected;
+                    //debugValues[10] = PxPThreadStatus.IsOnSync;
+                    //debugValues[11] = PxPThreadStatus.IsOnDoffResult;
+                    //debugValues[12] = PxPThreadStatus.IsOnRollResult;
+                    //debugValues[13] = PxPThreadStatus.IsOnOpenHistory;
+                    //debugValues[14] = PxPThreadStatus.IsOnClassifyFlaw;
+                    //debugValues[15] = PxPThreadStatus.IsFireEvent;
+                    //debugValues[16] = PxPThreadStatus.IsOnUnitsChanged;
+                    //debugValues[17] = PxPThreadStatus.IsOnJobStopped;
+                    //debugValues[18] = PxPThreadStatus.IsOnGlassEdges;
+                    //debugValues[19] = PxPThreadStatus.IsOnUserTermsChanged;
+                    //debugValues[20] = PxPThreadStatus.IsOnCognitiveScience;
+                        
+
+                    //</Debgu>
+
+
                     if (PxPThreadStatus.IsOnShutdown)
                         return;
 
-
+                    
                     if (PxPThreadStatus.IsOnLanguageChanged)
                     {
                         PxPThreadStatus.IsOnLanguageChanged = false;
@@ -633,6 +733,15 @@ namespace PxP
                         MethodInvoker CognitiveScience = new MethodInvoker(ProcessOnCognitiveScience);
                         this.BeginInvoke(CognitiveScience);
                     }
+                    //<dbug>
+                    //for (int i = 0; i < 21; i++)
+                    //{
+                    //    string x = string.Format("{0}:{1}", debugEvents[i].ToString(), debugValues[i].ToString());
+                    //    //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, x  , "PxPTab.cs", 1);
+                    //    bugPut.WriteLog("PxPTab.cs", debugEvents[i].ToString(), debugValues[i]);
+                    //}
+                    //</dbug>
+                    
 
                 }
             }
@@ -706,107 +815,168 @@ namespace PxP
         //Deal IWRPlugIn Interface Event 
         public void ProcessJobLoaded()
         {
-            MessageBox.Show("ProcessJobLoaded");
+            //MessageBox.Show("ProcessJobLoaded");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessJobLoaded", "PxPTab.cs", 1); 
+            bugPut.WriteLog("PxPTab.cs", "ProcessJobLoaded", null);
+
             PxPThreadStatus.IsOnJobLoaded = false;
         }
         public void ProcessJobStarted()
         {
             //工單開始執行之後的動作
-            MessageBox.Show("ProcessJobStarted");
+            //MessageBox.Show("ProcessJobStarted");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessJobStarted", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessJobStarted", null);
+
             MapWindowVariable.MapWindowController.SetGvFlawClass(PxPVariable.FlawTypeName);
             PxPThreadStatus.IsOnJobStarted = false;
         }
         public void ProcessOnCut()
         {
             //處理Cut
-            MessageBox.Show("ProcessOnCut");
+            //MessageBox.Show("ProcessOnCut");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnCut", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnCut", null);
+
             MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece);
             PxPThreadStatus.IsOnCut = false;
         }
         public void ProcessOnOnline()
         {
-            MessageBox.Show("ProcessOnOnline");
+            //MessageBox.Show("ProcessOnOnline");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnOnline", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnOnline", null);
+
             //在這裡先測試畫圖
             PxPThreadStatus.IsOnOnline = false;
         }
         public void ProcessOnDoffResult()
         {
-            MessageBox.Show("ProcessOnDoffResult");
+            //MessageBox.Show("ProcessOnDoffResult");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnDoffResult", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnDoffResult", null);
+
             PxPThreadStatus.IsOnDoffResult = false;
         }
         public void ProcessOnPxPConfig()
         {
-            MessageBox.Show("ProcessOnPxPConfig");
+            //MessageBox.Show("ProcessOnPxPConfig");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnPxPConfig", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnPxPConfig", null);
+
             PxPThreadStatus.IsOnPxPConfig = false;
         }
         public void ProcessOnOpenHistory() 
         {
-            MessageBox.Show("ProcessOnOpenHistory");
+            //MessageBox.Show("ProcessOnOpenHistory");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnOpenHistory", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnOpenHistory", null);
+            
             PxPThreadStatus.IsOnOpenHistory = false;
         }
         public void ProcessOnUnitsChanged()
         {
-            MessageBox.Show("ProcessOnUnitsChanged");
+            //MessageBox.Show("ProcessOnUnitsChanged");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnUnitsChanged", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnUnitsChanged", null);
+            
             PxPThreadStatus.IsOnUnitsChanged = false;
         }
         public void ProcessOnLanguageChenged()
         {
-            MessageBox.Show("ProcessOnLanguageChenged");
+            //MessageBox.Show("ProcessOnLanguageChenged");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnLanguageChenged", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnLanguageChenged", null);
+            
             PxPThreadStatus.IsOnLanguageChanged = false;
         }
         public void ProcessOnFlaws()
         {
-            MessageBox.Show("ProcessOnFlaws");
+            //MessageBox.Show("ProcessOnFlaws");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnFlaws", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnFlaws", null);
+
             PxPThreadStatus.IsOnFlaws = false;
         }
         public void ProcessOnEvents()
         {
-            MessageBox.Show("ProcessOnEvents");
+            //MessageBox.Show("ProcessOnEvents");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnEvents", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnEvents", null);
+
             PxPThreadStatus.IsOnEvents = false;
         }
         public void ProcessOnWebDBConnected()
         {
-            MessageBox.Show("ProcessOnWebDBConnected");
+            //MessageBox.Show("ProcessOnWebDBConnected");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnWebDBConnected", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnWebDBConnected", null);
+            
             PxPThreadStatus.IsOnWebDBConnected = false;
         }
         public void ProcessOnSync()
         {
-            MessageBox.Show("ProcessOnSync");
+            //MessageBox.Show("ProcessOnSync");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnSync", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnSync", null);
+
+
             PxPThreadStatus.IsOnSync = false;
         }
         public void ProcessOnRollResult()
         {
-            MessageBox.Show("ProcessOnRollResult");
+            //MessageBox.Show("ProcessOnRollResult");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnRollResult", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnRollResult", null);
+
             PxPThreadStatus.IsOnRollResult = false;
         }
         public void ProcessOnClassifyFlaw()
         {
-            MessageBox.Show("ProcessOnClassifyFlaw");
+            //MessageBox.Show("ProcessOnClassifyFlaw");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnClassifyFlaw", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnClassifyFlaw", null);
+
             PxPThreadStatus.IsOnClassifyFlaw = false;
         }
         public void ProcessFireEvent()
         {
-            MessageBox.Show("ProcessFireEvent");
+            //MessageBox.Show("ProcessFireEvent");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessFireEvent", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessFireEvent", null);
+
             PxPThreadStatus.IsFireEvent = false;
         }
         public void ProcessOnJobStopped()
         {
-            MessageBox.Show("ProcessOnJobStopped");
+            //MessageBox.Show("ProcessOnJobStopped");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnJobStopped", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnJobStopped", null);
+
             PxPThreadStatus.IsOnJobStopped = false;
         }
         public void ProcessOnGlassEdges()
         {
-            MessageBox.Show("ProcessOnGlassEdges");
+            //MessageBox.Show("ProcessOnGlassEdges");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnGlassEdges", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnGlassEdges", null);
+
             PxPThreadStatus.IsOnGlassEdges = false;
         }
         public void ProcessOnUserTermsChanged()
         {
-            MessageBox.Show("ProcessOnUserTermsChanged");
+            //MessageBox.Show("ProcessOnUserTermsChanged");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnUserTermsChanged", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnUserTermsChanged", null);
+
             PxPThreadStatus.IsOnUserTermsChanged = false;
         }
         public void ProcessOnCognitiveScience()
         {
-            MessageBox.Show("ProcessOnCognitiveScience");
+            //MessageBox.Show("ProcessOnCognitiveScience");
+            //MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.DebugMessage, "ProcessOnCognitiveScience", "PxPTab.cs", 1);
+            bugPut.WriteLog("PxPTab.cs", "ProcessOnCognitiveScience", null);
+
             PxPThreadStatus.IsOnCognitiveScience = false;
         }
         
