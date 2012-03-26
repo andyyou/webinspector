@@ -6,33 +6,32 @@ using System.IO;
 
 namespace PxP
 {
-    public class DebugPut
+    public class DebugTool
     {
         const string path = @"c:\Project\PxPLifeCycle.txt";
-        public StreamWriter sw = new StreamWriter(path);
+        public static StreamWriter sw = new StreamWriter(path);
         public static int i = 1;
-        public DebugPut()
+        public DebugTool()
         {
             
         }
-        ~DebugPut()
+        ~DebugTool()
         {
             sw.Close();
         }
-        public void WriteLog(string FileName, string Msg, bool? BoolMsg)
+        public static void WriteLog(string FileName, string Msg)
         {
             lock (sw)
             {
-                sw.WriteLine(i.ToString() + ". " + FileName + " | " + Msg);
+                sw.WriteLine(i.ToString() + ". " + FileName.PadRight(15) + " | " + Msg.PadRight(50));
                 sw.Flush();
                 i++;
             }
 
         }
-        public static void DebugMethod()
-        {
+        static void Some()
+        { }
 
-        }
 
     }
 }

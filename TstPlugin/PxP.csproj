@@ -81,6 +81,7 @@
       <DependentUpon>PxPTab.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Setting.cs" />
     <Compile Include="SingleFlawControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -112,10 +113,13 @@
     <None Include="Resources\bgLeft.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\bgRight.jpg" />
+    <None Include="Resources\bgSingle.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\bgSingle.jpg" />
+    <None Include="Resources\plugin_bg_right_matel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bgRight.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

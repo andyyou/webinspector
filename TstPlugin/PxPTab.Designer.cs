@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PxPTab));
             this.gvFlaw = new System.Windows.Forms.DataGridView();
             this.bsFlaw = new System.Windows.Forms.BindingSource(this.components);
             this.tlpDoffGrid = new System.Windows.Forms.TableLayoutPanel();
@@ -51,6 +52,9 @@
             // 
             // tlpDoffGrid
             // 
+            this.tlpDoffGrid.BackColor = System.Drawing.Color.Transparent;
+            this.tlpDoffGrid.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.tlpDoffGrid.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tlpDoffGrid.ColumnCount = 2;
             this.tlpDoffGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDoffGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -67,7 +71,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.BackgroundImage = global::PxP.Properties.Resources.bgRight;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.Controls.Add(this.tlpDoffGrid);
             this.Controls.Add(this.gvFlaw);
             this.Name = "PxPTab";

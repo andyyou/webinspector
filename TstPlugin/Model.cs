@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WRPlugIn;
+using System.Xml.Linq;
+using System.IO;
+using System.Reflection;
 
 namespace PxP
 {
@@ -78,6 +81,7 @@ namespace PxP
         internal static MapWindow MapWindowController = new MapWindow();
         internal static List<IFlawInfo> Flaws = new List<IFlawInfo>();                                          //紀錄OnFlaws整條資訊
         internal static List<IFlawInfo> FlawPiece = new List<IFlawInfo>();                                      //暫存單片Piece
+        internal static int FlawPieceIndex = 0;
         internal static int InitMapWidth;                                                                       //紀錄初始Map寬
         internal static int InitMapHeight;                                                                      //紀錄初始Map高
         internal static bool IsMapInit;                                                                         //紀錄Map是否紀錄初始狀態
@@ -85,11 +89,12 @@ namespace PxP
     }
     public class SystemVariable
     {
+        internal static string ConfigFileName ;                     //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
         internal static e_Language Language = e_Language.English;   //預設為英語
         internal static string FlawLock = "FlawLock";               //OnFlaws & OnCut 鎖定
-        internal static int ImgRowsSet = 2;                         //ImgGrid設定大小
-        internal static int ImgColsSet = 2;
-        internal static int MapSizeSet = 0;                         //紀錄Map比例 0->1:1, 2->1:1, 2->2:1, 3->4:3, 4->3:4,  5->16:9
+        internal static int ImgRowsSet = 3;                         //ImgGrid設定大小
+        internal static int ImgColsSet = 3;
+        internal static int MapProportion = 0;                      //紀錄Map比例 0->1:1, 2->1:1, 2->2:1, 3->4:3, 4->3:4,  5->16:9
         internal static int ShowGridSet = 1;                        //是否顯示格線
         internal static int MapGridSet = 1;                         //選擇使用的Grid間隔依據 0: EachCellSize , 1: EachCellCount
         internal static double MapMDSet = 3;                        //Map Size 的間隔大小
@@ -99,6 +104,149 @@ namespace PxP
         internal static int MDInver = 0;                            //紀錄是否反轉座標軸
         internal static int CDInver = 0;
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
+        internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
+        internal static int PageSize = ImgRowsSet * ImgColsSet;    //右下角TableLayoutPanel 圖片數量
+        internal static int PageCurrent = 0;                       //             
+
+
+        #region 取得設定檔參數Method
+        //取得語系檔
+        internal static XDocument GetLangXDoc(e_Language lang)
+        {
+            string selectedFile = "";
+            switch (lang)
+            {
+                case e_Language.Chinese:
+                    selectedFile = "zh.xml";
+                    break;
+                case e_Language.English:
+                    selectedFile = "en.xml";
+                    break;
+                case e_Language.German:
+                    selectedFile = "de.xml";
+                    break;
+                case e_Language.Korean:
+                    selectedFile = "ko.xml";
+                    break;
+                default:
+                    selectedFile = "en.xml";
+                    break;
+            }
+            string file = Path.GetDirectoryName(
+               Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\PXP\\Language\\";
+            string filename = file + selectedFile;
+            XDocument xd = XDocument.Load(filename);
+            return xd;
+        }
+        //取得sys_conf/sys.xml 用來設定自訂參數檔 & Grid排序位置
+        internal static XDocument GetSysConfXDoc()
+        {
+            string path = Path.GetDirectoryName(
+              Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
+            string FullFilePath = path + "sys.xml";
+            XDocument XD = XDocument.Load(FullFilePath);
+            return XD;
+        }
+        //取得conf底下參數檔可自訂
+        internal static XDocument GetConfig()
+        {
+            LoadSystemConfig();
+            string path = Path.GetDirectoryName(
+             Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
+            string FullFilePath = string.Format("{0}{1}.xml", path, SystemVariable.ConfigFileName);
+            XDocument XD = XDocument.Load(FullFilePath);
+            return XD;
+        }
+        //載入/sys_conf/sys.xml 
+        internal static void LoadSystemConfig()
+        {
+            #region 註解
+            /*
+             * 開啟程式啟動完執行緒之後,立刻載入相關設定檔,將設定檔的值帶入Model 全域變數中
+             * 系統變數包含 : 
+             *   1. 載入其他Conf檔的檔名 (因為User可自訂Conf檔)
+             *   2. 右上角缺陷DataGridView的欄位左右排列順序
+             */
+            #endregion
+            try
+            {
+                XDocument XSysConf = GetSysConfXDoc();
+                XElement XConfFile = XSysConf.Element("SystemConfig").Element("ConfFile"); //儲存Conf檔名到SystemVariable變數
+                IEnumerable<XElement> XDoffGrid = XSysConf.Element("SystemConfig").Element("DoffGrid").Elements("Column"); //自動儲存右上方GridView的排序和欄位Size
+                SystemVariable.ConfigFileName = XConfFile.Value + ".xml";
+                SystemVariable.DoffGridSetup.Clear();
+                foreach (XElement el in XDoffGrid)
+                {
+                    DoffGridColumns d = new DoffGridColumns(int.Parse(el.Element("Index").Value), el.Attribute("Name").Value, int.Parse(el.Element("Size").Value));
+                    SystemVariable.DoffGridSetup.Add(d);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Load System Config Error : \n" + ex.Message);
+            }
+
+
+        }
+        //載入/CPxP/conf/setup.xml 或 自定義的設定檔
+        //如果該變數會受Conf檔影響,請記得在此補上
+        internal static void LoadConfig()
+        {
+            XDocument XConf = GetConfig();
+            XElement SysVariable = XConf.Element("Config").Element("SystemVariable");
+            try
+            {
+                SystemVariable.ImgRowsSet = int.Parse(SysVariable.Element("ImgRowsSet").Value);
+                SystemVariable.ImgColsSet = int.Parse(SysVariable.Element("ImgColsSet").Value);
+                SystemVariable.MapProportion = int.Parse(SysVariable.Element("MapProportion").Value);
+                SystemVariable.ShowGridSet = int.Parse(SysVariable.Element("ShowGridSet").Value);
+                SystemVariable.MapGridSet = int.Parse(SysVariable.Element("MapGridSet").Value);
+                SystemVariable.MapMDSet = double.Parse(SysVariable.Element("MapMDSet").Value);
+                SystemVariable.MapCDSet = double.Parse(SysVariable.Element("MapCDSet").Value);
+                SystemVariable.SeriesSet = int.Parse(SysVariable.Element("SeriesSet").Value);
+                SystemVariable.BottomAxe = int.Parse(SysVariable.Element("BottomAxe").Value);
+                SystemVariable.MDInver = int.Parse(SysVariable.Element("MDInver").Value);
+                SystemVariable.CDInver = int.Parse(SysVariable.Element("CDInver").Value);
+                SystemVariable.PageSize = SystemVariable.ImgRowsSet * SystemVariable.ImgColsSet;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Initialize Load Config Fail : \n" + ex.Message);
+                SystemVariable.ImgRowsSet = 2;
+                SystemVariable.ImgColsSet = 2;
+                SystemVariable.MapProportion = 0;
+                SystemVariable.ShowGridSet = 1;
+                SystemVariable.MapGridSet = 1;
+                SystemVariable.MapMDSet = 3;
+                SystemVariable.MapCDSet = 3;
+                SystemVariable.SeriesSet = 0;
+                SystemVariable.BottomAxe = 0;
+                SystemVariable.MDInver = 0;
+                SystemVariable.CDInver = 0;
+            }
+        }
+        #endregion
+    }
+
+    public class DoffGridColumns
+    {
+        public int Index { set; get; }
+        public string ColumnName { set; get; }
+        public int Width { set; get; }
+        public DoffGridColumns()
+        { }
+        public DoffGridColumns(int index, string column, int width)
+        {
+            this.Index = index;
+            this.ColumnName = column;
+            this.Width = width;
+        }
     }
     #endregion
+
+
+
+    
+
+    
 }

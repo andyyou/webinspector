@@ -26,8 +26,7 @@ namespace PxP
         {
             
             //MessageBox.Show("MapWindow Conturctor");
-            //SystemVariable.bugPut.WriteLog("MapWindow.cs", "MapWindow-Conturctor", null);
-
+            DebugTool.WriteLog("PxPTab.cs", "MapWindow Contructor");
             InitializeComponent();
             InitNChart(ref nChart, out nChartMap, out nPoint);
             InitGvFlawClass();
@@ -75,6 +74,8 @@ namespace PxP
 
         public void InitGvFlawClass()
         {
+            DebugTool.WriteLog("MapWindow.cs", "InitGvFlawClass");
+
             IList<IFlawTypeName> tmpFlawTypes = new List<IFlawTypeName>();
             gvFlawClass.DataSource = bsFlawType;
             bsFlawType.DataSource = tmpFlawTypes; 
@@ -89,6 +90,8 @@ namespace PxP
         }
         public void SetGvFlawClass(IList<IFlawTypeName> flawTypes)
         {
+            DebugTool.WriteLog("MapWindow.cs", "SetGvFlawClass");
+
             bsFlawType.DataSource = flawTypes;
         }
         #endregion
