@@ -87,5 +87,19 @@ namespace PxP.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap Zoom_In {
+            get {
+                object obj = ResourceManager.GetObject("Zoom_In", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Zoom_Out {
+            get {
+                object obj = ResourceManager.GetObject("Zoom_Out", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

@@ -73,7 +73,7 @@ namespace PxP
 
             SystemVariable.LoadSystemConfig();
             InitTableLayout(tlpDoffGrid);
-            DrawTableLayout(ref tlpDoffGrid, 3);
+            DrawTableLayout(tlpDoffGrid, 3);
         }
         #endregion
 
@@ -81,7 +81,7 @@ namespace PxP
         //定義右上角DataGridView
         void DefineDataGridView(DataGridView dgv)
         {
-            bsFlaw.DataSource = MapWindowVariable.Flaws;
+            bsFlaw.DataSource = MapWindowVariable.FlawPiece;
             dgv.DataSource = bsFlaw;
             dgv.Columns["FlawID"].HeaderText = "標號";
             dgv.Columns["FlawID"].SortMode = DataGridViewColumnSortMode.Automatic;
@@ -123,18 +123,18 @@ namespace PxP
             }
         }
         //繪製TableLayoutPanel
-        void DrawTableLayout(ref TableLayoutPanel Tlp,int MapProportion)
+        void DrawTableLayout(TableLayoutPanel Tlp,int MapProportion)
         {
-            for (int i = 0; i < SystemVariable.ImgRowsSet; i++)
+            for (int i = 0; i < SystemVariable.ImgRowsSet * SystemVariable.ImgColsSet; i++)
             {
-                for (int j = 0; j < SystemVariable.ImgColsSet; j++)
-                {
-                    PictureBox pic = new PictureBox();
-                    pic.Image = global::PxP.Properties.Resources.BrushedSteel00;
-                    pic.Width = 200;
-                    pic.Height = 200;
-                    Tlp.Controls.Add(pic);
-                }
+
+                PictureBox pic = new PictureBox();
+                pic.Image = global::PxP.Properties.Resources.BrushedSteel00;
+                pic.Width = 200;
+                pic.Height = 200;
+                pic.Name = "Pbox" + i.ToString() ;
+                Tlp.Controls.Add(pic);
+
             }
             //if (gvFlaw.Rows.Count > 0) //追加判斷現在頁面第幾片
             //{
@@ -207,10 +207,10 @@ namespace PxP
             switch (lang)
             {
                 case e_Language.Chinese:
-                    name = "安迪您好";
+                    name = "玻璃組件";
                     break;
                 default:
-                    name = "HelloAndy";
+                    name = "PxP";
                     break;
             }
         }
@@ -256,9 +256,7 @@ namespace PxP
             try
             {
                 MapWindowVariable.Flaws.AddRange(flaws);
-                bsFlaw.ResetBindings(false);
-                bsFlaw.ResumeBinding();
-                gvFlaw.FirstDisplayedScrollingRowIndex = gvFlaw.Rows.Count - 1;
+                
             }
             catch (Exception ex)
             {
@@ -297,6 +295,10 @@ namespace PxP
                 if (f.MD > PxPVariable.CurrentCutPosition + 3 || f.MD < 3)
                     MapWindowVariable.FlawPiece.Add(f);
             }
+            bsFlaw.ResetBindings(false);
+            bsFlaw.ResumeBinding();
+            gvFlaw.FirstDisplayedScrollingRowIndex = gvFlaw.Rows.Count - 1;
+
             PxPVariable.CurrentCutPosition = md;
             PxPThreadStatus.IsOnCut = true;
             PxPThreadEvent.Set();
@@ -425,7 +427,6 @@ namespace PxP
         {
             //MessageBox.Show("OnUserTermsChanged");
             DebugTool.WriteLog("PxPTab.cs", "OnUserTermsChanged");
-
 
             PxPThreadStatus.IsOnUserTermsChanged = true;
             PxPThreadEvent.Set();
@@ -827,13 +828,23 @@ namespace PxP
 
             MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece);
             //處理右下角圖片
+
+            
+            for (int i = 0; i < 9; i++)
+            {
+                PictureBox pic = tlpDoffGrid.Controls["Pbox" + i.ToString()] as PictureBox;
+                pic.Image = MapWindowVariable.FlawPiece[i].Images as Image;
+                pictureBox1.Image = MapWindowVariable.FlawPiece[8].Images as Image;
+                
+            }
+            /*
             foreach (var i in MapWindowVariable.FlawPiece)
             {
                 PictureBox pic = new PictureBox();
                 pic.Image = i.Images as Image;
                 tlpDoffGrid.Controls.Add(pic);
             }
-           
+           */
             PxPThreadStatus.IsOnCut = false;
         }
         public void ProcessOnOnline()
@@ -966,6 +977,8 @@ namespace PxP
         }
         
         #endregion
+
+
 
         #region Action Events
         //操作事件
