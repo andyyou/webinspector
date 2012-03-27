@@ -83,7 +83,6 @@ namespace PxP
         internal static MapWindow MapWindowController = new MapWindow();
         internal static List<IFlawInfo> Flaws = new List<IFlawInfo>();                                          //紀錄OnFlaws整條資訊
         internal static List<IFlawInfo> FlawPiece = new List<IFlawInfo>();                                      //暫存單片Piece
-        internal static int FlawPieceIndex = 0;
         internal static int InitMapWidth;                                                                       //紀錄初始Map寬
         internal static int InitMapHeight;                                                                      //紀錄初始Map高
         internal static bool IsMapInit;                                                                         //紀錄Map是否紀錄初始狀態
@@ -118,6 +117,15 @@ namespace PxP
         //取得語系檔
         internal static XDocument GetLangXDoc(e_Language lang)
         {
+            #region 註解
+            /*
+             * 需要變更語系的變數或屬性列表
+             * 1. 右上方缺陷點DataGridView Columns
+             * 2. 左上方Lables
+             * 3. 左下方缺陷點分類DataGridView Columns
+             * 4. 
+             */
+            #endregion
             string selectedFile = "";
             switch (lang)
             {
@@ -138,7 +146,7 @@ namespace PxP
                     break;
             }
             string file = Path.GetDirectoryName(
-               Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\PXP\\Language\\";
+               Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/i18n/";
             string filename = file + selectedFile;
             XDocument xd = XDocument.Load(filename);
             return xd;
@@ -162,7 +170,7 @@ namespace PxP
             XDocument XD = XDocument.Load(FullFilePath);
             return XD;
         }
-        //載入/sys_conf/sys.xml 
+        //載入/sys_conf/sys.xml  ==> 根據有定義語系資料再變更一次參數
         internal static void LoadSystemConfig()
         {
             #region 註解
@@ -190,6 +198,7 @@ namespace PxP
             {
                 Console.WriteLine("Load System Config Error : \n" + ex.Message);
             }
+            
 
 
         }
@@ -238,6 +247,7 @@ namespace PxP
         public int Index { set; get; }
         public string ColumnName { set; get; }
         public int Width { set; get; }
+        public string HeaderText { set; get; }
         public DoffGridColumns()
         { }
         public DoffGridColumns(int index, string column, int width)

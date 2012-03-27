@@ -65,7 +65,7 @@ namespace PxP
         public PxPTab()
         {
             InitializeComponent();
-            DefineDataGridView(gvFlaw);
+            
 
             //MessageBox.Show("PxPTab");
             DebugTool.WriteLog("PxPTab.cs", "PxPTab Constructor");
@@ -78,6 +78,7 @@ namespace PxP
 
             SystemVariable.LoadSystemConfig();
             InitTableLayout(tlpDoffGrid);
+            DefineDataGridView(gvFlaw);
         }
         #endregion
 
@@ -87,29 +88,38 @@ namespace PxP
         {
             bsFlaw.DataSource = MapWindowVariable.FlawPiece;
             Dgv.DataSource = bsFlaw;
-            Dgv.Columns["FlawID"].HeaderText = "標號";
-            Dgv.Columns["FlawID"].SortMode = DataGridViewColumnSortMode.Automatic;
-            Dgv.Columns["FlawClass"].HeaderText = "缺陷分類";
-            Dgv.Columns["FlawClass"].SortMode = DataGridViewColumnSortMode.Automatic;
-            Dgv.Columns["CD"].HeaderText = "橫向位置";
-            Dgv.Columns["CD"].SortMode = DataGridViewColumnSortMode.Automatic;
-            Dgv.Columns["MD"].HeaderText = "縱向位置";
-            Dgv.Columns["MD"].SortMode = DataGridViewColumnSortMode.Automatic;
-            Dgv.Columns["Width"].HeaderText = "寬度";
-            Dgv.Columns["Width"].SortMode = DataGridViewColumnSortMode.Automatic;
-            Dgv.Columns["Length"].HeaderText = "高度";
-            Dgv.Columns["Length"].SortMode = DataGridViewColumnSortMode.Automatic;
-            Dgv.Columns["Area"].HeaderText = "面積";
-            Dgv.Columns["Area"].SortMode = DataGridViewColumnSortMode.Automatic;
-            Dgv.Columns["FlawType"].HeaderText = "型態";
-            Dgv.Columns["FlawType"].SortMode = DataGridViewColumnSortMode.Automatic;
+            foreach (var column in SystemVariable.DoffGridSetup)
+            {
+                Dgv.Columns[column.Index].Name = column.ColumnName;
+                Dgv.Columns[column.Index].SortMode = DataGridViewColumnSortMode.Automatic;
+                Dgv.Columns[column.Index].HeaderText = column.HeaderText;
+                 
+            }
+            
+            //Dgv.Columns["FlawID"].HeaderText = "標號";
+            //Dgv.Columns["FlawID"].SortMode = DataGridViewColumnSortMode.Automatic;
+            //Dgv.Columns["FlawClass"].HeaderText = "缺陷分類";
+            //Dgv.Columns["FlawClass"].SortMode = DataGridViewColumnSortMode.Automatic;
+            //Dgv.Columns["CD"].HeaderText = "橫向位置";
+            //Dgv.Columns["CD"].SortMode = DataGridViewColumnSortMode.Automatic;
+            //Dgv.Columns["MD"].HeaderText = "縱向位置";
+            //Dgv.Columns["MD"].SortMode = DataGridViewColumnSortMode.Automatic;
+            //Dgv.Columns["Width"].HeaderText = "寬度";
+            //Dgv.Columns["Width"].SortMode = DataGridViewColumnSortMode.Automatic;
+            //Dgv.Columns["Length"].HeaderText = "高度";
+            //Dgv.Columns["Length"].SortMode = DataGridViewColumnSortMode.Automatic;
+            //Dgv.Columns["Area"].HeaderText = "面積";
+            //Dgv.Columns["Area"].SortMode = DataGridViewColumnSortMode.Automatic;
+            //Dgv.Columns["FlawType"].HeaderText = "型態";
+            //Dgv.Columns["FlawType"].SortMode = DataGridViewColumnSortMode.Automatic;
             Dgv.Columns["Images"].Visible = false;
             Dgv.Columns["LeftEdge"].Visible = false;
             Dgv.Columns["RightEdge"].Visible = false;
         }       
-        //更新頁面,該換圖或Map調整
+        //更新頁面,該換圖或Map調整,語系變更,全域變數變更時更新物件資料
         void PageRefresh()
         {
+            DefineDataGridView(gvFlaw); //重繪右上角DataGridView
         }        
         //設定初始化TableLayoutPanel
         void InitTableLayout(TableLayoutPanel Tlp)
@@ -118,8 +128,8 @@ namespace PxP
             Tlp.RowCount = SystemVariable.ImgRowsSet;
             Tlp.ColumnCount = SystemVariable.ImgColsSet;
             pbFlaws = new PictureBox[Tlp.RowCount * Tlp.ColumnCount];
-            ImgPlaceHolderHeight = Tlp.Height;
-            ImgPlaceHolderWidth = Tlp.Width;
+            ImgPlaceHolderHeight = Tlp.Height / Tlp.RowCount;
+            ImgPlaceHolderWidth = Tlp.Width / Tlp.ColumnCount;
             for (int i = 0; i < SystemVariable.ImgRowsSet; i++)
             {
                 Tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
@@ -131,14 +141,35 @@ namespace PxP
             for (int i = 0; i < SystemVariable.ImgRowsSet * SystemVariable.ImgColsSet; i++)
             {
                 pbFlaws[i] = new PictureBox();
+                pbFlaws[i].Width = ImgPlaceHolderWidth;
+                pbFlaws[i].Height = ImgPlaceHolderHeight;
+                pbFlaws[i].SizeMode = PictureBoxSizeMode.Zoom;
+                pbFlaws[i].Location = new Point(0, 0);
                 Tlp.Controls.Add(pbFlaws[i]);
             }
             
         }
         //繪製TableLayoutPanel將圖片置入Control
-        void DrawTableLayout(TableLayoutPanel Tlp, List<IFlawInfo> FlawPiece , int PieceID )
+        void DrawTablePictures(List<List<IFlawInfo>> FlawPieces, int PieceID)
         {
+            SystemVariable.PageCurrent = 1;
+            SystemVariable.PageTotal = gvFlaw.Rows.Count % SystemVariable.PageSize == 0 ?
+                                       gvFlaw.Rows.Count / SystemVariable.PageSize :
+                                       gvFlaw.Rows.Count / SystemVariable.PageSize + 1;
+            lbPageCurrent.Text = SystemVariable.PageCurrent.ToString();
+            lbPageTotal.Text = SystemVariable.PageTotal.ToString();
 
+            int FlawPointStart = (SystemVariable.PageCurrent - 1) * 9;
+            int FlawPointEnd = FlawPointStart + SystemVariable.PageSize;
+
+            for (int i = FlawPointStart, j = 0; i < FlawPointEnd; i++, j++)
+            {
+                foreach (IImageInfo image in FlawPieces[PieceID][i].Images)
+                {
+
+                    ImageAdjust(image.Image ,  pbFlaws[j]);
+                }
+            }
             
             //if (gvFlaw.Rows.Count > 0) //追加判斷現在頁面第幾片
             //{
@@ -160,10 +191,10 @@ namespace PxP
 
         }
         //調整圖片縮放讓整張圖可以完整呈現
-        public void ImageAdjust(Bitmap Bmp, int PWidth, int PHeight , PictureBox Pb)
+        public void ImageAdjust(Bitmap Bmp, PictureBox Pb)
         {
-            double Width_d = (double)Bmp.Width / PWidth;
-            double Height_d = (double)Bmp.Height / PHeight;
+            double Width_d = (double)Bmp.Width / Pb.Width;
+            double Height_d = (double)Bmp.Height / Pb.Height;
             double Ratio = 1.0;
             if (Width_d > 1 || Height_d > 1)
             {
@@ -186,6 +217,7 @@ namespace PxP
             }
             Pb.Width = (int)Math.Round(Bmp.Width / Ratio);
             Pb.Height = (int)Math.Round(Bmp.Height / Ratio);
+            Pb.Image = Bmp;
         }
         #endregion
 
@@ -380,6 +412,43 @@ namespace PxP
 
 
             SystemVariable.Language = language;
+            #region 註解
+            /*
+             * 需要變更語系的變數或屬性列表
+             * 1. 右上方缺陷點DataGridView Columns
+             * 2. 左上方Lables
+             * 3. 左下方缺陷點分類DataGridView Columns
+             * 4. 
+             */
+
+
+            #endregion
+            //載入語系並設定需變更的值
+            try
+            {
+                XDocument XDocLang = SystemVariable.GetLangXDoc(SystemVariable.Language);
+                
+                IEnumerable<XElement> PxPDoffGridLangItem = XDocLang.Element("Language").Element("PxPTab").Element("DoffGrid").Elements("Column");
+               
+                foreach (var column in SystemVariable.DoffGridSetup)
+                {
+                    foreach (var i in PxPDoffGridLangItem)
+                    {
+                        if (column.ColumnName == i.Attribute("Name").Value)
+                        {
+                            column.HeaderText = i.Value;
+                        }
+                    }
+                }
+                //刷新所有須改變語系的物件
+                PageRefresh();
+                
+
+            }
+            catch (Exception ex)
+            {
+                //Nothing Now
+            }
             PxPThreadEvent.Set();
         }
 
@@ -859,12 +928,8 @@ namespace PxP
 
             MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece);
             //處理右下角圖片
-            
-            for (int i = 0; i < MapWindowVariable.FlawPiece.Count; i++)
-            {
-                //pbFlaws[]                
+            DrawTablePictures(MapWindowVariable.FlawPieces,MapWindowVariable.CurrentPiece);
                 
-            }
             /*
             foreach (var i in MapWindowVariable.FlawPiece)
             {

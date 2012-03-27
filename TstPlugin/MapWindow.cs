@@ -35,18 +35,48 @@ namespace PxP
         #endregion
 
         #region Refactoring
-        void InitNChart(ref NChartControl ncc,out NChart nc,out NPointSeries np)
+        void InitNChart(ref NChartControl ncc, out NChart nc, out NPointSeries np)
         {
+            //2D line chart
             ncc.Settings.RenderDevice = RenderDevice.GDI;
+            //Add chart header
             NLabel nchartHeader = nChart.Labels.AddHeader("缺陷圖");
+
+            //Add tools to chart controller
+            ncc.Controller.Tools.Add(new NSelectorTool());
+            ncc.Controller.Tools.Add(new NDataZoomTool());
+            //ncc.Controller.Tools.Add(new NDataPanTool());
+            ncc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(OnChartMouseDoubleClick);
+
             nc = ncc.Charts[0];
-            nc.Axis(StandardAxis.Depth).Visible = false;
+            NCartesianChart chart = (NCartesianChart)nc;
+
+            //Set range selections property
+            NRangeSelection rangeSelection = new NRangeSelection();
+            //Reset Axis when zoom out
+            rangeSelection.ZoomOutResetsAxis = true;
+            chart.RangeSelections.Add(rangeSelection);
+
+            //Set chart axis property
+            chart.Axis(StandardAxis.Depth).Visible = false;
+            chart.BoundsMode = BoundsMode.Stretch;
+            chart.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, 0), true, false);
+            chart.Axis(StandardAxis.PrimaryX).ScaleConfigurator = GetScaleConfigurator();
+            chart.Axis(StandardAxis.PrimaryX).PagingView.MinPageLength = 0.01f;
+            chart.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, 0), true, false);
+            chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
+            chart.Axis(StandardAxis.PrimaryY).PagingView.MinPageLength = 0.01f;
+
             np = (NPointSeries)nChartMap.Series.Add(SeriesType.Point);
             np.Name = "PointName";
-            np.BorderStyle.Width = new NLength(0, NGraphicsUnit.Millimeter);
-            np.Legend.Mode = SeriesLegendMode.DataPoints;
+            //Set datapoint shape
             np.PointShape = PointShape.Cross;
-            np.Size = new NLength(2,NRelativeUnit.ParentPercentage);
+            np.Size = new NLength(2, NRelativeUnit.ParentPercentage);
+            np.BorderStyle.Width = new NLength(0, NGraphicsUnit.Millimeter);
+            //Hide point label
+            np.DataLabelStyle.Visible = false;
+            //Using x axis value, otherwise the datapoint will be incorrect
+            np.UseXValues = true;
         }
         
         #endregion
@@ -95,6 +125,37 @@ namespace PxP
 
             bsFlawType.DataSource = flawTypes;
         }
+        private NLinearScaleConfigurator GetScaleConfigurator()
+        {
+            NLinearScaleConfigurator linearScale = new NLinearScaleConfigurator();
+
+            linearScale.SetPredefinedScaleStyle(PredefinedScaleStyle.Scientific);
+            linearScale.MinorTickCount = 5;
+
+            linearScale.MajorGridStyle.SetShowAtWall(ChartWallType.Back, true);
+            linearScale.MajorGridStyle.SetShowAtWall(ChartWallType.Floor, true);
+            linearScale.MajorGridStyle.LineStyle.Pattern = LinePattern.Dot;
+
+            return linearScale;
+        }
+
+        public void OnChartMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            NHitTestResult hitTestResult = nChart.HitTest(e.Location);
+            if (hitTestResult.ChartElement == ChartElement.DataPoint)
+            {
+                NSeries series = hitTestResult.Series as NSeries;
+                if (series != null)
+                {
+                    object obj = series.Tags[hitTestResult.DataPointIndex];
+
+                    if (obj != null)
+                    {
+                        MessageBox.Show("Data point [" + hitTestResult.DataPointIndex.ToString() + "] from series [" + ((NSeriesBase)hitTestResult.Object.ParentNode).Name + "]");
+                    }
+                }
+            }
+        }
         #endregion
 
 

@@ -36,8 +36,8 @@
             this.btnPrevGrid = new System.Windows.Forms.Button();
             this.btnNextGrid = new System.Windows.Forms.Button();
             this.lbNothing = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lbPageTotal = new System.Windows.Forms.Label();
+            this.lbPageCurrent = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gvFlaw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlaw)).BeginInit();
             this.SuspendLayout();
@@ -104,27 +104,27 @@
             this.lbNothing.TabIndex = 5;
             this.lbNothing.Text = "/";
             // 
-            // label1
+            // lbPageTotal
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(399, 705);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 23);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "99";
+            this.lbPageTotal.AutoSize = true;
+            this.lbPageTotal.BackColor = System.Drawing.Color.Transparent;
+            this.lbPageTotal.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPageTotal.Location = new System.Drawing.Point(399, 705);
+            this.lbPageTotal.Name = "lbPageTotal";
+            this.lbPageTotal.Size = new System.Drawing.Size(34, 23);
+            this.lbPageTotal.TabIndex = 6;
+            this.lbPageTotal.Text = "99";
             // 
-            // label2
+            // lbPageCurrent
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(325, 705);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 23);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "99";
+            this.lbPageCurrent.AutoSize = true;
+            this.lbPageCurrent.BackColor = System.Drawing.Color.Transparent;
+            this.lbPageCurrent.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPageCurrent.Location = new System.Drawing.Point(325, 705);
+            this.lbPageCurrent.Name = "lbPageCurrent";
+            this.lbPageCurrent.Size = new System.Drawing.Size(34, 23);
+            this.lbPageCurrent.TabIndex = 7;
+            this.lbPageCurrent.Text = "99";
             // 
             // PxPTab
             // 
@@ -132,8 +132,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbPageCurrent);
+            this.Controls.Add(this.lbPageTotal);
             this.Controls.Add(this.lbNothing);
             this.Controls.Add(this.btnNextGrid);
             this.Controls.Add(this.btnPrevGrid);
@@ -157,7 +157,7 @@
         private System.Windows.Forms.Button btnPrevGrid;
         private System.Windows.Forms.Button btnNextGrid;
         private System.Windows.Forms.Label lbNothing;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbPageTotal;
+        private System.Windows.Forms.Label lbPageCurrent;
     }
 }
