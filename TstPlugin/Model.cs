@@ -71,6 +71,8 @@ namespace PxP
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
         internal static IJobInfo JobInfo;                                                    //工單資訊
         internal static int JobKey;
+        internal static int TotalPiece = 0;                                                  //用來處理目前總共有幾片
+        internal static int FreezPiece = 0;                                                  //當OnCut或需要畫面凍結時紀錄當下跑到第幾片Piece
     }
     public class MapWindowThreadStatus
     {
@@ -86,6 +88,7 @@ namespace PxP
         internal static int InitMapHeight;                                                                      //紀錄初始Map高
         internal static bool IsMapInit;                                                                         //紀錄Map是否紀錄初始狀態
         internal static List<List<IFlawInfo>> FlawPieces = new List<List<IFlawInfo>>();                         //儲存Piece切割後的所有檔案
+        internal static int CurrentPiece = 0 ;                                                                  //儲存左邊目前看到哪片玻璃
     }
     public class SystemVariable
     {
@@ -106,7 +109,8 @@ namespace PxP
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
         internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
         internal static int PageSize = ImgRowsSet * ImgColsSet;    //右下角TableLayoutPanel 圖片數量
-        internal static int PageCurrent = 0;                       //             
+        internal static int PageCurrent = 0;                       //
+        internal static int PageTotal = 0;                         //計算當OnCut發生時右下角DataGrid的頁數
        
 
 

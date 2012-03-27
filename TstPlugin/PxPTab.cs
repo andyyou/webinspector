@@ -136,7 +136,7 @@ namespace PxP
             
         }
         //繪製TableLayoutPanel將圖片置入Control
-        void DrawTableLayout(TableLayoutPanel Tlp, Bitmap Bmp, int Index)
+        void DrawTableLayout(TableLayoutPanel Tlp, List<IFlawInfo> FlawPiece , int PieceID )
         {
 
             
@@ -329,7 +329,7 @@ namespace PxP
             bsFlaw.ResetBindings(false);
             bsFlaw.ResumeBinding();
             gvFlaw.FirstDisplayedScrollingRowIndex = gvFlaw.Rows.Count - 1;
-
+            
             PxPVariable.CurrentCutPosition = md;
             PxPThreadStatus.IsOnCut = true;
             PxPThreadEvent.Set();
@@ -859,13 +859,10 @@ namespace PxP
 
             MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece);
             //處理右下角圖片
-
             
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < MapWindowVariable.FlawPiece.Count; i++)
             {
-                PictureBox pic = tlpDoffGrid.Controls["Pbox" + i.ToString()] as PictureBox;
-                pic.Image = MapWindowVariable.FlawPiece[i].Images as Image;
-                
+                //pbFlaws[]                
                 
             }
             /*
@@ -883,7 +880,7 @@ namespace PxP
             //MessageBox.Show("ProcessOnOnline");
             DebugTool.WriteLog("PxPTab.cs", "ProcessOnOnline");
 
-            //在這裡先測試畫圖
+           
             PxPThreadStatus.IsOnOnline = false;
         }
         public void ProcessOnDoffResult()
