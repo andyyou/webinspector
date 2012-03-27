@@ -107,6 +107,7 @@ namespace PxP
         internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
         internal static int PageSize = ImgRowsSet * ImgColsSet;    //右下角TableLayoutPanel 圖片數量
         internal static int PageCurrent = 0;                       //             
+       
 
 
         #region 取得設定檔參數Method

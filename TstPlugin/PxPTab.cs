@@ -38,6 +38,11 @@ namespace PxP
         /// </summary>
         [Import(typeof(IWRMessageLog))]
         IWRMessageLog MsgLog;
+        #region Local Variable
+        public PictureBox[] pbFlaws;
+        public int ImgPlaceHolderWidth;
+        public int ImgPlaceHolderHeight;                  //右下角DataGrid內置放圖片容器寬高
+        #endregion
         //////////////////////////////////////////////////////////////////////////
 
         #region Initialize Thread
@@ -73,35 +78,34 @@ namespace PxP
 
             SystemVariable.LoadSystemConfig();
             InitTableLayout(tlpDoffGrid);
-            DrawTableLayout(tlpDoffGrid, 3);
         }
         #endregion
 
         #region Refactoring
         //定義右上角DataGridView
-        void DefineDataGridView(DataGridView dgv)
+        void DefineDataGridView(DataGridView Dgv)
         {
             bsFlaw.DataSource = MapWindowVariable.FlawPiece;
-            dgv.DataSource = bsFlaw;
-            dgv.Columns["FlawID"].HeaderText = "標號";
-            dgv.Columns["FlawID"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["FlawClass"].HeaderText = "缺陷分類";
-            dgv.Columns["FlawClass"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["CD"].HeaderText = "橫向位置";
-            dgv.Columns["CD"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["MD"].HeaderText = "縱向位置";
-            dgv.Columns["MD"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["Width"].HeaderText = "寬度";
-            dgv.Columns["Width"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["Length"].HeaderText = "高度";
-            dgv.Columns["Length"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["Area"].HeaderText = "面積";
-            dgv.Columns["Area"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["FlawType"].HeaderText = "型態";
-            dgv.Columns["FlawType"].SortMode = DataGridViewColumnSortMode.Automatic;
-            dgv.Columns["Images"].Visible = false;
-            dgv.Columns["LeftEdge"].Visible = false;
-            dgv.Columns["RightEdge"].Visible = false;
+            Dgv.DataSource = bsFlaw;
+            Dgv.Columns["FlawID"].HeaderText = "標號";
+            Dgv.Columns["FlawID"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["FlawClass"].HeaderText = "缺陷分類";
+            Dgv.Columns["FlawClass"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["CD"].HeaderText = "橫向位置";
+            Dgv.Columns["CD"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["MD"].HeaderText = "縱向位置";
+            Dgv.Columns["MD"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["Width"].HeaderText = "寬度";
+            Dgv.Columns["Width"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["Length"].HeaderText = "高度";
+            Dgv.Columns["Length"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["Area"].HeaderText = "面積";
+            Dgv.Columns["Area"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["FlawType"].HeaderText = "型態";
+            Dgv.Columns["FlawType"].SortMode = DataGridViewColumnSortMode.Automatic;
+            Dgv.Columns["Images"].Visible = false;
+            Dgv.Columns["LeftEdge"].Visible = false;
+            Dgv.Columns["RightEdge"].Visible = false;
         }       
         //更新頁面,該換圖或Map調整
         void PageRefresh()
@@ -113,6 +117,9 @@ namespace PxP
             Tlp.ColumnStyles.Clear();
             Tlp.RowCount = SystemVariable.ImgRowsSet;
             Tlp.ColumnCount = SystemVariable.ImgColsSet;
+            pbFlaws = new PictureBox[Tlp.RowCount * Tlp.ColumnCount];
+            ImgPlaceHolderHeight = Tlp.Height;
+            ImgPlaceHolderWidth = Tlp.Width;
             for (int i = 0; i < SystemVariable.ImgRowsSet; i++)
             {
                 Tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
@@ -121,22 +128,18 @@ namespace PxP
             {
                 Tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             }
-            
-        }
-        //繪製TableLayoutPanel
-        void DrawTableLayout(TableLayoutPanel Tlp,int MapProportion)
-        {
             for (int i = 0; i < SystemVariable.ImgRowsSet * SystemVariable.ImgColsSet; i++)
             {
-
-                PictureBox pic = new PictureBox();
-                pic.Image = global::PxP.Properties.Resources.BrushedSteel00;
-                pic.Width = 200;
-                pic.Height = 200;
-                pic.Name = "Pbox" + i.ToString() ;
-                Tlp.Controls.Add(pic);
-
+                pbFlaws[i] = new PictureBox();
+                Tlp.Controls.Add(pbFlaws[i]);
             }
+            
+        }
+        //繪製TableLayoutPanel將圖片置入Control
+        void DrawTableLayout(TableLayoutPanel Tlp, Bitmap Bmp, int Index)
+        {
+
+            
             //if (gvFlaw.Rows.Count > 0) //追加判斷現在頁面第幾片
             //{
             //    for (int i = 0; i < count; i++)
@@ -156,7 +159,34 @@ namespace PxP
 
 
         }
+        //調整圖片縮放讓整張圖可以完整呈現
+        public void ImageAdjust(Bitmap Bmp, int PWidth, int PHeight , PictureBox Pb)
+        {
+            double Width_d = (double)Bmp.Width / PWidth;
+            double Height_d = (double)Bmp.Height / PHeight;
+            double Ratio = 1.0;
+            if (Width_d > 1 || Height_d > 1)
+            {
+                if (Width_d > Height_d)
+                {
+                    Ratio = Width_d;
 
+                }
+                else
+                {
+                    Ratio = Height_d;
+                }
+            }
+            else if (Width_d < 1 && Height_d < 1)
+            {
+                if (Width_d > Height_d)
+                    Ratio = Width_d;
+                else
+                    Ratio = Height_d;
+            }
+            Pb.Width = (int)Math.Round(Bmp.Width / Ratio);
+            Pb.Height = (int)Math.Round(Bmp.Height / Ratio);
+        }
         #endregion
 
         #region Inherit Interface

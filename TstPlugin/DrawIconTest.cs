@@ -16,10 +16,10 @@ namespace PxP
             InitializeComponent();
         }
 
-        protected override void OnPaint(PaintEventArgs e, string c)
+        protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.DrawString(c, new Font("Verdana", 18), new SolidBrush(Color.Red), 45, 40);
+            g.DrawString("Hello", new Font("Verdana", 18), new SolidBrush(Color.Red), 45, 40);
         }
     }
 }

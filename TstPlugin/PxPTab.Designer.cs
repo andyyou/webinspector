@@ -35,10 +35,9 @@
             this.tlpDoffGrid = new System.Windows.Forms.TableLayoutPanel();
             this.btnPrevGrid = new System.Windows.Forms.Button();
             this.btnNextGrid = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.lbNothing = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnRefresh = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gvFlaw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlaw)).BeginInit();
             this.SuspendLayout();
@@ -76,7 +75,7 @@
             // 
             this.btnPrevGrid.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnPrevGrid.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnPrevGrid.Location = new System.Drawing.Point(311, 700);
+            this.btnPrevGrid.Location = new System.Drawing.Point(269, 700);
             this.btnPrevGrid.Name = "btnPrevGrid";
             this.btnPrevGrid.Size = new System.Drawing.Size(30, 30);
             this.btnPrevGrid.TabIndex = 2;
@@ -87,26 +86,19 @@
             // 
             this.btnNextGrid.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnNextGrid.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnNextGrid.Location = new System.Drawing.Point(435, 700);
+            this.btnNextGrid.Location = new System.Drawing.Point(461, 700);
             this.btnNextGrid.Name = "btnNextGrid";
             this.btnNextGrid.Size = new System.Drawing.Size(30, 30);
             this.btnNextGrid.TabIndex = 3;
             this.btnNextGrid.Text = ">";
             this.btnNextGrid.UseVisualStyleBackColor = false;
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(349, 705);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(30, 22);
-            this.textBox1.TabIndex = 4;
-            // 
             // lbNothing
             // 
             this.lbNothing.AutoSize = true;
             this.lbNothing.BackColor = System.Drawing.Color.Transparent;
             this.lbNothing.Font = new System.Drawing.Font("Ubuntu", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNothing.Location = new System.Drawing.Point(384, 705);
+            this.lbNothing.Location = new System.Drawing.Point(371, 705);
             this.lbNothing.Name = "lbNothing";
             this.lbNothing.Size = new System.Drawing.Size(17, 21);
             this.lbNothing.TabIndex = 5;
@@ -123,16 +115,16 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "99";
             // 
-            // btnRefresh
+            // label2
             // 
-            this.btnRefresh.Font = new System.Drawing.Font("新細明體-ExtB", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnRefresh.Location = new System.Drawing.Point(484, 700);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(60, 30);
-            this.btnRefresh.TabIndex = 7;
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(325, 705);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 23);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "99";
             // 
             // PxPTab
             // 
@@ -140,10 +132,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbNothing);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnNextGrid);
             this.Controls.Add(this.btnPrevGrid);
             this.Controls.Add(this.tlpDoffGrid);
@@ -162,12 +153,11 @@
 
         private System.Windows.Forms.DataGridView gvFlaw;
         private System.Windows.Forms.BindingSource bsFlaw;
-        private System.Windows.Forms.TableLayoutPanel tlpDoffGrid;
+        public System.Windows.Forms.TableLayoutPanel tlpDoffGrid;
         private System.Windows.Forms.Button btnPrevGrid;
         private System.Windows.Forms.Button btnNextGrid;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lbNothing;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Label label2;
     }
 }
