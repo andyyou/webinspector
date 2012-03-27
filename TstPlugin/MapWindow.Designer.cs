@@ -48,9 +48,9 @@
             this.lbFailValue = new System.Windows.Forms.Label();
             this.lbYieldValue = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.rbPass = new System.Windows.Forms.RadioButton();
-            this.rbFail = new System.Windows.Forms.RadioButton();
             this.rbAll = new System.Windows.Forms.RadioButton();
+            this.rbFail = new System.Windows.Forms.RadioButton();
+            this.rbPass = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.gvFlawClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlawType)).BeginInit();
             this.tlpMapInfo.SuspendLayout();
@@ -119,133 +119,133 @@
             // 
             this.lbJob.AutoEllipsis = true;
             this.lbJob.AutoSize = true;
-            this.lbJob.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbJob.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbJob.ForeColor = System.Drawing.Color.Black;
             this.lbJob.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
             this.lbJob.Location = new System.Drawing.Point(4, 1);
             this.lbJob.Name = "lbJob";
             this.lbJob.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lbJob.Size = new System.Drawing.Size(43, 16);
+            this.lbJob.Size = new System.Drawing.Size(42, 15);
             this.lbJob.TabIndex = 0;
             this.lbJob.Text = "Lot# ";
             // 
             // lbPiece
             // 
             this.lbPiece.AutoSize = true;
-            this.lbPiece.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPiece.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPiece.Location = new System.Drawing.Point(4, 25);
             this.lbPiece.Name = "lbPiece";
-            this.lbPiece.Size = new System.Drawing.Size(50, 16);
+            this.lbPiece.Size = new System.Drawing.Size(49, 15);
             this.lbPiece.TabIndex = 1;
             this.lbPiece.Text = "Piece ";
             // 
             // lbFile
             // 
             this.lbFile.AutoSize = true;
-            this.lbFile.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFile.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbFile.Location = new System.Drawing.Point(4, 49);
             this.lbFile.Name = "lbFile";
-            this.lbFile.Size = new System.Drawing.Size(36, 16);
+            this.lbFile.Size = new System.Drawing.Size(35, 15);
             this.lbFile.TabIndex = 2;
             this.lbFile.Text = "File";
             // 
             // lbOperator
             // 
             this.lbOperator.AutoSize = true;
-            this.lbOperator.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbOperator.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbOperator.Location = new System.Drawing.Point(4, 73);
             this.lbOperator.Name = "lbOperator";
-            this.lbOperator.Size = new System.Drawing.Size(64, 16);
+            this.lbOperator.Size = new System.Drawing.Size(63, 15);
             this.lbOperator.TabIndex = 3;
             this.lbOperator.Text = "Operator";
             // 
             // lbSize
             // 
             this.lbSize.AutoSize = true;
-            this.lbSize.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSize.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbSize.Location = new System.Drawing.Point(4, 97);
             this.lbSize.Name = "lbSize";
-            this.lbSize.Size = new System.Drawing.Size(36, 16);
+            this.lbSize.Size = new System.Drawing.Size(35, 15);
             this.lbSize.TabIndex = 4;
             this.lbSize.Text = "Size";
             // 
             // lbDateTime
             // 
             this.lbDateTime.AutoSize = true;
-            this.lbDateTime.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbDateTime.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbDateTime.Location = new System.Drawing.Point(4, 121);
             this.lbDateTime.Name = "lbDateTime";
-            this.lbDateTime.Size = new System.Drawing.Size(64, 16);
+            this.lbDateTime.Size = new System.Drawing.Size(63, 15);
             this.lbDateTime.TabIndex = 5;
             this.lbDateTime.Text = "DateTime";
             // 
             // lbPass
             // 
             this.lbPass.AutoSize = true;
-            this.lbPass.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPass.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPass.Location = new System.Drawing.Point(252, 1);
             this.lbPass.Name = "lbPass";
-            this.lbPass.Size = new System.Drawing.Size(36, 16);
+            this.lbPass.Size = new System.Drawing.Size(35, 15);
             this.lbPass.TabIndex = 6;
             this.lbPass.Text = "Pass";
             // 
             // lbFail
             // 
             this.lbFail.AutoSize = true;
-            this.lbFail.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFail.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbFail.Location = new System.Drawing.Point(252, 25);
             this.lbFail.Name = "lbFail";
-            this.lbFail.Size = new System.Drawing.Size(36, 16);
+            this.lbFail.Size = new System.Drawing.Size(35, 15);
             this.lbFail.TabIndex = 7;
             this.lbFail.Text = "Fail";
             // 
             // lbYield
             // 
             this.lbYield.AutoSize = true;
-            this.lbYield.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbYield.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbYield.Location = new System.Drawing.Point(252, 49);
             this.lbYield.Name = "lbYield";
-            this.lbYield.Size = new System.Drawing.Size(43, 16);
+            this.lbYield.Size = new System.Drawing.Size(42, 15);
             this.lbYield.TabIndex = 8;
             this.lbYield.Text = "Yield";
             // 
             // lbMark
             // 
             this.lbMark.AutoSize = true;
-            this.lbMark.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMark.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbMark.Location = new System.Drawing.Point(252, 73);
             this.lbMark.Name = "lbMark";
-            this.lbMark.Size = new System.Drawing.Size(36, 16);
+            this.lbMark.Size = new System.Drawing.Size(35, 15);
             this.lbMark.TabIndex = 9;
             this.lbMark.Text = "Mark";
             // 
             // lbPassValue
             // 
             this.lbPassValue.AutoSize = true;
-            this.lbPassValue.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPassValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPassValue.Location = new System.Drawing.Point(376, 1);
             this.lbPassValue.Name = "lbPassValue";
-            this.lbPassValue.Size = new System.Drawing.Size(15, 16);
+            this.lbPassValue.Size = new System.Drawing.Size(14, 15);
             this.lbPassValue.TabIndex = 10;
             this.lbPassValue.Text = "0";
             // 
             // lbFailValue
             // 
             this.lbFailValue.AutoSize = true;
-            this.lbFailValue.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFailValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbFailValue.Location = new System.Drawing.Point(376, 25);
             this.lbFailValue.Name = "lbFailValue";
-            this.lbFailValue.Size = new System.Drawing.Size(15, 16);
+            this.lbFailValue.Size = new System.Drawing.Size(14, 15);
             this.lbFailValue.TabIndex = 11;
             this.lbFailValue.Text = "0";
             // 
             // lbYieldValue
             // 
             this.lbYieldValue.AutoSize = true;
-            this.lbYieldValue.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbYieldValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbYieldValue.Location = new System.Drawing.Point(376, 49);
             this.lbYieldValue.Name = "lbYieldValue";
-            this.lbYieldValue.Size = new System.Drawing.Size(15, 16);
+            this.lbYieldValue.Size = new System.Drawing.Size(14, 15);
             this.lbYieldValue.TabIndex = 12;
             this.lbYieldValue.Text = "0";
             // 
@@ -260,42 +260,42 @@
             this.panel1.Size = new System.Drawing.Size(114, 100);
             this.panel1.TabIndex = 3;
             // 
-            // rbPass
+            // rbAll
             // 
-            this.rbPass.AutoSize = true;
-            this.rbPass.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbPass.Location = new System.Drawing.Point(3, 3);
-            this.rbPass.Name = "rbPass";
-            this.rbPass.Size = new System.Drawing.Size(54, 20);
-            this.rbPass.TabIndex = 0;
-            this.rbPass.TabStop = true;
-            this.rbPass.Text = "Pass";
-            this.rbPass.UseVisualStyleBackColor = true;
+            this.rbAll.AutoSize = true;
+            this.rbAll.Checked = true;
+            this.rbAll.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAll.Location = new System.Drawing.Point(3, 47);
+            this.rbAll.Name = "rbAll";
+            this.rbAll.Size = new System.Drawing.Size(46, 19);
+            this.rbAll.TabIndex = 2;
+            this.rbAll.TabStop = true;
+            this.rbAll.Text = "All";
+            this.rbAll.UseVisualStyleBackColor = true;
             // 
             // rbFail
             // 
             this.rbFail.AutoSize = true;
-            this.rbFail.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbFail.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rbFail.Location = new System.Drawing.Point(3, 25);
             this.rbFail.Name = "rbFail";
-            this.rbFail.Size = new System.Drawing.Size(54, 20);
+            this.rbFail.Size = new System.Drawing.Size(53, 19);
             this.rbFail.TabIndex = 1;
             this.rbFail.TabStop = true;
             this.rbFail.Text = "Fail";
             this.rbFail.UseVisualStyleBackColor = true;
             // 
-            // rbAll
+            // rbPass
             // 
-            this.rbAll.AutoSize = true;
-            this.rbAll.Checked = true;
-            this.rbAll.Font = new System.Drawing.Font("Ubuntu Mono", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbAll.Location = new System.Drawing.Point(3, 47);
-            this.rbAll.Name = "rbAll";
-            this.rbAll.Size = new System.Drawing.Size(47, 20);
-            this.rbAll.TabIndex = 2;
-            this.rbAll.TabStop = true;
-            this.rbAll.Text = "All";
-            this.rbAll.UseVisualStyleBackColor = true;
+            this.rbPass.AutoSize = true;
+            this.rbPass.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbPass.Location = new System.Drawing.Point(3, 3);
+            this.rbPass.Name = "rbPass";
+            this.rbPass.Size = new System.Drawing.Size(53, 19);
+            this.rbPass.TabIndex = 0;
+            this.rbPass.TabStop = true;
+            this.rbPass.Text = "Pass";
+            this.rbPass.UseVisualStyleBackColor = true;
             // 
             // MapWindow
             // 

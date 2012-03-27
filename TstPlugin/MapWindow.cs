@@ -70,6 +70,7 @@ namespace PxP
                 }
             }
             nChart.Refresh();
+
         }
 
         public void InitGvFlawClass()

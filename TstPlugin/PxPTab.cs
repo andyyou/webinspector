@@ -121,6 +121,7 @@ namespace PxP
             {
                 Tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             }
+            
         }
         //繪製TableLayoutPanel
         void DrawTableLayout(TableLayoutPanel Tlp,int MapProportion)
@@ -834,7 +835,7 @@ namespace PxP
             {
                 PictureBox pic = tlpDoffGrid.Controls["Pbox" + i.ToString()] as PictureBox;
                 pic.Image = MapWindowVariable.FlawPiece[i].Images as Image;
-                pictureBox1.Image = MapWindowVariable.FlawPiece[8].Images as Image;
+                
                 
             }
             /*
