@@ -88,7 +88,7 @@ namespace PxP
         #endregion
 
         #region Method
-        public void DrawPieceFlaw(List<IFlawInfo> flawPiece)
+        public void DrawPieceFlaw(List<FlawInfoAddPriority> flawPiece)
         {
             nPoint.ClearDataPoints();
             MapWindowVariable.FlawPieces.Add(flawPiece); //把PxP處理完的每一片儲存
@@ -96,7 +96,7 @@ namespace PxP
             {
                 foreach (var f in flawPiece)
                 {
-                    nPoint.AddDataPoint(new NDataPoint(f.MD, f.CD));
+                    nPoint.AddDataPoint(new NDataPoint(f.CD, f.MD));
                 }
             }
             nChart.Refresh();
@@ -147,15 +147,14 @@ namespace PxP
                 NSeries series = hitTestResult.Series as NSeries;
                 if (series != null)
                 {
-                    object obj = series.Tags[hitTestResult.DataPointIndex];
-
-                    if (obj != null)
-                    {
-                        MessageBox.Show("Data point [" + hitTestResult.DataPointIndex.ToString() + "] from series [" + ((NSeriesBase)hitTestResult.Object.ParentNode).Name + "]");
-                    }
+                    FlawForm FlawFormController = new FlawForm();
+                    FlawFormController.GetFlawInfo(hitTestResult.DataPointIndex);
+                    FlawFormController.Show();
+                    //MessageBox.Show("Flaw point [" + hitTestResult.DataPointIndex.ToString() + "]");
                 }
             }
-        }
+        }
+
         #endregion
 
 

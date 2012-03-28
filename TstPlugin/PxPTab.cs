@@ -84,16 +84,21 @@ namespace PxP
 
         #region Refactoring
         //定義右上角DataGridView
+        
         void DefineDataGridView(DataGridView Dgv)
         {
+            //全部欄位都有實作 不要的從最下面Visible關閉
             bsFlaw.DataSource = MapWindowVariable.FlawPiece;
             Dgv.DataSource = bsFlaw;
+            Dgv.AllowUserToOrderColumns = true;
+
             foreach (var column in SystemVariable.DoffGridSetup)
             {
-                Dgv.Columns[column.Index].Name = column.ColumnName;
-                Dgv.Columns[column.Index].SortMode = DataGridViewColumnSortMode.Automatic;
-                Dgv.Columns[column.Index].HeaderText = column.HeaderText;
-                 
+               
+                Dgv.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
+                Dgv.Columns[column.ColumnName].HeaderText = column.HeaderText;
+                Dgv.Columns[column.ColumnName].DisplayIndex = column.Index;
+
             }
             
             //Dgv.Columns["FlawID"].HeaderText = "標號";
@@ -115,6 +120,7 @@ namespace PxP
             Dgv.Columns["Images"].Visible = false;
             Dgv.Columns["LeftEdge"].Visible = false;
             Dgv.Columns["RightEdge"].Visible = false;
+            Dgv.Columns["FlawType"].Visible = false;
         }       
         //更新頁面,該換圖或Map調整,語系變更,全域變數變更時更新物件資料
         void PageRefresh()
@@ -150,7 +156,7 @@ namespace PxP
             
         }
         //繪製TableLayoutPanel將圖片置入Control
-        void DrawTablePictures(List<List<IFlawInfo>> FlawPieces, int PieceID)
+        void DrawTablePictures(List<List<FlawInfoAddPriority>> FlawPieces, int PieceID)
         {
             SystemVariable.PageCurrent = 1;
             SystemVariable.PageTotal = gvFlaw.Rows.Count % SystemVariable.PageSize == 0 ?
@@ -318,7 +324,29 @@ namespace PxP
 
             try
             {
-                MapWindowVariable.Flaws.AddRange(flaws);
+                IList<FlawInfoAddPriority> temp = new List<FlawInfoAddPriority>();
+                foreach (var i in flaws)
+                {
+                    FlawInfoAddPriority f = new FlawInfoAddPriority();
+                    f.Area = i.Area;
+                    f.CD = i.CD;
+                    f.FlawClass = i.FlawClass;
+                    f.FlawID = i.FlawID;
+                    f.FlawType = i.FlawType;
+                    f.Images = i.Images;
+                    f.LeftEdge = i.LeftEdge;
+                    f.Length = i.Length;
+                    f.MD = i.MD;
+                    f.RightEdge = i.RightEdge;
+                    f.Width = i.Width;
+                    //特別處理Priority
+                    int opv;
+                    f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
+
+                    temp.Add(f);
+                }
+
+                MapWindowVariable.Flaws.AddRange(temp);
                 
             }
             catch (Exception ex)
@@ -384,7 +412,9 @@ namespace PxP
             PxPVariable.FlawTypeName.Clear();
             PxPVariable.FlawTypeName = flawTypes;
             PxPVariable.JobInfo = jobInfo;
+            PxPVariable.SeverityInfo = severityInfo;
             PxPThreadStatus.IsOnJobLoaded = true;
+            
             PxPThreadEvent.Set();
         }
         #endregion
@@ -554,12 +584,13 @@ namespace PxP
         {
             //MessageBox.Show("OnPxPConfig");
             DebugTool.WriteLog("PxPTab.cs", "OnPxPConfig");
-
+            PxPVariable.PxPInfo = info;
+            PxPVariable.UnitsXMLPath = unitsXMLPath;
 
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
         }
-
+        
         #endregion
 
         #region IOnRollResult 成員

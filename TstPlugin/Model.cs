@@ -69,6 +69,8 @@ namespace PxP
         internal static IList<IFlawTypeName> FlawTypeName = new List<IFlawTypeName>();       //載入工單時先儲存方便各事件處理
         internal static IList<ISeverityInfo> SeverityInfo = new List<ISeverityInfo>();       //嚴重缺點優先順序
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
+        internal static IPxPInfo PxPInfo;
+        internal static string UnitsXMLPath;
         internal static IJobInfo JobInfo;                                                    //工單資訊
         internal static int JobKey;
         internal static int TotalPiece = 0;                                                  //用來處理目前總共有幾片
@@ -81,13 +83,18 @@ namespace PxP
     public class MapWindowVariable
     {
         internal static MapWindow MapWindowController = new MapWindow();
-        internal static List<IFlawInfo> Flaws = new List<IFlawInfo>();                                          //紀錄OnFlaws整條資訊
-        internal static List<IFlawInfo> FlawPiece = new List<IFlawInfo>();                                      //暫存單片Piece
+        internal static List<FlawInfoAddPriority> Flaws = new List<FlawInfoAddPriority>();                                          //紀錄OnFlaws整條資訊
+        internal static List<FlawInfoAddPriority> FlawPiece = new List<FlawInfoAddPriority>();                                      //暫存單片Piece
         internal static int InitMapWidth;                                                                       //紀錄初始Map寬
         internal static int InitMapHeight;                                                                      //紀錄初始Map高
         internal static bool IsMapInit;                                                                         //紀錄Map是否紀錄初始狀態
-        internal static List<List<IFlawInfo>> FlawPieces = new List<List<IFlawInfo>>();                         //儲存Piece切割後的所有檔案
+        internal static List<List<FlawInfoAddPriority>> FlawPieces = new List<List<FlawInfoAddPriority>>();                         //儲存Piece切割後的所有檔案
         internal static int CurrentPiece = 0 ;                                                                  //儲存左邊目前看到哪片玻璃
+        public MapWindowVariable()
+        {
+            //FlawInfoExtend x = new FlawInfoExtend();
+            
+        }
     }
     public class SystemVariable
     {
@@ -110,6 +117,7 @@ namespace PxP
         internal static int PageSize = ImgRowsSet * ImgColsSet;    //右下角TableLayoutPanel 圖片數量
         internal static int PageCurrent = 0;                       //
         internal static int PageTotal = 0;                         //計算當OnCut發生時右下角DataGrid的頁數
+        
        
 
 
@@ -255,6 +263,26 @@ namespace PxP
             this.Index = index;
             this.ColumnName = column;
             this.Width = width;
+        }
+    }
+    public class FlawInfoAddPriority
+    {
+        public int FlawID { set; get; }
+        public double Area { set; get; }
+        public double CD { set; get; }
+        public double MD { set; get; }
+        public string FlawClass { set; get; }
+        public int FlawType { set; get; }
+        public System.Collections.Generic.IList<IImageInfo> Images { get; set; }
+        public double LeftEdge { set; get; }
+        public double RightEdge { set; get; }
+        public double Length { set; get; }
+        public double Width { set; get; }
+        //Add Column
+        public int Priority { get; set; }
+        public FlawInfoAddPriority()
+        { 
+            
         }
     }
     #endregion
