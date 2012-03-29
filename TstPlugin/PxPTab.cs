@@ -80,6 +80,38 @@ namespace PxP
             InitTableLayout(tlpDoffGrid);
             DefineDataGridView(gvFlaw);
         }
+        //解構子
+        ~PxPTab()
+        {
+            try
+            {
+                string FolderPath = Path.GetDirectoryName(
+            Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
+                string FullFilePath = FolderPath + "sys.xml";
+                XDocument XDoc = XDocument.Load(FullFilePath);
+                IEnumerable<XElement> Columns = XDoc.Element("SystemConfig").Element("DoffGrid").Elements("Column");
+                for (int i = 0; i < gvFlaw.Columns.Count; i++)
+                {
+                    foreach (var column in Columns)
+                    {
+                        if (column.Attribute("Name").Value.ToString() == gvFlaw.Columns[i].Name.ToString())
+                        {
+                            column.SetElementValue("Index", gvFlaw.Columns[i].DisplayIndex.ToString());
+                            column.SetElementValue("Size", gvFlaw.Columns[i].Width);
+                        }
+
+                    }
+                }
+
+                XDoc.Save(FullFilePath);
+            }
+            catch (Exception e)
+            {
+            }
+
+            PxPThreadStatus.IsOnShutdown = true;
+            PxPThreadEvent.Set();
+        }
         #endregion
 
         #region Refactoring
@@ -98,6 +130,8 @@ namespace PxP
                 Dgv.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
                 Dgv.Columns[column.ColumnName].HeaderText = column.HeaderText;
                 Dgv.Columns[column.ColumnName].DisplayIndex = column.Index;
+                Dgv.Columns[column.ColumnName].Width = column.Width;
+
 
             }
             
@@ -170,6 +204,7 @@ namespace PxP
 
             for (int i = FlawPointStart, j = 0; i < FlawPointEnd; i++, j++)
             {
+                //尚未處理缺陷點小於9片格數
                 foreach (IImageInfo image in FlawPieces[PieceID][i].Images)
                 {
 
@@ -187,7 +222,7 @@ namespace PxP
             //        if (flag < flawList[flag2].Count)
             //        {
             //            FlawInfoControl fic = new FlawInfoControl(flawList[flag2][flag], jobinfo.NumberOfStations);
-            //            tableLayoutPanel1.Controls.Add(fic);
+            //            tableLayoutPa nel1.Controls.Add(fic);
             //            fic.Dock = DockStyle.Fill;
             //        }
 
@@ -379,13 +414,14 @@ namespace PxP
         {
             //MessageBox.Show("OnCut");
             DebugTool.WriteLog("PxPTab.cs", "OnCut");
-
+            
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
                 if (f.MD > PxPVariable.CurrentCutPosition + 3 || f.MD < 3)
                     MapWindowVariable.FlawPiece.Add(f);
             }
+            MapWindowVariable.Flaws.Clear();
             bsFlaw.ResetBindings(false);
             bsFlaw.ResumeBinding();
             gvFlaw.FirstDisplayedScrollingRowIndex = gvFlaw.Rows.Count - 1;
@@ -457,9 +493,7 @@ namespace PxP
             try
             {
                 XDocument XDocLang = SystemVariable.GetLangXDoc(SystemVariable.Language);
-                
                 IEnumerable<XElement> PxPDoffGridLangItem = XDocLang.Element("Language").Element("PxPTab").Element("DoffGrid").Elements("Column");
-               
                 foreach (var column in SystemVariable.DoffGridSetup)
                 {
                     foreach (var i in PxPDoffGridLangItem)
@@ -472,8 +506,6 @@ namespace PxP
                 }
                 //刷新所有須改變語系的物件
                 PageRefresh();
-                
-
             }
             catch (Exception ex)
             {

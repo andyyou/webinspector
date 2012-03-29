@@ -1,0 +1,546 @@
+﻿namespace PxP
+{
+    partial class MapSetup
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.lbLabelConfig = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.gbImgSettings = new System.Windows.Forms.GroupBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.lbImgRow = new System.Windows.Forms.Label();
+            this.lbImgColumn = new System.Windows.Forms.Label();
+            this.lbImgX = new System.Windows.Forms.Label();
+            this.gbMapSettings = new System.Windows.Forms.GroupBox();
+            this.lbMapSize = new System.Windows.Forms.Label();
+            this.cboxMapSize = new System.Windows.Forms.ComboBox();
+            this.lbMapGridShow = new System.Windows.Forms.Label();
+            this.rbMapGridOn = new System.Windows.Forms.RadioButton();
+            this.rbMapGridOff = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.rbFixCellSize = new System.Windows.Forms.RadioButton();
+            this.rbCountSize = new System.Windows.Forms.RadioButton();
+            this.lbFixSizeMD = new System.Windows.Forms.Label();
+            this.lbFixSizeCD = new System.Windows.Forms.Label();
+            this.tboxFixSizeMD = new System.Windows.Forms.TextBox();
+            this.tboxFixSizeCD = new System.Windows.Forms.TextBox();
+            this.tboxCountSizeMD = new System.Windows.Forms.TextBox();
+            this.tboxCountSizeCD = new System.Windows.Forms.TextBox();
+            this.lbCountSizeMD = new System.Windows.Forms.Label();
+            this.lbCountSizeCD = new System.Windows.Forms.Label();
+            this.lbBottomAxe = new System.Windows.Forms.Label();
+            this.cboxButtomAxe = new System.Windows.Forms.ComboBox();
+            this.cbMDInverse = new System.Windows.Forms.CheckBox();
+            this.cbCDInverse = new System.Windows.Forms.CheckBox();
+            this.gbSeriesSetting = new System.Windows.Forms.GroupBox();
+            this.rbSharp = new System.Windows.Forms.RadioButton();
+            this.rbLetter = new System.Windows.Forms.RadioButton();
+            this.gvSeries = new System.Windows.Forms.DataGridView();
+            this.Class = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Sharp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Letter = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnSaveAs = new System.Windows.Forms.Button();
+            this.btnConfirm = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.gbImgSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            this.gbMapSettings.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.gbSeriesSetting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gvSeries)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // lbLabelConfig
+            // 
+            this.lbLabelConfig.AutoSize = true;
+            this.lbLabelConfig.Location = new System.Drawing.Point(17, 20);
+            this.lbLabelConfig.Name = "lbLabelConfig";
+            this.lbLabelConfig.Size = new System.Drawing.Size(65, 12);
+            this.lbLabelConfig.TabIndex = 0;
+            this.lbLabelConfig.Text = "Load Config";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(94, 16);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(171, 20);
+            this.comboBox1.TabIndex = 1;
+            // 
+            // gbImgSettings
+            // 
+            this.gbImgSettings.Controls.Add(this.lbImgX);
+            this.gbImgSettings.Controls.Add(this.lbImgColumn);
+            this.gbImgSettings.Controls.Add(this.lbImgRow);
+            this.gbImgSettings.Controls.Add(this.numericUpDown2);
+            this.gbImgSettings.Controls.Add(this.numericUpDown1);
+            this.gbImgSettings.Location = new System.Drawing.Point(14, 55);
+            this.gbImgSettings.Name = "gbImgSettings";
+            this.gbImgSettings.Size = new System.Drawing.Size(251, 100);
+            this.gbImgSettings.TabIndex = 2;
+            this.gbImgSettings.TabStop = false;
+            this.gbImgSettings.Text = "Image Grid Settings";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(10, 50);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(50, 22);
+            this.numericUpDown1.TabIndex = 0;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(80, 50);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(50, 22);
+            this.numericUpDown2.TabIndex = 1;
+            // 
+            // lbImgRow
+            // 
+            this.lbImgRow.AutoSize = true;
+            this.lbImgRow.Location = new System.Drawing.Point(80, 25);
+            this.lbImgRow.Name = "lbImgRow";
+            this.lbImgRow.Size = new System.Drawing.Size(31, 12);
+            this.lbImgRow.TabIndex = 2;
+            this.lbImgRow.Text = "Rows";
+            // 
+            // lbImgColumn
+            // 
+            this.lbImgColumn.AutoSize = true;
+            this.lbImgColumn.Location = new System.Drawing.Point(10, 25);
+            this.lbImgColumn.Name = "lbImgColumn";
+            this.lbImgColumn.Size = new System.Drawing.Size(47, 12);
+            this.lbImgColumn.TabIndex = 3;
+            this.lbImgColumn.Text = "Columns";
+            // 
+            // lbImgX
+            // 
+            this.lbImgX.AutoSize = true;
+            this.lbImgX.Location = new System.Drawing.Point(63, 55);
+            this.lbImgX.Name = "lbImgX";
+            this.lbImgX.Size = new System.Drawing.Size(13, 12);
+            this.lbImgX.TabIndex = 4;
+            this.lbImgX.Text = "X";
+            // 
+            // gbMapSettings
+            // 
+            this.gbMapSettings.Controls.Add(this.cbCDInverse);
+            this.gbMapSettings.Controls.Add(this.cbMDInverse);
+            this.gbMapSettings.Controls.Add(this.cboxButtomAxe);
+            this.gbMapSettings.Controls.Add(this.lbBottomAxe);
+            this.gbMapSettings.Controls.Add(this.panel1);
+            this.gbMapSettings.Controls.Add(this.rbMapGridOff);
+            this.gbMapSettings.Controls.Add(this.rbMapGridOn);
+            this.gbMapSettings.Controls.Add(this.lbMapGridShow);
+            this.gbMapSettings.Controls.Add(this.cboxMapSize);
+            this.gbMapSettings.Controls.Add(this.lbMapSize);
+            this.gbMapSettings.Location = new System.Drawing.Point(14, 162);
+            this.gbMapSettings.Name = "gbMapSettings";
+            this.gbMapSettings.Size = new System.Drawing.Size(251, 302);
+            this.gbMapSettings.TabIndex = 3;
+            this.gbMapSettings.TabStop = false;
+            this.gbMapSettings.Text = "Map Settings";
+            // 
+            // lbMapSize
+            // 
+            this.lbMapSize.AutoSize = true;
+            this.lbMapSize.Location = new System.Drawing.Point(10, 22);
+            this.lbMapSize.Name = "lbMapSize";
+            this.lbMapSize.Size = new System.Drawing.Size(48, 12);
+            this.lbMapSize.TabIndex = 0;
+            this.lbMapSize.Text = "Map Size";
+            // 
+            // cboxMapSize
+            // 
+            this.cboxMapSize.FormattingEnabled = true;
+            this.cboxMapSize.Items.AddRange(new object[] {
+            "1:1",
+            "2:1 ",
+            "4:3 ",
+            "3:4 ",
+            "16:9"});
+            this.cboxMapSize.Location = new System.Drawing.Point(113, 14);
+            this.cboxMapSize.Name = "cboxMapSize";
+            this.cboxMapSize.Size = new System.Drawing.Size(121, 20);
+            this.cboxMapSize.TabIndex = 1;
+            // 
+            // lbMapGridShow
+            // 
+            this.lbMapGridShow.AutoSize = true;
+            this.lbMapGridShow.Location = new System.Drawing.Point(10, 48);
+            this.lbMapGridShow.Name = "lbMapGridShow";
+            this.lbMapGridShow.Size = new System.Drawing.Size(79, 12);
+            this.lbMapGridShow.TabIndex = 2;
+            this.lbMapGridShow.Text = "Map Grid Show";
+            // 
+            // rbMapGridOn
+            // 
+            this.rbMapGridOn.AutoSize = true;
+            this.rbMapGridOn.Location = new System.Drawing.Point(113, 44);
+            this.rbMapGridOn.Name = "rbMapGridOn";
+            this.rbMapGridOn.Size = new System.Drawing.Size(37, 16);
+            this.rbMapGridOn.TabIndex = 3;
+            this.rbMapGridOn.TabStop = true;
+            this.rbMapGridOn.Text = "On";
+            this.rbMapGridOn.UseVisualStyleBackColor = true;
+            // 
+            // rbMapGridOff
+            // 
+            this.rbMapGridOff.AutoSize = true;
+            this.rbMapGridOff.Location = new System.Drawing.Point(156, 44);
+            this.rbMapGridOff.Name = "rbMapGridOff";
+            this.rbMapGridOff.Size = new System.Drawing.Size(39, 16);
+            this.rbMapGridOff.TabIndex = 4;
+            this.rbMapGridOff.TabStop = true;
+            this.rbMapGridOff.Text = "Off";
+            this.rbMapGridOff.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.lbCountSizeCD);
+            this.panel1.Controls.Add(this.lbCountSizeMD);
+            this.panel1.Controls.Add(this.tboxCountSizeCD);
+            this.panel1.Controls.Add(this.tboxCountSizeMD);
+            this.panel1.Controls.Add(this.tboxFixSizeCD);
+            this.panel1.Controls.Add(this.tboxFixSizeMD);
+            this.panel1.Controls.Add(this.lbFixSizeCD);
+            this.panel1.Controls.Add(this.lbFixSizeMD);
+            this.panel1.Controls.Add(this.rbCountSize);
+            this.panel1.Controls.Add(this.rbFixCellSize);
+            this.panel1.Location = new System.Drawing.Point(12, 76);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(222, 144);
+            this.panel1.TabIndex = 5;
+            // 
+            // rbFixCellSize
+            // 
+            this.rbFixCellSize.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.rbFixCellSize.Location = new System.Drawing.Point(11, 7);
+            this.rbFixCellSize.Name = "rbFixCellSize";
+            this.rbFixCellSize.Size = new System.Drawing.Size(200, 60);
+            this.rbFixCellSize.TabIndex = 0;
+            this.rbFixCellSize.TabStop = true;
+            this.rbFixCellSize.Text = "Specify Cell Size";
+            this.rbFixCellSize.UseVisualStyleBackColor = false;
+            // 
+            // rbCountSize
+            // 
+            this.rbCountSize.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.rbCountSize.Location = new System.Drawing.Point(11, 72);
+            this.rbCountSize.Name = "rbCountSize";
+            this.rbCountSize.Size = new System.Drawing.Size(200, 60);
+            this.rbCountSize.TabIndex = 1;
+            this.rbCountSize.TabStop = true;
+            this.rbCountSize.Text = "Equal Cell Count";
+            this.rbCountSize.UseVisualStyleBackColor = false;
+            // 
+            // lbFixSizeMD
+            // 
+            this.lbFixSizeMD.AutoSize = true;
+            this.lbFixSizeMD.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbFixSizeMD.Location = new System.Drawing.Point(118, 17);
+            this.lbFixSizeMD.Name = "lbFixSizeMD";
+            this.lbFixSizeMD.Size = new System.Drawing.Size(23, 12);
+            this.lbFixSizeMD.TabIndex = 2;
+            this.lbFixSizeMD.Text = "MD";
+            // 
+            // lbFixSizeCD
+            // 
+            this.lbFixSizeCD.AutoSize = true;
+            this.lbFixSizeCD.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbFixSizeCD.Location = new System.Drawing.Point(120, 45);
+            this.lbFixSizeCD.Name = "lbFixSizeCD";
+            this.lbFixSizeCD.Size = new System.Drawing.Size(21, 12);
+            this.lbFixSizeCD.TabIndex = 3;
+            this.lbFixSizeCD.Text = "CD";
+            // 
+            // tboxFixSizeMD
+            // 
+            this.tboxFixSizeMD.Location = new System.Drawing.Point(144, 12);
+            this.tboxFixSizeMD.Name = "tboxFixSizeMD";
+            this.tboxFixSizeMD.Size = new System.Drawing.Size(50, 22);
+            this.tboxFixSizeMD.TabIndex = 4;
+            // 
+            // tboxFixSizeCD
+            // 
+            this.tboxFixSizeCD.Location = new System.Drawing.Point(144, 40);
+            this.tboxFixSizeCD.Name = "tboxFixSizeCD";
+            this.tboxFixSizeCD.Size = new System.Drawing.Size(50, 22);
+            this.tboxFixSizeCD.TabIndex = 5;
+            // 
+            // tboxCountSizeMD
+            // 
+            this.tboxCountSizeMD.Location = new System.Drawing.Point(144, 75);
+            this.tboxCountSizeMD.Name = "tboxCountSizeMD";
+            this.tboxCountSizeMD.Size = new System.Drawing.Size(50, 22);
+            this.tboxCountSizeMD.TabIndex = 6;
+            // 
+            // tboxCountSizeCD
+            // 
+            this.tboxCountSizeCD.Location = new System.Drawing.Point(144, 103);
+            this.tboxCountSizeCD.Name = "tboxCountSizeCD";
+            this.tboxCountSizeCD.Size = new System.Drawing.Size(50, 22);
+            this.tboxCountSizeCD.TabIndex = 7;
+            // 
+            // lbCountSizeMD
+            // 
+            this.lbCountSizeMD.AutoSize = true;
+            this.lbCountSizeMD.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCountSizeMD.Location = new System.Drawing.Point(118, 80);
+            this.lbCountSizeMD.Name = "lbCountSizeMD";
+            this.lbCountSizeMD.Size = new System.Drawing.Size(23, 12);
+            this.lbCountSizeMD.TabIndex = 8;
+            this.lbCountSizeMD.Text = "MD";
+            // 
+            // lbCountSizeCD
+            // 
+            this.lbCountSizeCD.AutoSize = true;
+            this.lbCountSizeCD.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCountSizeCD.Location = new System.Drawing.Point(120, 108);
+            this.lbCountSizeCD.Name = "lbCountSizeCD";
+            this.lbCountSizeCD.Size = new System.Drawing.Size(21, 12);
+            this.lbCountSizeCD.TabIndex = 9;
+            this.lbCountSizeCD.Text = "CD";
+            // 
+            // lbBottomAxe
+            // 
+            this.lbBottomAxe.AutoSize = true;
+            this.lbBottomAxe.Location = new System.Drawing.Point(10, 232);
+            this.lbBottomAxe.Name = "lbBottomAxe";
+            this.lbBottomAxe.Size = new System.Drawing.Size(62, 12);
+            this.lbBottomAxe.TabIndex = 6;
+            this.lbBottomAxe.Text = "Bottom Axe";
+            // 
+            // cboxButtomAxe
+            // 
+            this.cboxButtomAxe.FormattingEnabled = true;
+            this.cboxButtomAxe.Location = new System.Drawing.Point(113, 228);
+            this.cboxButtomAxe.Name = "cboxButtomAxe";
+            this.cboxButtomAxe.Size = new System.Drawing.Size(121, 20);
+            this.cboxButtomAxe.TabIndex = 7;
+            // 
+            // cbMDInverse
+            // 
+            this.cbMDInverse.AutoSize = true;
+            this.cbMDInverse.Location = new System.Drawing.Point(12, 273);
+            this.cbMDInverse.Name = "cbMDInverse";
+            this.cbMDInverse.Size = new System.Drawing.Size(79, 16);
+            this.cbMDInverse.TabIndex = 8;
+            this.cbMDInverse.Text = "MD Inverse";
+            this.cbMDInverse.UseVisualStyleBackColor = true;
+            // 
+            // cbCDInverse
+            // 
+            this.cbCDInverse.AutoSize = true;
+            this.cbCDInverse.Location = new System.Drawing.Point(113, 272);
+            this.cbCDInverse.Name = "cbCDInverse";
+            this.cbCDInverse.Size = new System.Drawing.Size(77, 16);
+            this.cbCDInverse.TabIndex = 9;
+            this.cbCDInverse.Text = "CD Inverse";
+            this.cbCDInverse.UseVisualStyleBackColor = true;
+            // 
+            // gbSeriesSetting
+            // 
+            this.gbSeriesSetting.Controls.Add(this.gvSeries);
+            this.gbSeriesSetting.Controls.Add(this.rbLetter);
+            this.gbSeriesSetting.Controls.Add(this.rbSharp);
+            this.gbSeriesSetting.Location = new System.Drawing.Point(271, 55);
+            this.gbSeriesSetting.Name = "gbSeriesSetting";
+            this.gbSeriesSetting.Size = new System.Drawing.Size(394, 409);
+            this.gbSeriesSetting.TabIndex = 4;
+            this.gbSeriesSetting.TabStop = false;
+            this.gbSeriesSetting.Text = "Series Settings";
+            // 
+            // rbSharp
+            // 
+            this.rbSharp.AutoSize = true;
+            this.rbSharp.Location = new System.Drawing.Point(20, 25);
+            this.rbSharp.Name = "rbSharp";
+            this.rbSharp.Size = new System.Drawing.Size(50, 16);
+            this.rbSharp.TabIndex = 0;
+            this.rbSharp.TabStop = true;
+            this.rbSharp.Text = "Sharp";
+            this.rbSharp.UseVisualStyleBackColor = true;
+            // 
+            // rbLetter
+            // 
+            this.rbLetter.AutoSize = true;
+            this.rbLetter.Location = new System.Drawing.Point(75, 25);
+            this.rbLetter.Name = "rbLetter";
+            this.rbLetter.Size = new System.Drawing.Size(50, 16);
+            this.rbLetter.TabIndex = 1;
+            this.rbLetter.TabStop = true;
+            this.rbLetter.Text = "Letter";
+            this.rbLetter.UseVisualStyleBackColor = true;
+            // 
+            // gvSeries
+            // 
+            this.gvSeries.AllowUserToAddRows = false;
+            this.gvSeries.AllowUserToDeleteRows = false;
+            this.gvSeries.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvSeries.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Class,
+            this.Color,
+            this.Sharp,
+            this.Letter});
+            this.gvSeries.Location = new System.Drawing.Point(6, 50);
+            this.gvSeries.Name = "gvSeries";
+            this.gvSeries.ReadOnly = true;
+            this.gvSeries.RowHeadersVisible = false;
+            this.gvSeries.RowTemplate.Height = 24;
+            this.gvSeries.Size = new System.Drawing.Size(382, 345);
+            this.gvSeries.TabIndex = 2;
+            // 
+            // Class
+            // 
+            this.Class.HeaderText = "Class";
+            this.Class.Name = "Class";
+            this.Class.ReadOnly = true;
+            // 
+            // Color
+            // 
+            this.Color.HeaderText = "Color";
+            this.Color.Name = "Color";
+            this.Color.ReadOnly = true;
+            // 
+            // Sharp
+            // 
+            this.Sharp.HeaderText = "Sharp";
+            this.Sharp.Name = "Sharp";
+            this.Sharp.ReadOnly = true;
+            // 
+            // Letter
+            // 
+            this.Letter.HeaderText = "Letter";
+            this.Letter.Name = "Letter";
+            this.Letter.ReadOnly = true;
+            // 
+            // btnSaveAs
+            // 
+            this.btnSaveAs.Location = new System.Drawing.Point(428, 477);
+            this.btnSaveAs.Name = "btnSaveAs";
+            this.btnSaveAs.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveAs.TabIndex = 5;
+            this.btnSaveAs.Text = "Save As";
+            this.btnSaveAs.UseVisualStyleBackColor = true;
+            // 
+            // btnConfirm
+            // 
+            this.btnConfirm.Location = new System.Drawing.Point(509, 477);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(75, 23);
+            this.btnConfirm.TabIndex = 6;
+            this.btnConfirm.Text = "Apply";
+            this.btnConfirm.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(590, 477);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 7;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            // 
+            // MapSetup
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(682, 512);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnConfirm);
+            this.Controls.Add(this.btnSaveAs);
+            this.Controls.Add(this.gbSeriesSetting);
+            this.Controls.Add(this.gbMapSettings);
+            this.Controls.Add(this.gbImgSettings);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.lbLabelConfig);
+            this.Name = "MapSetup";
+            this.Text = "MapSetup";
+            this.gbImgSettings.ResumeLayout(false);
+            this.gbImgSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            this.gbMapSettings.ResumeLayout(false);
+            this.gbMapSettings.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.gbSeriesSetting.ResumeLayout(false);
+            this.gbSeriesSetting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gvSeries)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Label lbLabelConfig;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.GroupBox gbImgSettings;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label lbImgX;
+        private System.Windows.Forms.Label lbImgColumn;
+        private System.Windows.Forms.Label lbImgRow;
+        private System.Windows.Forms.GroupBox gbMapSettings;
+        private System.Windows.Forms.ComboBox cboxMapSize;
+        private System.Windows.Forms.Label lbMapSize;
+        private System.Windows.Forms.RadioButton rbMapGridOn;
+        private System.Windows.Forms.Label lbMapGridShow;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lbCountSizeCD;
+        private System.Windows.Forms.Label lbCountSizeMD;
+        private System.Windows.Forms.TextBox tboxCountSizeCD;
+        private System.Windows.Forms.TextBox tboxCountSizeMD;
+        private System.Windows.Forms.TextBox tboxFixSizeCD;
+        private System.Windows.Forms.TextBox tboxFixSizeMD;
+        private System.Windows.Forms.Label lbFixSizeCD;
+        private System.Windows.Forms.Label lbFixSizeMD;
+        private System.Windows.Forms.RadioButton rbCountSize;
+        private System.Windows.Forms.RadioButton rbFixCellSize;
+        private System.Windows.Forms.RadioButton rbMapGridOff;
+        private System.Windows.Forms.Label lbBottomAxe;
+        private System.Windows.Forms.ComboBox cboxButtomAxe;
+        private System.Windows.Forms.CheckBox cbCDInverse;
+        private System.Windows.Forms.CheckBox cbMDInverse;
+        private System.Windows.Forms.GroupBox gbSeriesSetting;
+        private System.Windows.Forms.DataGridView gvSeries;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Class;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Color;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Sharp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Letter;
+        private System.Windows.Forms.RadioButton rbLetter;
+        private System.Windows.Forms.RadioButton rbSharp;
+        private System.Windows.Forms.Button btnSaveAs;
+        private System.Windows.Forms.Button btnConfirm;
+        private System.Windows.Forms.Button btnCancel;
+    }
+}
