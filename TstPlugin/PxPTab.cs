@@ -599,10 +599,14 @@ namespace PxP
             if (isOnline)
             {
                 gvFlaw.Rows.Clear();
+                MapWindowVariable.MapWindowController.ClearMap();
+                lbPageTotal.Text = "--";
+                lbPageCurrent.Text = "--";
                 foreach (var p in pbFlaws)
                 {
                     p.Image = null;
                 }
+
             }
             //if (isOnline)
             //{

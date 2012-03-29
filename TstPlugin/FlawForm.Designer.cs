@@ -46,8 +46,8 @@
             this.lbAreaVal = new System.Windows.Forms.Label();
             this.lbCDVal = new System.Windows.Forms.Label();
             this.lbLengthVal = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnZoomIn = new System.Windows.Forms.Button();
+            this.btnZoomOut = new System.Windows.Forms.Button();
             this.tlbFlawInfo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -260,27 +260,29 @@
             this.lbLengthVal.TabIndex = 8;
             this.lbLengthVal.Text = "Length Value";
             // 
-            // button1
+            // btnZoomIn
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackgroundImage = global::PxP.Properties.Resources.Zoom_In;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button1.Location = new System.Drawing.Point(432, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(40, 40);
-            this.button1.TabIndex = 2;
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnZoomIn.BackgroundImage = global::PxP.Properties.Resources.Zoom_In;
+            this.btnZoomIn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnZoomIn.Location = new System.Drawing.Point(432, 12);
+            this.btnZoomIn.Name = "btnZoomIn";
+            this.btnZoomIn.Size = new System.Drawing.Size(40, 40);
+            this.btnZoomIn.TabIndex = 2;
+            this.btnZoomIn.UseVisualStyleBackColor = true;
+            this.btnZoomIn.Click += new System.EventHandler(this.btnZoomIn_Click);
             // 
-            // button2
+            // btnZoomOut
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.BackgroundImage = global::PxP.Properties.Resources.Zoom_Out;
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button2.Location = new System.Drawing.Point(432, 58);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(40, 40);
-            this.button2.TabIndex = 3;
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnZoomOut.BackgroundImage = global::PxP.Properties.Resources.Zoom_Out;
+            this.btnZoomOut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnZoomOut.Location = new System.Drawing.Point(432, 58);
+            this.btnZoomOut.Name = "btnZoomOut";
+            this.btnZoomOut.Size = new System.Drawing.Size(40, 40);
+            this.btnZoomOut.TabIndex = 3;
+            this.btnZoomOut.UseVisualStyleBackColor = true;
+            this.btnZoomOut.Click += new System.EventHandler(this.btnZoomOut_Click);
             // 
             // FlawForm
             // 
@@ -288,12 +290,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::PxP.Properties.Resources.bgRight;
             this.ClientSize = new System.Drawing.Size(484, 358);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnZoomOut);
+            this.Controls.Add(this.btnZoomIn);
             this.Controls.Add(this.tlbFlawInfo);
             this.Controls.Add(this.tcPicture);
             this.Name = "FlawForm";
             this.Text = "FalwForm";
+            this.Load += new System.EventHandler(this.FlawForm_Load);
             this.tlbFlawInfo.ResumeLayout(false);
             this.tlbFlawInfo.PerformLayout();
             this.ResumeLayout(false);
@@ -312,8 +315,8 @@
         private System.Windows.Forms.Label lbArea;
         private System.Windows.Forms.Label lbCD;
         private System.Windows.Forms.Label lbLength;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnZoomIn;
+        private System.Windows.Forms.Button btnZoomOut;
         private System.Windows.Forms.Label lbFlawIDVal;
         private System.Windows.Forms.Label lbFlawClassVal;
         private System.Windows.Forms.Label lbMDVal;

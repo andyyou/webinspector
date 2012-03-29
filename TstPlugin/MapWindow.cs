@@ -40,7 +40,7 @@ namespace PxP
             //2D line chart
             ncc.Settings.RenderDevice = RenderDevice.GDI;
             //Add chart header
-            NLabel nchartHeader = nChart.Labels.AddHeader("缺陷圖");
+            //NLabel nchartHeader = nChart.Labels.AddHeader("缺陷圖");
 
             //Add tools to chart controller
             ncc.Controller.Tools.Add(new NSelectorTool());
@@ -96,13 +96,17 @@ namespace PxP
             {
                 foreach (var f in flawPiece)
                 {
-                    nPoint.AddDataPoint(new NDataPoint(f.CD, f.MD));
+                    nPoint.AddDataPoint(new NDataPoint(f.CD, f.RMD));
                 }
             }
             nChart.Refresh();
 
         }
-
+        public void ClearMap()
+        {
+            nPoint.ClearDataPoints();
+            nChart.Refresh();
+        }
         public void InitGvFlawClass()
         {
             DebugTool.WriteLog("MapWindow.cs", "InitGvFlawClass");
@@ -147,8 +151,8 @@ namespace PxP
                 NSeries series = hitTestResult.Series as NSeries;
                 if (series != null)
                 {
-                    FlawForm FlawFormController = new FlawForm();
-                    FlawFormController.GetFlawInfo(hitTestResult.DataPointIndex);
+                    FlawForm FlawFormController = new FlawForm(hitTestResult.DataPointIndex);
+                    //FlawFormController.GetFlawInfo();
                     FlawFormController.Show();
                     //MessageBox.Show("Flaw point [" + hitTestResult.DataPointIndex.ToString() + "]");
                 }

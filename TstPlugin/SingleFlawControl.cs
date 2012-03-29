@@ -14,7 +14,7 @@ namespace PxP
     public partial class SingleFlawControl : UserControl
     {
         public PictureBox[] pb;
-        private Label lb;
+        private Label lbCoordinate;
         private double dRatio = 0;
         private double dCurrentRatio = 0;
 
@@ -26,11 +26,10 @@ namespace PxP
 
             flaw = info;
             lbFlawID.Text += info.FlawID.ToString();
-            lb = new Label();
-            lb.BackColor = Color.LightSkyBlue;
-            lb.AutoSize = true;
-            lb.Visible = false;
-
+            lbCoordinate = new Label();
+            lbCoordinate.BackColor = Color.LightSkyBlue;
+            lbCoordinate.AutoSize = true;
+            lbCoordinate.Visible = false;
 
             pb = new PictureBox[station];
 
@@ -79,22 +78,22 @@ namespace PxP
             int xResult = x + 10;
             int yResult = y + 10;
 
-            lb.Text = ((int)(pbPoint.X / dCurrentRatio)).ToString() + "," + ((int)(pbPoint.Y / dCurrentRatio)).ToString();
+            lbCoordinate.Text = ((int)(pbPoint.X / dCurrentRatio)).ToString() + "," + ((int)(pbPoint.Y / dCurrentRatio)).ToString();
 
-            if (xResult + lb.Width + 5 > tp.ClientSize.Width)
+            if (xResult + lbCoordinate.Width + 5 > tp.ClientSize.Width)
             {
-                xResult = tp.ClientSize.Width - lb.Width - 10;
+                xResult = tp.ClientSize.Width - lbCoordinate.Width - 10;
             }
 
-            if (yResult + lb.Height + 5 > tp.ClientSize.Height)
+            if (yResult + lbCoordinate.Height + 5 > tp.ClientSize.Height)
             {
-                yResult = tp.ClientSize.Height - lb.Height - 10;
+                yResult = tp.ClientSize.Height - lbCoordinate.Height - 10;
             }
 
-            tabFlawControl.SelectedTab.Controls.Add(lb);
-            lb.Location = new Point(xResult, yResult);
-            lb.Visible = true;
-            lb.BringToFront();
+            tabFlawControl.SelectedTab.Controls.Add(lbCoordinate);
+            lbCoordinate.Location = new Point(xResult, yResult);
+            lbCoordinate.Visible = true;
+            lbCoordinate.BringToFront();
         }
         private void SingleFlawControl_DoubleClick(object sender, EventArgs e)
         { 

@@ -43,6 +43,7 @@
             // lbFlawID
             // 
             this.lbFlawID.AutoSize = true;
+            this.lbFlawID.BackColor = System.Drawing.Color.Transparent;
             this.lbFlawID.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbFlawID.Location = new System.Drawing.Point(3, 6);
             this.lbFlawID.Name = "lbFlawID";
