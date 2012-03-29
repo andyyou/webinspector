@@ -81,6 +81,7 @@
             this.btnPrevGrid.TabIndex = 2;
             this.btnPrevGrid.Text = "<";
             this.btnPrevGrid.UseVisualStyleBackColor = false;
+            this.btnPrevGrid.Click += new System.EventHandler(this.btnPrevGrid_Click);
             // 
             // btnNextGrid
             // 
@@ -92,6 +93,7 @@
             this.btnNextGrid.TabIndex = 3;
             this.btnNextGrid.Text = ">";
             this.btnNextGrid.UseVisualStyleBackColor = false;
+            this.btnNextGrid.Click += new System.EventHandler(this.btnNextGrid_Click);
             // 
             // lbNothing
             // 
@@ -111,9 +113,9 @@
             this.lbPageTotal.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPageTotal.Location = new System.Drawing.Point(399, 705);
             this.lbPageTotal.Name = "lbPageTotal";
-            this.lbPageTotal.Size = new System.Drawing.Size(34, 23);
+            this.lbPageTotal.Size = new System.Drawing.Size(28, 23);
             this.lbPageTotal.TabIndex = 6;
-            this.lbPageTotal.Text = "99";
+            this.lbPageTotal.Text = "--";
             // 
             // lbPageCurrent
             // 
@@ -122,9 +124,9 @@
             this.lbPageCurrent.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPageCurrent.Location = new System.Drawing.Point(325, 705);
             this.lbPageCurrent.Name = "lbPageCurrent";
-            this.lbPageCurrent.Size = new System.Drawing.Size(34, 23);
+            this.lbPageCurrent.Size = new System.Drawing.Size(28, 23);
             this.lbPageCurrent.TabIndex = 7;
-            this.lbPageCurrent.Text = "99";
+            this.lbPageCurrent.Text = "--";
             // 
             // PxPTab
             // 

@@ -75,6 +75,11 @@ namespace PxP
         internal static int JobKey;
         internal static int TotalPiece = 0;                                                  //用來處理目前總共有幾片
         internal static int FreezPiece = 0;                                                  //當OnCut或需要畫面凍結時紀錄當下跑到第幾片Piece
+        internal static int ImgRowsSet = 3;                         //ImgGrid設定大小
+        internal static int ImgColsSet = 3;
+        internal static int PageSize = ImgRowsSet * ImgColsSet;    //右下角TableLayoutPanel 圖片數量
+        internal static int PageCurrent = 0;                       //
+        internal static int PageTotal = 0;                         //計算當OnCut發生時右下角DataGrid的頁數
     }
     public class MapWindowThreadStatus
     {
@@ -101,8 +106,6 @@ namespace PxP
         internal static string ConfigFileName ;                     //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
         internal static e_Language Language = e_Language.English;   //預設為英語
         internal static string FlawLock = "FlawLock";               //OnFlaws & OnCut 鎖定
-        internal static int ImgRowsSet = 3;                         //ImgGrid設定大小
-        internal static int ImgColsSet = 3;
         internal static int MapProportion = 0;                      //紀錄Map比例 0->1:1, 2->1:1, 2->2:1, 3->4:3, 4->3:4,  5->16:9
         internal static int ShowGridSet = 1;                        //是否顯示格線
         internal static int MapGridSet = 1;                         //選擇使用的Grid間隔依據 0: EachCellSize , 1: EachCellCount
@@ -114,9 +117,7 @@ namespace PxP
         internal static int CDInver = 0;
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
         internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
-        internal static int PageSize = ImgRowsSet * ImgColsSet;    //右下角TableLayoutPanel 圖片數量
-        internal static int PageCurrent = 0;                       //
-        internal static int PageTotal = 0;                         //計算當OnCut發生時右下角DataGrid的頁數
+        internal static bool IsSystemFreez = false;                 //判斷系統現在是否在offline凍結狀態
         
        
 
@@ -218,8 +219,8 @@ namespace PxP
             XElement SysVariable = XConf.Element("Config").Element("SystemVariable");
             try
             {
-                SystemVariable.ImgRowsSet = int.Parse(SysVariable.Element("ImgRowsSet").Value);
-                SystemVariable.ImgColsSet = int.Parse(SysVariable.Element("ImgColsSet").Value);
+                PxPVariable.ImgRowsSet = int.Parse(SysVariable.Element("ImgRowsSet").Value);
+                PxPVariable.ImgColsSet = int.Parse(SysVariable.Element("ImgColsSet").Value);
                 SystemVariable.MapProportion = int.Parse(SysVariable.Element("MapProportion").Value);
                 SystemVariable.ShowGridSet = int.Parse(SysVariable.Element("ShowGridSet").Value);
                 SystemVariable.MapGridSet = int.Parse(SysVariable.Element("MapGridSet").Value);
@@ -229,13 +230,13 @@ namespace PxP
                 SystemVariable.BottomAxe = int.Parse(SysVariable.Element("BottomAxe").Value);
                 SystemVariable.MDInver = int.Parse(SysVariable.Element("MDInver").Value);
                 SystemVariable.CDInver = int.Parse(SysVariable.Element("CDInver").Value);
-                SystemVariable.PageSize = SystemVariable.ImgRowsSet * SystemVariable.ImgColsSet;
+                PxPVariable.PageSize = PxPVariable.ImgRowsSet * PxPVariable.ImgColsSet;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Initialize Load Config Fail : \n" + ex.Message);
-                SystemVariable.ImgRowsSet = 2;
-                SystemVariable.ImgColsSet = 2;
+                PxPVariable.ImgRowsSet = 2;
+                PxPVariable.ImgColsSet = 2;
                 SystemVariable.MapProportion = 0;
                 SystemVariable.ShowGridSet = 1;
                 SystemVariable.MapGridSet = 1;
@@ -280,6 +281,7 @@ namespace PxP
         public double Width { set; get; }
         //Add Column
         public int Priority { get; set; }
+        public double RMD { get; set; }
         public FlawInfoAddPriority()
         { 
             

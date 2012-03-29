@@ -31,16 +31,16 @@ namespace PxP
             tcPicture.TabPages.Add("Flaw");
             tcPicture.TabPages[0].Controls.Add(pbFlaw);
 
-            lbFlawIDVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].FlawID.ToString();
-            lbFlawTypeVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].FlawType.ToString();
-            lbFlawClassVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].FlawClass.ToString();
-            lbAreaVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].Area.ToString("0.######");
-            lbMDVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].MD.ToString();
-            lbCDVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].CD.ToString();
-            lbWidthVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].Width.ToString();
-            lbLengthVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].Length.ToString();
+            lbFlawIDVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece -1 ][PointIndex].FlawID.ToString();
+            lbFlawTypeVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece -1][PointIndex].FlawType.ToString();
+            lbFlawClassVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece -1][PointIndex].FlawClass.ToString();
+            lbAreaVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1][PointIndex].Area.ToString("0.######");
+            lbMDVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1][PointIndex].MD.ToString();
+            lbCDVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1][PointIndex].CD.ToString();
+            lbWidthVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1][PointIndex].Width.ToString();
+            lbLengthVal.Text = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1][PointIndex].Length.ToString();
 
-            foreach (IImageInfo image in MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex].Images)
+            foreach (IImageInfo image in MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1][PointIndex].Images)
             {
                 pbFlaw.Image = image.Image;
             }

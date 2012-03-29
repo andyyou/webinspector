@@ -38,6 +38,8 @@ namespace PxP
         /// </summary>
         [Import(typeof(IWRMessageLog))]
         IWRMessageLog MsgLog;
+        [Import(typeof(IWRJob))]
+        IWRJob Job;
         #region Local Variable
         public PictureBox[] pbFlaws;
         public int ImgPlaceHolderWidth;
@@ -165,20 +167,20 @@ namespace PxP
         void InitTableLayout(TableLayoutPanel Tlp)
         {
             Tlp.ColumnStyles.Clear();
-            Tlp.RowCount = SystemVariable.ImgRowsSet;
-            Tlp.ColumnCount = SystemVariable.ImgColsSet;
+            Tlp.RowCount = PxPVariable.ImgRowsSet;
+            Tlp.ColumnCount = PxPVariable.ImgColsSet;
             pbFlaws = new PictureBox[Tlp.RowCount * Tlp.ColumnCount];
             ImgPlaceHolderHeight = Tlp.Height / Tlp.RowCount;
             ImgPlaceHolderWidth = Tlp.Width / Tlp.ColumnCount;
-            for (int i = 0; i < SystemVariable.ImgRowsSet; i++)
+            for (int i = 0; i < PxPVariable.ImgRowsSet; i++)
             {
                 Tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
             }
-            for (int i = 0; i < SystemVariable.ImgColsSet; i++)
+            for (int i = 0; i < PxPVariable.ImgColsSet; i++)
             {
                 Tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             }
-            for (int i = 0; i < SystemVariable.ImgRowsSet * SystemVariable.ImgColsSet; i++)
+            for (int i = 0; i < PxPVariable.ImgRowsSet * PxPVariable.ImgColsSet; i++)
             {
                 pbFlaws[i] = new PictureBox();
                 pbFlaws[i].Width = ImgPlaceHolderWidth;
@@ -190,25 +192,45 @@ namespace PxP
             
         }
         //繪製TableLayoutPanel將圖片置入Control
-        void DrawTablePictures(List<List<FlawInfoAddPriority>> FlawPieces, int PieceID)
+        void DrawTablePictures(List<List<FlawInfoAddPriority>> FlawPieces, int PieceID, int PageNum)
         {
-            SystemVariable.PageCurrent = 1;
-            SystemVariable.PageTotal = gvFlaw.Rows.Count % SystemVariable.PageSize == 0 ?
-                                       gvFlaw.Rows.Count / SystemVariable.PageSize :
-                                       gvFlaw.Rows.Count / SystemVariable.PageSize + 1;
-            lbPageCurrent.Text = SystemVariable.PageCurrent.ToString();
-            lbPageTotal.Text = SystemVariable.PageTotal.ToString();
 
-            int FlawPointStart = (SystemVariable.PageCurrent - 1) * 9;
-            int FlawPointEnd = FlawPointStart + SystemVariable.PageSize;
+            PxPVariable.PageCurrent = (PageNum < 1) ? 1 : PageNum;
+            PxPVariable.PageTotal = gvFlaw.Rows.Count % PxPVariable.PageSize == 0 ?
+                                       gvFlaw.Rows.Count / PxPVariable.PageSize :
+                                       gvFlaw.Rows.Count / PxPVariable.PageSize + 1;
+            lbPageCurrent.Text = PxPVariable.PageCurrent.ToString();
+            lbPageTotal.Text = PxPVariable.PageTotal.ToString();
+            //Deal Button enable
+            if (PxPVariable.PageCurrent < PxPVariable.PageTotal && PxPVariable.PageCurrent > 1)
+            {
+                btnNextGrid.Enabled = true;
+                btnPrevGrid.Enabled = true;
+            }
+            else if (PxPVariable.PageCurrent == 1)
+            {
+                btnPrevGrid.Enabled = false;
+            }
+            else if (PxPVariable.PageCurrent == PxPVariable.PageTotal)
+            {
+                btnNextGrid.Enabled = false;
+            }
+            else
+            {
+                btnNextGrid.Enabled = false;
+                btnPrevGrid.Enabled = false;
+            }
+
+            int FlawPointStart = (PxPVariable.PageCurrent - 1) * 9;
+            int FlawPointEnd = ((FlawPointStart + PxPVariable.PageSize) > gvFlaw.Rows.Count) ? gvFlaw.Rows.Count : (FlawPointStart + PxPVariable.PageSize);
 
             for (int i = FlawPointStart, j = 0; i < FlawPointEnd; i++, j++)
             {
                 //尚未處理缺陷點小於9片格數
                 foreach (IImageInfo image in FlawPieces[PieceID][i].Images)
                 {
-
-                    ImageAdjust(image.Image ,  pbFlaws[j]);
+                    if (image != null)
+                        ImageAdjust(image.Image ,  pbFlaws[j]);
                 }
             }
             
@@ -372,6 +394,7 @@ namespace PxP
                     f.LeftEdge = i.LeftEdge;
                     f.Length = i.Length;
                     f.MD = i.MD;
+                    f.RMD = i.MD - PxPVariable.CurrentCutPosition;
                     f.RightEdge = i.RightEdge;
                     f.Width = i.Width;
                     //特別處理Priority
@@ -401,7 +424,7 @@ namespace PxP
         {
             //MessageBox.Show("OnEvents");
             DebugTool.WriteLog("PxPTab.cs", "OnEvents");
-
+            
             PxPThreadStatus.IsOnEvents = true;
             PxPThreadEvent.Set();
         }
@@ -414,21 +437,23 @@ namespace PxP
         {
             //MessageBox.Show("OnCut");
             DebugTool.WriteLog("PxPTab.cs", "OnCut");
-            
-            MapWindowVariable.FlawPiece.Clear();
-            foreach (var f in MapWindowVariable.Flaws)
+            if (PxPThreadStatus.IsOnOnline)
             {
-                if (f.MD > PxPVariable.CurrentCutPosition + 3 || f.MD < 3)
-                    MapWindowVariable.FlawPiece.Add(f);
+                MapWindowVariable.FlawPiece.Clear();
+                foreach (var f in MapWindowVariable.Flaws)
+                {
+                    if (f.MD < PxPVariable.CurrentCutPosition + 3 && f.MD > PxPVariable.CurrentCutPosition)
+                        MapWindowVariable.FlawPiece.Add(f);
+                }
+                MapWindowVariable.Flaws.Clear();
+                bsFlaw.ResetBindings(false);
+                bsFlaw.ResumeBinding();
+
+
+                PxPVariable.CurrentCutPosition = md;
+                PxPThreadStatus.IsOnCut = true;
+                PxPThreadEvent.Set();
             }
-            MapWindowVariable.Flaws.Clear();
-            bsFlaw.ResetBindings(false);
-            bsFlaw.ResumeBinding();
-            gvFlaw.FirstDisplayedScrollingRowIndex = gvFlaw.Rows.Count - 1;
-            
-            PxPVariable.CurrentCutPosition = md;
-            PxPThreadStatus.IsOnCut = true;
-            PxPThreadEvent.Set();
         }
 
         #endregion
@@ -461,8 +486,6 @@ namespace PxP
         {
             //MessageBox.Show("OnJobStarted");
             DebugTool.WriteLog("PxPTab.cs", "OnJobStarted");
-
-
             PxPVariable.JobKey = jobKey;
             PxPThreadStatus.IsOnJobStarted = true;
             PxPThreadEvent.Set();
@@ -475,8 +498,6 @@ namespace PxP
         {
             //MessageBox.Show("OnLanguageChanged");
             DebugTool.WriteLog("PxPTab.cs", "OnLanguageChanged");
-
-
             SystemVariable.Language = language;
             #region 註解
             /*
@@ -511,7 +532,7 @@ namespace PxP
             {
                 //Nothing Now
             }
-            PxPThreadEvent.Set();
+            // PxPThreadEvent.Set();
         }
 
         #endregion
@@ -522,7 +543,6 @@ namespace PxP
         {
             //MessageBox.Show("OnJobStopped");
             DebugTool.WriteLog("PxPTab.cs", "OnJobStopped");
-
 
             PxPThreadStatus.IsOnJobStopped = true;
             PxPThreadEvent.Set();
@@ -575,9 +595,23 @@ namespace PxP
         {
             //MessageBox.Show("OnOnline");
             DebugTool.WriteLog("PxPTab.cs", "OnOnline");
+            PxPThreadStatus.IsOnOnline = isOnline;
+            if (isOnline)
+            {
+                gvFlaw.Rows.Clear();
+                foreach (var p in pbFlaws)
+                {
+                    p.Image = null;
+                }
+            }
+            //if (isOnline)
+            //{
+            //    PxPThreadStatus.IsOnOnline = true;
 
-
-            PxPThreadStatus.IsOnOnline = true;
+            //}
+            //else
+            //    PxPThreadStatus.IsOnOnline = false;
+            
             PxPThreadEvent.Set();
         }
 
@@ -747,7 +781,7 @@ namespace PxP
                     if (PxPThreadStatus.IsOnShutdown)
                         return;
 
-                    
+
                     if (PxPThreadStatus.IsOnLanguageChanged)
                     {
                         PxPThreadStatus.IsOnLanguageChanged = false;
@@ -768,12 +802,12 @@ namespace PxP
                         MethodInvoker JobStarted = new MethodInvoker(ProcessJobStarted);
                         this.BeginInvoke(JobStarted);
                     }
-                    if (PxPThreadStatus.IsOnOnline)
-                    {
-                        PxPThreadStatus.IsOnOnline = false;
-                        MethodInvoker Online = new MethodInvoker(ProcessOnOnline);
-                        this.BeginInvoke(Online);
-                    }
+                    //if (PxPThreadStatus.IsOnOnline)
+                    //{
+                    //    PxPThreadStatus.IsOnOnline = false;
+                    //    MethodInvoker Online = new MethodInvoker(ProcessOnOnline);
+                    //    this.BeginInvoke(Online);
+                    //}
 
                     if (PxPThreadStatus.IsOnFlaws)
                     {
@@ -970,8 +1004,6 @@ namespace PxP
         {
             //MessageBox.Show("ProcessJobLoaded");
             DebugTool.WriteLog("PxPTab.cs", "ProcessJobLoaded");
-
-
             PxPThreadStatus.IsOnJobLoaded = false;
         }
         public void ProcessJobStarted()
@@ -991,8 +1023,8 @@ namespace PxP
 
             MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece);
             //處理右下角圖片
-            DrawTablePictures(MapWindowVariable.FlawPieces,MapWindowVariable.CurrentPiece);
-                
+            DrawTablePictures(MapWindowVariable.FlawPieces,MapWindowVariable.CurrentPiece,1);
+            //MapWindowVariable.CurrentPiece++;
             /*
             foreach (var i in MapWindowVariable.FlawPiece)
             {
@@ -1006,10 +1038,8 @@ namespace PxP
         public void ProcessOnOnline()
         {
             //MessageBox.Show("ProcessOnOnline");
-            DebugTool.WriteLog("PxPTab.cs", "ProcessOnOnline");
-
-           
-            PxPThreadStatus.IsOnOnline = false;
+            //DebugTool.WriteLog("PxPTab.cs", "ProcessOnOnline");
+            //PxPThreadStatus.IsOnOnline = false;
         }
         public void ProcessOnDoffResult()
         {
@@ -1045,7 +1075,7 @@ namespace PxP
             //MessageBox.Show("ProcessOnLanguageChenged");
             DebugTool.WriteLog("PxPTab.cs", "ProcessOnLanguageChenged");
 
-            
+
             PxPThreadStatus.IsOnLanguageChanged = false;
         }
         public void ProcessOnFlaws()
@@ -1134,11 +1164,35 @@ namespace PxP
         
         #endregion
 
+        
+
 
 
         #region Action Events
         //操作事件
+        /// <summary>
+        /// Next Page of Grid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnNextGrid_Click(object sender, EventArgs e)
+        {
+            Job.SetOffline();
+            //PxPThreadStatus.IsOnCut = false;
+            PxPThreadStatus.IsOnOnline = false;
+            int Page = (PxPVariable.PageCurrent + 1 > PxPVariable.PageTotal) ? PxPVariable.PageTotal : PxPVariable.PageCurrent + 1;
+            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, Page);
+        }
         #endregion
+
+        private void btnPrevGrid_Click(object sender, EventArgs e)
+        {
+            Job.SetOffline();
+            //PxPThreadStatus.IsOnCut = false;
+            PxPThreadStatus.IsOnOnline = false;
+            int Page = (PxPVariable.PageCurrent - 1 < 1) ? 1 : PxPVariable.PageCurrent - 1;
+            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, Page);
+        }
 
 
 
