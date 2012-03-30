@@ -91,7 +91,21 @@ namespace PxP
         public void DrawPieceFlaw(List<FlawInfoAddPriority> flawPiece)
         {
             nPoint.ClearDataPoints();
+            
             MapWindowVariable.FlawPieces.Add(flawPiece); //把PxP處理完的每一片儲存
+            if (flawPiece.Count > 0)
+            {
+                foreach (var f in flawPiece)
+                {
+                    nPoint.AddDataPoint(new NDataPoint(f.CD, f.RMD));
+                }
+            }
+            nChart.Refresh();
+
+        }
+        public void RefreshPieceFlaw(List<FlawInfoAddPriority> flawPiece)
+        {
+            nPoint.ClearDataPoints();
             if (flawPiece.Count > 0)
             {
                 foreach (var f in flawPiece)

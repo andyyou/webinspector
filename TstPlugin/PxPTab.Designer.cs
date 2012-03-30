@@ -46,14 +46,17 @@
             // 
             this.gvFlaw.AllowUserToAddRows = false;
             this.gvFlaw.AllowUserToDeleteRows = false;
+            this.gvFlaw.AllowUserToOrderColumns = true;
             this.gvFlaw.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvFlaw.Location = new System.Drawing.Point(12, 12);
             this.gvFlaw.Name = "gvFlaw";
             this.gvFlaw.ReadOnly = true;
             this.gvFlaw.RowHeadersVisible = false;
             this.gvFlaw.RowTemplate.Height = 24;
+            this.gvFlaw.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gvFlaw.Size = new System.Drawing.Size(735, 196);
             this.gvFlaw.TabIndex = 0;
+            this.gvFlaw.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvFlaw_ColumnHeaderMouseClick);
             // 
             // tlpDoffGrid
             // 

@@ -6,6 +6,8 @@ using WRPlugIn;
 using System.Xml.Linq;
 using System.IO;
 using System.Reflection;
+using System.ComponentModel;
+using System.Collections;
 
 namespace PxP
 {
@@ -66,6 +68,7 @@ namespace PxP
     {
         internal static double CurrentCutPosition = 0;                                       //紀錄目前裁切位置
         internal static int PieceLimit;                                                      //Piece限制數量
+        internal static int PieceTotal;                                                      //紀錄目前Cut幾片
         internal static IList<IFlawTypeName> FlawTypeName = new List<IFlawTypeName>();       //載入工單時先儲存方便各事件處理
         internal static IList<ISeverityInfo> SeverityInfo = new List<ISeverityInfo>();       //嚴重缺點優先順序
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
@@ -80,6 +83,8 @@ namespace PxP
         internal static int PageSize = ImgRowsSet * ImgColsSet;    //右下角TableLayoutPanel 圖片數量
         internal static int PageCurrent = 0;                       //
         internal static int PageTotal = 0;                         //計算當OnCut發生時右下角DataGrid的頁數
+        internal static string FlawGridViewOrderColumn = "";       //右上角GridView排序的欄位
+        internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
     }
     public class MapWindowThreadStatus
     {
@@ -116,7 +121,7 @@ namespace PxP
         internal static int MDInver = 0;                            //紀錄是否反轉座標軸
         internal static int CDInver = 0;
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
-        internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
+       
         internal static bool IsSystemFreez = false;                 //判斷系統現在是否在offline凍結狀態
         
        
@@ -196,12 +201,14 @@ namespace PxP
                 XElement XConfFile = XSysConf.Element("SystemConfig").Element("ConfFile"); //儲存Conf檔名到SystemVariable變數
                 IEnumerable<XElement> XDoffGrid = XSysConf.Element("SystemConfig").Element("DoffGrid").Elements("Column"); //自動儲存右上方GridView的排序和欄位Size
                 SystemVariable.ConfigFileName = XConfFile.Value + ".xml";
-                SystemVariable.DoffGridSetup.Clear();
+                PxPVariable.DoffGridSetup.Clear();
                 foreach (XElement el in XDoffGrid)
                 {
                     DoffGridColumns d = new DoffGridColumns(int.Parse(el.Element("Index").Value), el.Attribute("Name").Value, int.Parse(el.Element("Size").Value));
-                    SystemVariable.DoffGridSetup.Add(d);
+                    PxPVariable.DoffGridSetup.Add(d);
                 }
+                XElement OrderByColumn = XSysConf.Element("SystemConfig").Element("DoffGrid").Element("OrderBy");
+                PxPVariable.FlawGridViewOrderColumn = OrderByColumn.Value;
             }
             catch (Exception ex)
             {
@@ -285,6 +292,21 @@ namespace PxP
         public FlawInfoAddPriority()
         { 
             
+        }
+        ////////////////////////////////////////////////////////////////////////////////
+
+       
+        
+    }
+    public class Pair
+    {
+        public string Key { set; get; } 
+        public int Value { set; get; }
+        public Pair() { }
+        public Pair(string k, int v)
+        {
+            Key = k;
+            Value = v;
         }
     }
     #endregion
