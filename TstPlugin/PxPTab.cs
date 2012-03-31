@@ -200,7 +200,7 @@ namespace PxP
         //繪製TableLayoutPanel將圖片置入Control
         void DrawTablePictures(List<List<FlawInfoAddPriority>> FlawPieces, int PieceID, int PageNum)
         {
-
+            //this.Refresh(); 
             PxPVariable.PageCurrent = (PageNum < 1) ? 1 : PageNum;
             PxPVariable.PageTotal = gvFlaw.Rows.Count % PxPVariable.PageSize == 0 ?
                                        gvFlaw.Rows.Count / PxPVariable.PageSize :
@@ -241,6 +241,7 @@ namespace PxP
             //}
 
             tlpDoffGrid.Controls.Clear();
+            
             tlpDoffGrid.Visible = false;
             if (gvFlaw.Rows.Count > 0)
             {
@@ -254,12 +255,14 @@ namespace PxP
                         SingleFlawControl sfc = new SingleFlawControl(FlawPieces[PieceID][flag]);
                         sfc.Width = ImgPlaceHolderWidth;
                         sfc.Height = ImgPlaceHolderHeight;
+                        sfc.Name = sfc.Tag.ToString();
                         tlpDoffGrid.Controls.Add(sfc);
                         sfc.Dock = DockStyle.Fill;
                     }
                    
                 }
             }
+           
             tlpDoffGrid.Visible = true;
 
 
@@ -376,7 +379,15 @@ namespace PxP
                     break;
             };
         }
+        //Find Control
+        public IEnumerable<Control> GetAll(Control control, Type type)
+        {
+            var controls = control.Controls.Cast<Control>();
 
+            return controls.SelectMany(ctrl => GetAll(ctrl, type))
+                                      .Concat(controls)
+                                      .Where(c => c.GetType() == type);
+        }
         #endregion
 
         #region Inherit Interface
@@ -1287,14 +1298,16 @@ namespace PxP
             Job.SetOffline();
             PxPThreadStatus.IsOnOnline = false;
             // Check which column is selected, otherwise set NewColumn to null.
-            DataGridViewColumn NewColumn = gvFlaw.Columns[e.ColumnIndex];
-            
-            DataGridViewColumn OlderColumn = gvFlaw.SortedColumn;
-            ListSortDirection lsd;
-            SortGridViewByColumn(NewColumn.Name);
-            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
-            MapWindowVariable.MapWindowController.RefreshPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
-            /*
+            if (gvFlaw.Rows.Count > 0)
+            {
+                DataGridViewColumn NewColumn = gvFlaw.Columns[e.ColumnIndex];
+                DataGridViewColumn OlderColumn = gvFlaw.SortedColumn;
+                ListSortDirection lsd;
+                SortGridViewByColumn(NewColumn.Name);
+                DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
+                MapWindowVariable.MapWindowController.RefreshPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
+            }
+                /*
             // Offical Way
            
             // If oldColumn is null, then the DataGridView is not currently sorted.
@@ -1326,7 +1339,44 @@ namespace PxP
            */
         
         }
+        private void tlpDoffGrid_Paint(object sender, PaintEventArgs e)
+        {
+            try
+            {
+                
+                Graphics g = tlpDoffGrid.CreateGraphics();
+                Control c = tlpDoffGrid.Controls[PxPVariable.ChooseFlawID] as SingleFlawControl;
+                Pen p = new Pen(Color.SandyBrown, 3.0f);
+                Rectangle rec = new Rectangle(c.Location, new Size(c.Width, c.Height));
+                g.DrawRectangle(p, rec);
+                
+                //if (PxPVariable.ChooseFlawID != -1 && c.Tag.ToString() == PxPVariable.ChooseFlawID.ToString())
+                //{
+                //    //Control c = tlpDoffGrid.GetControlFromPosition(0,1);
+                //    Pen p = new Pen(Color.Red, 2.0f);
+                //    Rectangle rec = new Rectangle(c.Location, new Size(c.Width, c.Height));
+                //    g.DrawRectangle(p, rec);
+                //}
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void gvFlaw_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Job.SetOffline();
+            PxPThreadStatus.IsOnOnline = false;
+            int v = -1;
+            int p = e.RowIndex / PxPVariable.PageSize;
+            PxPVariable.ChooseFlawID = int.TryParse(gvFlaw.Rows[e.RowIndex].Cells["FlawID"].Value.ToString(), out v) ? v : -1;
+            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, p);
+        }
         #endregion
+
+       
+
+       
 
         
 

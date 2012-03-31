@@ -56,6 +56,7 @@
             this.gvFlaw.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gvFlaw.Size = new System.Drawing.Size(735, 196);
             this.gvFlaw.TabIndex = 0;
+            this.gvFlaw.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvFlaw_CellDoubleClick);
             this.gvFlaw.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvFlaw_ColumnHeaderMouseClick);
             // 
             // tlpDoffGrid
@@ -73,6 +74,7 @@
             this.tlpDoffGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDoffGrid.Size = new System.Drawing.Size(735, 448);
             this.tlpDoffGrid.TabIndex = 1;
+            this.tlpDoffGrid.Paint += new System.Windows.Forms.PaintEventHandler(this.tlpDoffGrid_Paint);
             // 
             // btnPrevGrid
             // 

@@ -85,6 +85,7 @@ namespace PxP
         internal static int PageTotal = 0;                         //計算當OnCut發生時右下角DataGrid的頁數
         internal static string FlawGridViewOrderColumn = "";       //右上角GridView排序的欄位
         internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
+        internal static int ChooseFlawID = -1;
     }
     public class MapWindowThreadStatus
     {
