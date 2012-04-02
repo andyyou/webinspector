@@ -200,7 +200,13 @@ namespace PxP
         //繪製TableLayoutPanel將圖片置入Control
         void DrawTablePictures(List<List<FlawInfoAddPriority>> FlawPieces, int PieceID, int PageNum)
         {
-            //this.Refresh(); 
+            ////<test clear>
+            //var cs = GetAll(this, typeof(Rectangle));
+            //foreach (var c in cs)
+            //{
+            //    c.Refresh(); 
+            //}
+            ////</test clear>
             PxPVariable.PageCurrent = (PageNum < 1) ? 1 : PageNum;
             PxPVariable.PageTotal = gvFlaw.Rows.Count % PxPVariable.PageSize == 0 ?
                                        gvFlaw.Rows.Count / PxPVariable.PageSize :
@@ -263,7 +269,8 @@ namespace PxP
                 }
             }
            
-            tlpDoffGrid.Visible = true;
+            tlpDoffGrid.Visible = true;
+
 
 
         }
@@ -1345,7 +1352,8 @@ namespace PxP
             {
                 
                 Graphics g = tlpDoffGrid.CreateGraphics();
-                Control c = tlpDoffGrid.Controls[PxPVariable.ChooseFlawID] as SingleFlawControl;
+                Control c = tlpDoffGrid.Controls[PxPVariable.ChooseFlawID.ToString()] as SingleFlawControl;
+               
                 Pen p = new Pen(Color.SandyBrown, 3.0f);
                 Rectangle rec = new Rectangle(c.Location, new Size(c.Width, c.Height));
                 g.DrawRectangle(p, rec);
@@ -1368,7 +1376,8 @@ namespace PxP
             Job.SetOffline();
             PxPThreadStatus.IsOnOnline = false;
             int v = -1;
-            int p = e.RowIndex / PxPVariable.PageSize;
+            int p = e.RowIndex / PxPVariable.PageSize + 1;
+            PxPVariable.PageCurrent = p;
             PxPVariable.ChooseFlawID = int.TryParse(gvFlaw.Rows[e.RowIndex].Cells["FlawID"].Value.ToString(), out v) ? v : -1;
             DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, p);
         }
