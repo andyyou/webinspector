@@ -89,7 +89,11 @@ namespace PxP
     }
     public class MapWindowThreadStatus
     {
-        public static bool IsRunSetup;
+        public static bool IsRunSetup = false;
+        public static bool StopMapThreading = false;
+        public static bool CallDrawTableLayout= false;
+        public static bool IsPageRefresh = false;
+       
     }
     public class MapWindowVariable
     {
@@ -101,6 +105,16 @@ namespace PxP
         internal static bool IsMapInit;                                                                         //紀錄Map是否紀錄初始狀態
         internal static List<List<FlawInfoAddPriority>> FlawPieces = new List<List<FlawInfoAddPriority>>();                         //儲存Piece切割後的所有檔案
         internal static int CurrentPiece = 0 ;                                                                  //儲存左邊目前看到哪片玻璃
+        internal static int MapProportion = 0;                      //紀錄Map比例 0->1:1, 2->1:1, 2->2:1, 3->4:3, 4->3:4,  5->16:9
+        internal static bool ShowGridSet = true;                    //是否顯示格線
+        internal static int MapGridSet = 1;                         //選擇使用的Grid間隔依據 0: EachCellSize , 1: EachCellCount
+        internal static double MapMDSet = 3;                        //Map Size 的間隔大小
+        internal static double MapCDSet = 3;
+        internal static int SeriesSet = 0;                          //紀錄選用的紀錄方式 0->Sharp , 1->Letter
+        internal static int BottomAxe = 0;                          //紀錄MD或CD為Bottom Axes 0:CD, 1:MD
+        internal static int MDInver = 0;                            //紀錄是否反轉座標軸
+        internal static int CDInver = 0;
+        internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
         public MapWindowVariable()
         {
             //FlawInfoExtend x = new FlawInfoExtend();
@@ -112,21 +126,16 @@ namespace PxP
         internal static string ConfigFileName ;                     //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
         internal static e_Language Language = e_Language.English;   //預設為英語
         internal static string FlawLock = "FlawLock";               //OnFlaws & OnCut 鎖定
-        internal static int MapProportion = 0;                      //紀錄Map比例 0->1:1, 2->1:1, 2->2:1, 3->4:3, 4->3:4,  5->16:9
-        internal static int ShowGridSet = 1;                        //是否顯示格線
-        internal static int MapGridSet = 1;                         //選擇使用的Grid間隔依據 0: EachCellSize , 1: EachCellCount
-        internal static double MapMDSet = 3;                        //Map Size 的間隔大小
-        internal static double MapCDSet = 3;
-        internal static int SeriesSet = 0;                          //紀錄選用的紀錄方式
-        internal static int BottomAxe = 0;                          //紀錄MD或CD為Bottom Axes 0:CD, 1:MD
-        internal static int MDInver = 0;                            //紀錄是否反轉座標軸
-        internal static int CDInver = 0;
-        internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
-       
-        internal static bool IsSystemFreez = false;                 //判斷系統現在是否在offline凍結狀態
         
        
+        internal static bool IsSystemFreez = false;                 //判斷系統現在是否在offline凍結狀態
 
+        #region Constructor
+        public SystemVariable()
+        {
+
+        }
+        #endregion
 
         #region 取得設定檔參數Method
         //取得語系檔
@@ -181,9 +190,9 @@ namespace PxP
             LoadSystemConfig();
             string path = Path.GetDirectoryName(
              Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
-            string FullFilePath = string.Format("{0}{1}.xml", path, SystemVariable.ConfigFileName);
-            XDocument XD = XDocument.Load(FullFilePath);
-            return XD;
+            string FullFilePath = string.Format("{0}{1}", path, SystemVariable.ConfigFileName);
+            XDocument XD2 = XDocument.Load(FullFilePath);
+            return XD2;
         }
         //載入/sys_conf/sys.xml  ==> 根據有定義語系資料再變更一次參數
         internal static void LoadSystemConfig()
@@ -224,36 +233,36 @@ namespace PxP
         internal static void LoadConfig()
         {
             XDocument XConf = GetConfig();
-            XElement SysVariable = XConf.Element("Config").Element("SystemVariable");
+            XElement MapVariable = XConf.Element("Config").Element("MapVariable");
             try
             {
-                PxPVariable.ImgRowsSet = int.Parse(SysVariable.Element("ImgRowsSet").Value);
-                PxPVariable.ImgColsSet = int.Parse(SysVariable.Element("ImgColsSet").Value);
-                SystemVariable.MapProportion = int.Parse(SysVariable.Element("MapProportion").Value);
-                SystemVariable.ShowGridSet = int.Parse(SysVariable.Element("ShowGridSet").Value);
-                SystemVariable.MapGridSet = int.Parse(SysVariable.Element("MapGridSet").Value);
-                SystemVariable.MapMDSet = double.Parse(SysVariable.Element("MapMDSet").Value);
-                SystemVariable.MapCDSet = double.Parse(SysVariable.Element("MapCDSet").Value);
-                SystemVariable.SeriesSet = int.Parse(SysVariable.Element("SeriesSet").Value);
-                SystemVariable.BottomAxe = int.Parse(SysVariable.Element("BottomAxe").Value);
-                SystemVariable.MDInver = int.Parse(SysVariable.Element("MDInver").Value);
-                SystemVariable.CDInver = int.Parse(SysVariable.Element("CDInver").Value);
+                PxPVariable.ImgRowsSet = int.Parse(MapVariable.Element("ImgRowsSet").Value);
+                PxPVariable.ImgColsSet = int.Parse(MapVariable.Element("ImgColsSet").Value);
+                MapWindowVariable.MapProportion = int.Parse(MapVariable.Element("MapProportion").Value);
+                MapWindowVariable.ShowGridSet = (int.Parse(MapVariable.Element("ShowGridSet").Value) == 1) ? true : false;
+                MapWindowVariable.MapGridSet = int.Parse(MapVariable.Element("MapGridSet").Value);
+                MapWindowVariable.MapMDSet = double.Parse(MapVariable.Element("MapMDSet").Value);
+                MapWindowVariable.MapCDSet = double.Parse(MapVariable.Element("MapCDSet").Value);
+                MapWindowVariable.SeriesSet = int.Parse(MapVariable.Element("SeriesSet").Value);
+                MapWindowVariable.BottomAxe = int.Parse(MapVariable.Element("BottomAxe").Value);
+                MapWindowVariable.MDInver = int.Parse(MapVariable.Element("MDInver").Value);
+                MapWindowVariable.CDInver = int.Parse(MapVariable.Element("CDInver").Value);
                 PxPVariable.PageSize = PxPVariable.ImgRowsSet * PxPVariable.ImgColsSet;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Initialize Load Config Fail : \n" + ex.Message);
+                System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail : \n" + ex.Message);
                 PxPVariable.ImgRowsSet = 2;
                 PxPVariable.ImgColsSet = 2;
-                SystemVariable.MapProportion = 0;
-                SystemVariable.ShowGridSet = 1;
-                SystemVariable.MapGridSet = 1;
-                SystemVariable.MapMDSet = 3;
-                SystemVariable.MapCDSet = 3;
-                SystemVariable.SeriesSet = 0;
-                SystemVariable.BottomAxe = 0;
-                SystemVariable.MDInver = 0;
-                SystemVariable.CDInver = 0;
+                MapWindowVariable.MapProportion = 0;
+                MapWindowVariable.ShowGridSet = true;
+                MapWindowVariable.MapGridSet = 1;
+                MapWindowVariable.MapMDSet = 3;
+                MapWindowVariable.MapCDSet = 3;
+                MapWindowVariable.SeriesSet = 0;
+                MapWindowVariable.BottomAxe = 0;
+                MapWindowVariable.MDInver = 0;
+                MapWindowVariable.CDInver = 0;
             }
         }
         #endregion
@@ -277,7 +286,7 @@ namespace PxP
     public class FlawInfoAddPriority
     {
         public int FlawID { set; get; }
-        public double Area { set; get; }
+        public string Area { set; get; }
         public double CD { set; get; }
         public double MD { set; get; }
         public string FlawClass { set; get; }
@@ -290,14 +299,24 @@ namespace PxP
         //Add Column
         public int Priority { get; set; }
         public double RMD { get; set; }
+        public double RCD { get; set; }
         public FlawInfoAddPriority()
         { 
             
         }
         ////////////////////////////////////////////////////////////////////////////////
+    }
 
-       
-        
+    public class FlawTypeNameExtend
+    {
+        public string Name { set; get; }
+        public string FlawType { set; get; }
+        //Add Other Properties
+        public bool Display { set; get; }
+        public int Count { set; get; }
+        public string Letter { set; get; }
+        public string Color { set; get; }
+        public string Sharp { set; get; }
     }
     public class Pair
     {
@@ -310,6 +329,8 @@ namespace PxP
             Value = v;
         }
     }
+    
+    public class ConfFile { public string Name { get; set; } }
     #endregion
 
 

@@ -14,6 +14,7 @@ namespace PxP
     {
         public PictureBox[] pb;
         public double[] pb_ratio;
+        private Image[] SrcImg;
         private FlawInfoAddPriority flaws;
 
         public FlawForm(int PointIndex)
@@ -21,6 +22,7 @@ namespace PxP
             InitializeComponent();
             flaws = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex];
             pb = new PictureBox[PxPVariable.JobInfo.NumberOfStations];
+            SrcImg = new Image[PxPVariable.JobInfo.NumberOfStations];
             pb_ratio = new double[PxPVariable.JobInfo.NumberOfStations];
         }
 
@@ -31,7 +33,7 @@ namespace PxP
             lbFlawIDVal.Text = flaws.FlawID.ToString();
             lbFlawTypeVal.Text = flaws.FlawType.ToString();
             lbFlawClassVal.Text = flaws.FlawClass.ToString();
-            lbAreaVal.Text = flaws.Area.ToString("0.######");
+            lbAreaVal.Text = flaws.Area;
             lbMDVal.Text = flaws.MD.ToString();
             lbCDVal.Text = flaws.CD.ToString();
             lbWidthVal.Text = flaws.Width.ToString();
@@ -51,14 +53,16 @@ namespace PxP
 
             foreach (IImageInfo image in flaws.Images)
             {
-                pb[PxPVariable.JobInfo.NumberOfStations - 1].Image = image.Image;
+                //pb[image.Station].Image = image.Image;
+                SrcImg[image.Station] = image.Image;
                 pb_ratio[image.Station] = Init_Image(image.Image, tcPicture.TabPages[image.Station], pb[image.Station]);
             }
         }
 
         private void btnZoomIn_Click(object sender, EventArgs e)
         {
-            PictureBox pb = null;
+            PicZoom("IN");
+            /*PictureBox pb = null;
             foreach (Control control in tcPicture.SelectedTab.Controls)
             {
 
@@ -78,12 +82,13 @@ namespace PxP
                 pb.Height = dest.Height;
                 pb.Width = dest.Width;
                 pb.Image = dest;
-            }
+            }*/
         }
 
         private void btnZoomOut_Click(object sender, EventArgs e)
         {
-            PictureBox pb = null;
+            PicZoom("OUT");
+            /*PictureBox pb = null;
             foreach (Control control in tcPicture.SelectedTab.Controls)
             {
 
@@ -103,7 +108,7 @@ namespace PxP
                 pb.Height = dest.Height;
                 pb.Width = dest.Width;
                 pb.Image = dest;
-            }
+            }*/
         }
 
         #endregion
@@ -112,7 +117,6 @@ namespace PxP
 
         public double Init_Image(Bitmap bmp, TabPage tp, PictureBox pb)
         {
-
             double Width_d = (double)bmp.Width / (double)tp.ClientSize.Width;
             double Height_d = (double)bmp.Height / (double)tp.ClientSize.Height;
             double ratio = 1.0;
@@ -121,7 +125,6 @@ namespace PxP
                 if (Width_d > Height_d)
                 {
                     ratio = Width_d;
-
                 }
                 else
                 {
@@ -147,6 +150,55 @@ namespace PxP
             pb.Width = dest.Width;
             pb.Image = dest;
             return ratio;
+        }
+
+        public void PicZoom(string ZoomType)
+        {
+            PictureBox pb = null;
+            foreach (Control control in tcPicture.SelectedTab.Controls)
+            {
+
+                if (control.GetType().Name == "PictureBox")
+                {
+                    pb = (PictureBox)control;
+                    break;
+                }
+            }
+
+            if (pb != null)
+            {
+                Image src = pb.Image;
+                Bitmap dest = null;
+
+                if (ZoomType.Equals("IN"))
+                {
+                    if (((double)src.Width * 2) >= ((double)SrcImg[tcPicture.SelectedIndex].Width / pb_ratio[tcPicture.SelectedIndex] * 4))
+                    {
+                        dest = new Bitmap(src.Width, src.Height);
+                    }
+                    else
+                    {
+                        dest = new Bitmap(src.Width * 2, src.Height * 2);
+                    }
+                }
+                else if (ZoomType.Equals("OUT"))
+                {
+                    if (((double)src.Width / 2) <= ((double)SrcImg[tcPicture.SelectedIndex].Width / pb_ratio[tcPicture.SelectedIndex] / 6))
+                    {
+                        dest = new Bitmap(src.Width, src.Height);
+                    }
+                    else
+                    {
+                        dest = new Bitmap(src.Width / 2, src.Height / 2);
+                    }
+                }
+
+                Graphics g = Graphics.FromImage(dest);
+                g.DrawImage(SrcImg[tcPicture.SelectedIndex], new Rectangle(0, 0, dest.Width, dest.Height));
+                pb.Height = dest.Height;
+                pb.Width = dest.Width;
+                pb.Image = dest;
+            }
         }
 
         #endregion
