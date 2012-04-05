@@ -248,6 +248,8 @@ namespace PxP
                 MapWindowVariable.BottomAxe = int.Parse(MapVariable.Element("BottomAxe").Value);
                 MapWindowVariable.MDInver = int.Parse(MapVariable.Element("MDInver").Value);
                 MapWindowVariable.CDInver = int.Parse(MapVariable.Element("CDInver").Value);
+                MapWindowVariable.ShowFlag = int.Parse(MapVariable.Element("ShowFlag").Value);
+               
                 PxPVariable.PageSize = PxPVariable.ImgRowsSet * PxPVariable.ImgColsSet;
             }
             catch (Exception ex)

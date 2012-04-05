@@ -101,6 +101,7 @@ namespace PxP
             ///////////////////////////////////////////////////////////////////////////////////////
             cbCDInverse.Checked = (MapWindowVariable.CDInver == 1) ? true : false;
             cbMDInverse.Checked = (MapWindowVariable.MDInver == 1) ? true : false;
+
         }
         #endregion
 

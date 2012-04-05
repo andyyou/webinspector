@@ -85,6 +85,7 @@ namespace PxP
 
             SystemVariable.LoadSystemConfig();
             SystemVariable.LoadConfig();
+
             InitTableLayout(tlpDoffGrid);
             DefineDataGridView(gvFlaw);
            
@@ -116,6 +117,19 @@ namespace PxP
                 XElement OrderByColumn = XDoc.Element("SystemConfig").Element("DoffGrid").Element("OrderBy");
                 OrderByColumn.Value = NowColumn;
                 XDoc.Save(FullFilePath);
+                /////////////////////////////////////////////////////////////////////////////////////////////////
+
+           
+                //MapConf : Save MapWindow Radio Button checked index
+                XDocument XDocConf = SystemVariable.GetConfig();
+                XElement ShowFlag = XDocConf.Element("Config").Element("MapVariable").Element("ShowFlag");
+                ShowFlag.Value = MapWindowVariable.ShowFlag.ToString();
+                string path = Path.GetDirectoryName(
+                 Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
+                string FullConfFilePath = string.Format("{0}{1}", path, SystemVariable.ConfigFileName);
+                XDocConf.Save(FullConfFilePath);
+               
+                
             }
             catch (Exception e)
             {

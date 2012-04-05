@@ -10,6 +10,9 @@ using WRPlugIn;
 using Nevron.Chart;
 using Nevron.GraphicsCore;
 using Nevron.Chart.WinForm;
+using System.Xml.Linq;
+using System.IO;
+using System.Reflection;
 
 namespace PxP
 {
@@ -28,8 +31,14 @@ namespace PxP
             //MessageBox.Show("MapWindow Conturctor");
             DebugTool.WriteLog("PxPTab.cs", "MapWindow Contructor");
             InitializeComponent();
+            SystemVariable.LoadConfig();
             InitNChart(ref nChart, out nChartMap, out nPoint);
             InitGvFlawClass();
+            SetFilterRadioButtons();
+            
+        }
+        ~MapWindow()
+        {
             
         }
         #endregion
@@ -187,6 +196,24 @@ namespace PxP
             //lbFailValue.Text = "";
             
         }
+        public void SetFilterRadioButtons()
+        {
+            switch (MapWindowVariable.ShowFlag)
+            {  //紀錄顯示項目 0:All, 1:Pass, 2:Fail
+                case 0:
+                    rbAll.Checked = true;
+                    break;
+                case 1:
+                    rbPass.Checked = true;
+                    break;
+                case 2:
+                    rbFail.Checked = true;
+                    break;
+                default:
+                    rbAll.Checked = true;
+                    break;
+            }
+        }
         #endregion
 
         #region Action Events
@@ -206,14 +233,24 @@ namespace PxP
         }
         #endregion
 
-       
-
-
-
-
-
-
-
+        private void rb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked == true)
+            {
+                switch (((RadioButton)sender).Name)
+                {   //0:All, 1:Pass, 2:Fail
+                    case "rbAll":
+                        MapWindowVariable.ShowFlag = 0;
+                        break;
+                    case "rbFail":
+                        MapWindowVariable.ShowFlag = 2;
+                        break;
+                    case "rbPass":
+                        MapWindowVariable.ShowFlag = 1;
+                        break;
+                }
+            }
+        }
 
 
     }

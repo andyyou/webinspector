@@ -334,6 +334,7 @@
             this.rbAll.TabStop = true;
             this.rbAll.Text = "All";
             this.rbAll.UseVisualStyleBackColor = true;
+            this.rbAll.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
             // 
             // rbFail
             // 
@@ -346,6 +347,7 @@
             this.rbFail.TabStop = true;
             this.rbFail.Text = "Fail";
             this.rbFail.UseVisualStyleBackColor = true;
+            this.rbFail.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
             // 
             // rbPass
             // 
@@ -358,6 +360,7 @@
             this.rbPass.TabStop = true;
             this.rbPass.Text = "Pass";
             this.rbPass.UseVisualStyleBackColor = true;
+            this.rbPass.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
             // 
             // btnMapSetup
             // 
