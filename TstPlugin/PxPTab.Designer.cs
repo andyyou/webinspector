@@ -49,6 +49,7 @@
             this.gvFlaw.AllowUserToOrderColumns = true;
             this.gvFlaw.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvFlaw.Location = new System.Drawing.Point(12, 12);
+            this.gvFlaw.MultiSelect = false;
             this.gvFlaw.Name = "gvFlaw";
             this.gvFlaw.ReadOnly = true;
             this.gvFlaw.RowHeadersVisible = false;

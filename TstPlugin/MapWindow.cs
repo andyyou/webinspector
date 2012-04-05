@@ -128,14 +128,15 @@ namespace PxP
             IList<IFlawTypeName> tmpFlawTypes = new List<IFlawTypeName>();
             gvFlawClass.DataSource = bsFlawType;
             bsFlawType.DataSource = tmpFlawTypes; 
-            gvFlawClass.Columns["FlawType"].HeaderText = "缺陷類型";
-            gvFlawClass.Columns["Name"].HeaderText = "缺陷名稱";
+
+            //gvFlawClass.Columns["FlawType"].HeaderText = "缺陷類型";
+            //gvFlawClass.Columns["Name"].HeaderText = "缺陷名稱";
             DataGridViewCheckBoxColumn cboxDisplay = new DataGridViewCheckBoxColumn();
             cboxDisplay.Name = "Display";
-            cboxDisplay.HeaderText = "顯示";
+            //cboxDisplay.HeaderText = "顯示";
             gvFlawClass.Columns.Insert(0, cboxDisplay);
-            gvFlawClass.Columns.Add("JobNum","工單數量");
-            gvFlawClass.Columns.Add("DoffNum","缺陷數量");
+            gvFlawClass.Columns.Add("JobNum", "JobNum");
+            gvFlawClass.Columns.Add("DoffNum", "DoffNum");
         }
         public void SetGvFlawClass(IList<IFlawTypeName> flawTypes)
         {
@@ -156,9 +157,10 @@ namespace PxP
 
             return linearScale;
         }
-
         public void OnChartMouseDoubleClick(object sender, MouseEventArgs e)
         {
+            MapWindowThreadStatus.UpdateChange = true;
+            PxPTab.MapThreadEvent.Set();
             NHitTestResult hitTestResult = nChart.HitTest(e.Location);
             if (hitTestResult.ChartElement == ChartElement.DataPoint)
             {
@@ -172,13 +174,47 @@ namespace PxP
                 }
             }
         }
-
+        public void SetJobInfo()
+        {
+            lbOrderNumberValue.Text = PxPVariable.JobInfo.OrderNumber;
+            lbJobIDValue.Text = PxPVariable.JobInfo.JobID;
+            
+            lbMeterialTypeValue.Text = PxPVariable.JobInfo.MaterialType;
+            lbOperatorValue.Text = PxPVariable.JobInfo.OperatorName;
+            lbDateTimeValue.Text = DateTime.Now.ToShortDateString();
+            lbDoffValue.Text = MapWindowVariable.CurrentPiece.ToString(); 
+            //lbPassValue.Text = "";
+            //lbFailValue.Text = "";
+            
+        }
         #endregion
 
+        #region Action Events
+        private void btnMapSetup_Click(object sender, EventArgs e)
+        {
+            if (!PxPThreadStatus.IsOnOnline && !PxPThreadStatus.IsOnJobLoaded || !PxPThreadStatus.IsOnOnline && PxPThreadStatus.IsOnJobStopped)
+            {
+                MapSetup MapSetup = new MapSetup();
+                MapSetup.ShowDialog();
+            }
+        }
+
+        private void nChart_MouseClick(object sender, MouseEventArgs e)
+        {
+            MapWindowThreadStatus.UpdateChange = true;
+            PxPTab.MapThreadEvent.Set();
+        }
+        #endregion
+
+       
 
 
 
 
-        
+
+
+
+
+
     }
 }

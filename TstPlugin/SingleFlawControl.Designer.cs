@@ -42,6 +42,7 @@
             this.tabFlawControl.SelectedIndex = 0;
             this.tabFlawControl.Size = new System.Drawing.Size(206, 128);
             this.tabFlawControl.TabIndex = 0;
+            this.tabFlawControl.DoubleClick += new System.EventHandler(this.tabFlawControl_DoubleClick);
             this.tabFlawControl.SizeChanged += new System.EventHandler(this.tabFlawControl_SizeChanged);
             // 
             // lbFlawID
