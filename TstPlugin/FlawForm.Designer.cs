@@ -48,7 +48,9 @@
             this.lbLengthVal = new System.Windows.Forms.Label();
             this.btnZoomIn = new System.Windows.Forms.Button();
             this.btnZoomOut = new System.Windows.Forms.Button();
+            this.tkbImage = new PxP.TransparentTrackBar();
             this.tlbFlawInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tkbImage)).BeginInit();
             this.SuspendLayout();
             // 
             // tcPicture
@@ -59,7 +61,7 @@
             this.tcPicture.Location = new System.Drawing.Point(12, 119);
             this.tcPicture.Name = "tcPicture";
             this.tcPicture.SelectedIndex = 0;
-            this.tcPicture.Size = new System.Drawing.Size(460, 227);
+            this.tcPicture.Size = new System.Drawing.Size(470, 265);
             this.tcPicture.TabIndex = 0;
             // 
             // tlbFlawInfo
@@ -97,7 +99,7 @@
             this.tlbFlawInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlbFlawInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlbFlawInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlbFlawInfo.Size = new System.Drawing.Size(392, 100);
+            this.tlbFlawInfo.Size = new System.Drawing.Size(402, 100);
             this.tlbFlawInfo.TabIndex = 1;
             // 
             // lbFlawID
@@ -144,7 +146,7 @@
             // 
             this.lbFlawType.AutoSize = true;
             this.lbFlawType.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbFlawType.Location = new System.Drawing.Point(198, 1);
+            this.lbFlawType.Location = new System.Drawing.Point(204, 1);
             this.lbFlawType.Name = "lbFlawType";
             this.lbFlawType.Size = new System.Drawing.Size(54, 12);
             this.lbFlawType.TabIndex = 4;
@@ -154,7 +156,7 @@
             // 
             this.lbArea.AutoSize = true;
             this.lbArea.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbArea.Location = new System.Drawing.Point(198, 25);
+            this.lbArea.Location = new System.Drawing.Point(204, 25);
             this.lbArea.Name = "lbArea";
             this.lbArea.Size = new System.Drawing.Size(27, 12);
             this.lbArea.TabIndex = 5;
@@ -164,7 +166,7 @@
             // 
             this.lbCD.AutoSize = true;
             this.lbCD.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbCD.Location = new System.Drawing.Point(198, 49);
+            this.lbCD.Location = new System.Drawing.Point(204, 49);
             this.lbCD.Name = "lbCD";
             this.lbCD.Size = new System.Drawing.Size(21, 12);
             this.lbCD.TabIndex = 6;
@@ -174,7 +176,7 @@
             // 
             this.lbLength.AutoSize = true;
             this.lbLength.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbLength.Location = new System.Drawing.Point(198, 73);
+            this.lbLength.Location = new System.Drawing.Point(204, 73);
             this.lbLength.Name = "lbLength";
             this.lbLength.Size = new System.Drawing.Size(38, 12);
             this.lbLength.TabIndex = 7;
@@ -184,7 +186,7 @@
             // 
             this.lbFlawIDVal.AutoSize = true;
             this.lbFlawIDVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbFlawIDVal.Location = new System.Drawing.Point(101, 1);
+            this.lbFlawIDVal.Location = new System.Drawing.Point(104, 1);
             this.lbFlawIDVal.Name = "lbFlawIDVal";
             this.lbFlawIDVal.Size = new System.Drawing.Size(47, 12);
             this.lbFlawIDVal.TabIndex = 8;
@@ -194,7 +196,7 @@
             // 
             this.lbFlawClassVal.AutoSize = true;
             this.lbFlawClassVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbFlawClassVal.Location = new System.Drawing.Point(101, 25);
+            this.lbFlawClassVal.Location = new System.Drawing.Point(104, 25);
             this.lbFlawClassVal.Name = "lbFlawClassVal";
             this.lbFlawClassVal.Size = new System.Drawing.Size(59, 12);
             this.lbFlawClassVal.TabIndex = 8;
@@ -204,7 +206,7 @@
             // 
             this.lbMDVal.AutoSize = true;
             this.lbMDVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbMDVal.Location = new System.Drawing.Point(101, 49);
+            this.lbMDVal.Location = new System.Drawing.Point(104, 49);
             this.lbMDVal.Name = "lbMDVal";
             this.lbMDVal.Size = new System.Drawing.Size(53, 12);
             this.lbMDVal.TabIndex = 8;
@@ -214,7 +216,7 @@
             // 
             this.lbWidthVal.AutoSize = true;
             this.lbWidthVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbWidthVal.Location = new System.Drawing.Point(101, 73);
+            this.lbWidthVal.Location = new System.Drawing.Point(104, 73);
             this.lbWidthVal.Name = "lbWidthVal";
             this.lbWidthVal.Size = new System.Drawing.Size(64, 12);
             this.lbWidthVal.TabIndex = 8;
@@ -224,7 +226,7 @@
             // 
             this.lbFlawTypeVal.AutoSize = true;
             this.lbFlawTypeVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbFlawTypeVal.Location = new System.Drawing.Point(295, 1);
+            this.lbFlawTypeVal.Location = new System.Drawing.Point(304, 1);
             this.lbFlawTypeVal.Name = "lbFlawTypeVal";
             this.lbFlawTypeVal.Size = new System.Drawing.Size(59, 12);
             this.lbFlawTypeVal.TabIndex = 8;
@@ -234,7 +236,7 @@
             // 
             this.lbAreaVal.AutoSize = true;
             this.lbAreaVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbAreaVal.Location = new System.Drawing.Point(295, 25);
+            this.lbAreaVal.Location = new System.Drawing.Point(304, 25);
             this.lbAreaVal.Name = "lbAreaVal";
             this.lbAreaVal.Size = new System.Drawing.Size(57, 12);
             this.lbAreaVal.TabIndex = 8;
@@ -244,7 +246,7 @@
             // 
             this.lbCDVal.AutoSize = true;
             this.lbCDVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbCDVal.Location = new System.Drawing.Point(295, 49);
+            this.lbCDVal.Location = new System.Drawing.Point(304, 49);
             this.lbCDVal.Name = "lbCDVal";
             this.lbCDVal.Size = new System.Drawing.Size(51, 12);
             this.lbCDVal.TabIndex = 8;
@@ -254,7 +256,7 @@
             // 
             this.lbLengthVal.AutoSize = true;
             this.lbLengthVal.Font = new System.Drawing.Font("新細明體", 9F);
-            this.lbLengthVal.Location = new System.Drawing.Point(295, 73);
+            this.lbLengthVal.Location = new System.Drawing.Point(304, 73);
             this.lbLengthVal.Name = "lbLengthVal";
             this.lbLengthVal.Size = new System.Drawing.Size(68, 12);
             this.lbLengthVal.TabIndex = 8;
@@ -265,7 +267,7 @@
             this.btnZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnZoomIn.BackgroundImage = global::PxP.Properties.Resources.Zoom_In;
             this.btnZoomIn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnZoomIn.Location = new System.Drawing.Point(432, 12);
+            this.btnZoomIn.Location = new System.Drawing.Point(442, 12);
             this.btnZoomIn.Name = "btnZoomIn";
             this.btnZoomIn.Size = new System.Drawing.Size(40, 40);
             this.btnZoomIn.TabIndex = 2;
@@ -277,19 +279,32 @@
             this.btnZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnZoomOut.BackgroundImage = global::PxP.Properties.Resources.Zoom_Out;
             this.btnZoomOut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnZoomOut.Location = new System.Drawing.Point(432, 58);
+            this.btnZoomOut.Location = new System.Drawing.Point(442, 58);
             this.btnZoomOut.Name = "btnZoomOut";
             this.btnZoomOut.Size = new System.Drawing.Size(40, 40);
             this.btnZoomOut.TabIndex = 3;
             this.btnZoomOut.UseVisualStyleBackColor = true;
             this.btnZoomOut.Click += new System.EventHandler(this.btnZoomOut_Click);
             // 
+            // tkbImage
+            // 
+            this.tkbImage.BackColor = System.Drawing.Color.Transparent;
+            this.tkbImage.Location = new System.Drawing.Point(376, 390);
+            this.tkbImage.Maximum = 4;
+            this.tkbImage.Minimum = 1;
+            this.tkbImage.Name = "tkbImage";
+            this.tkbImage.Size = new System.Drawing.Size(100, 45);
+            this.tkbImage.TabIndex = 4;
+            this.tkbImage.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.tkbImage.Value = 1;
+            // 
             // FlawForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::PxP.Properties.Resources.bgRight;
-            this.ClientSize = new System.Drawing.Size(484, 358);
+            this.ClientSize = new System.Drawing.Size(494, 419);
+            this.Controls.Add(this.tkbImage);
             this.Controls.Add(this.btnZoomOut);
             this.Controls.Add(this.btnZoomIn);
             this.Controls.Add(this.tlbFlawInfo);
@@ -299,7 +314,9 @@
             this.Load += new System.EventHandler(this.FlawForm_Load);
             this.tlbFlawInfo.ResumeLayout(false);
             this.tlbFlawInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tkbImage)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -325,5 +342,6 @@
         private System.Windows.Forms.Label lbAreaVal;
         private System.Windows.Forms.Label lbCDVal;
         private System.Windows.Forms.Label lbLengthVal;
+        private PxP.TransparentTrackBar tkbImage;
     }
 }

@@ -24,12 +24,16 @@ namespace PxP
             pb = new PictureBox[PxPVariable.JobInfo.NumberOfStations];
             SrcImg = new Image[PxPVariable.JobInfo.NumberOfStations];
             pb_ratio = new double[PxPVariable.JobInfo.NumberOfStations];
+
+            
         }
 
         #region Action Events
 
         private void FlawForm_Load(object sender, EventArgs e)
         {
+
+            
             lbFlawIDVal.Text = flaws.FlawID.ToString();
             lbFlawTypeVal.Text = flaws.FlawType.ToString();
             lbFlawClassVal.Text = flaws.FlawClass.ToString();
