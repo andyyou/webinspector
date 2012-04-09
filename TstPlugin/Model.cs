@@ -67,7 +67,7 @@ namespace PxP
     public class PxPVariable
     {
         internal static double CurrentCutPosition = 0;                                       //紀錄目前裁切位置
-        internal static int PieceLimit;                                                      //Piece限制數量
+        internal static int PieceLimit = 20;                                                      //Piece限制數量
         internal static int PieceTotal;                                                      //紀錄目前Cut幾片
         internal static IList<IFlawTypeName> FlawTypeName = new List<IFlawTypeName>();       //載入工單時先儲存方便各事件處理
         internal static IList<ISeverityInfo> SeverityInfo = new List<ISeverityInfo>();       //嚴重缺點優先順序

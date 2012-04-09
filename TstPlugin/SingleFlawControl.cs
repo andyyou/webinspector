@@ -17,6 +17,8 @@ namespace PxP
         private Label lbCoordinate;
         private double[] dRatio;
         private double dCurrentRatio = 0;
+        private Point MousePt = new Point();
+        private bool FormDragging = false;
         private Image[] SrcImg;
 
         private FlawInfoAddPriority flaw;
@@ -45,12 +47,18 @@ namespace PxP
                 pb[i].SizeMode = PictureBoxSizeMode.Zoom;
                 pb[i].Location = new Point(0, 0);
                 pb[i].BackColor = Color.Transparent;
-                pb[i].MouseClick += new MouseEventHandler(PictureBox_Click);
+                //pb[i].MouseClick += new MouseEventHandler(PictureBox_Click);
                 //pb[i].DoubleClick += new EventHandler(SingleFlawControl_DoubleClick);
-                pb[i].MouseMove += new MouseEventHandler(PictureBox_MouseMove);
+                //pb[i].MouseMove += new MouseEventHandler(PictureBox_MouseMove);
                 //pb[i].MouseHover += new EventHandler(PictureBox_MouseMove);
-                pb[i].MouseLeave += new EventHandler(PictrueBox_MouseLeave);
+                //pb[i].MouseLeave += new EventHandler(PictrueBox_MouseLeave);
                 //pb[i].Click +=new EventHandler(PictureBox_Click);
+                pb[i].MouseDown += new MouseEventHandler(pb_MouseDown);
+                pb[i].MouseMove += new MouseEventHandler(pb_MouseMove);
+                pb[i].MouseUp += new MouseEventHandler(pb_MouseUp);
+                pb[i].MouseLeave += new EventHandler(pb_MouseLeave);
+                pb[i].MouseClick += new MouseEventHandler(pb_Click);
+                pb[i].MouseDoubleClick += new MouseEventHandler(pb_MouseDoubleClick);
                 tabFlawControl.TabPages[i].AutoScroll = true;
                 tabFlawControl.TabPages[i].Controls.Add(pb[i]);
                 tabFlawControl.TabPages[i].BackColor = Color.Transparent;
@@ -63,9 +71,15 @@ namespace PxP
                 dRatio[image.Station] = Init_Image(image.Image, tabFlawControl.TabPages[image.Station], pb[image.Station]);
                 //pb[image.Station].Image = image.Image;
             }
-
+           
             this.Tag = info.FlawID;
         }
+
+       
+
+       
+
+        
 
         #endregion
 
@@ -84,13 +98,11 @@ namespace PxP
 
             }).Start();
         }
-
         private void PictrueBox_MouseLeave(object sender, EventArgs e)
         {
             lbCoordinate.Visible = false;
             tabFlawControl.SelectedTab.Controls.Remove(lbCoordinate);
         }
-
         private void tabFlawControl_SizeChanged(object sender, EventArgs e)
         {
             foreach (IImageInfo image in flaw.Images)
@@ -98,7 +110,68 @@ namespace PxP
                 Init_Image(image.Image, tabFlawControl.TabPages[image.Station], pb[image.Station]);
             }
         }
+        private void tabFlawControl_DoubleClick(object sender, EventArgs e)
+        {
+            MapWindowThreadStatus.UpdateChange = true;
+            PxPVariable.ChooseFlawID = Convert.ToInt32(this.Tag);
+            MapWindowThreadStatus.IsTableLayoutRefresh = true;
+            tkbImg.Focus();
+            PxPTab.MapThreadEvent.Set();
+        }
+        private void tkbImg_Scroll(object sender, EventArgs e)
+        {
+            if (!MapWindowThreadStatus.UpdateChange)
+            {
+                MapWindowThreadStatus.UpdateChange = true;
+                MapWindowThreadStatus.IsTableLayoutRefresh = true;
+                PxPTab.MapThreadEvent.Set();
+            }
+            PicZoomByPercent(tkbImg.Value);
+        }
+        private void pb_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.MousePt = e.Location;
+            FormDragging = true;
+        }
+        private void pb_MouseMove(object sender, MouseEventArgs e)
+        {
+           
+            if (FormDragging)
+            {
+                tabFlawControl.TabPages[tabFlawControl.SelectedIndex].AutoScrollPosition = new Point(-tabFlawControl.TabPages[tabFlawControl.SelectedIndex].AutoScrollPosition.X + (MousePt.X - e.X),
+     -tabFlawControl.TabPages[tabFlawControl.SelectedIndex].AutoScrollPosition.Y + (MousePt.Y - e.Y));
+            }
+            
 
+        }
+        private void pb_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            FormDragging = false;
+        }
+        public void pb_MouseLeave(object sender, EventArgs e)
+        {
+            lbCoordinate.Visible = false;
+            tabFlawControl.SelectedTab.Controls.Remove(lbCoordinate);
+        }
+        public void pb_Click(object sender, MouseEventArgs e)
+        {
+            this.e = e;
+            if (e.Button == MouseButtons.Right)
+            {
+                this.sender = sender;
+                new Thread(() =>
+                {
+                    MethodInvoker GetThread = new MethodInvoker(GetLabel);
+                    this.BeginInvoke(GetThread);
+
+                }).Start();
+            }
+        }
+        public void pb_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            tkbImg.Value = 100;
+            PicZoomByPercent(tkbImg.Value);
+        }
         #endregion
 
         #region Method
@@ -167,11 +240,63 @@ namespace PxP
             return ratio;
         }
 
-        public void PictureBox_Click(object sender, MouseEventArgs e)
+        //public void PictureBox_Click(object sender, MouseEventArgs e)
+        //{
+        //    PictureBox pb = null;
+        //    foreach (Control control in tabFlawControl.SelectedTab.Controls)
+        //    {
+        //        if (control.GetType().Name == "PictureBox")
+        //        {
+        //            pb = (PictureBox)control;
+        //            break;
+        //        }
+        //    }
+
+        //    if (pb != null)
+        //    {
+        //        Image src = pb.Image;
+        //        Bitmap dest = null;
+
+        //        if (e.Button == MouseButtons.Left)
+        //        {
+        //            if (((double)src.Width * 2) >= ((double)SrcImg[tabFlawControl.SelectedIndex].Width / dRatio[tabFlawControl.SelectedIndex] * 4))
+        //            {
+        //                dest = new Bitmap(src.Width, src.Height);
+        //            }
+        //            else
+        //            {
+        //                dest = new Bitmap(src.Width * 2, src.Height * 2);
+        //            }
+        //        }
+        //        else if (e.Button == MouseButtons.Right)
+        //        {
+        //            //dest = new Bitmap(src.Width / 2, src.Height / 2);
+        //            if (((double)src.Width / 2) <= ((double)SrcImg[tabFlawControl.SelectedIndex].Width / dRatio[tabFlawControl.SelectedIndex] / 6))
+        //            {
+        //                dest = new Bitmap(src.Width, src.Height);
+        //            }
+        //            else
+        //            {
+        //                dest = new Bitmap(src.Width / 2, src.Height / 2);
+        //            }
+        //            //dRatio[tabFlawControl.SelectedIndex] /= 2;
+        //        }
+
+        //        Graphics g = Graphics.FromImage(dest);
+        //        g.DrawImage(SrcImg[tabFlawControl.SelectedIndex], new Rectangle(0, 0, dest.Width, dest.Height));
+        //        pb.Height = dest.Height;
+        //        pb.Width = dest.Width;
+        //        pb.Image = dest;
+        //    }
+        //}
+
+        public void PicZoomByPercent(int ZoomPercent)
         {
+
             PictureBox pb = null;
             foreach (Control control in tabFlawControl.SelectedTab.Controls)
             {
+
                 if (control.GetType().Name == "PictureBox")
                 {
                     pb = (PictureBox)control;
@@ -184,30 +309,9 @@ namespace PxP
                 Image src = pb.Image;
                 Bitmap dest = null;
 
-                if (e.Button == MouseButtons.Left)
-                {
-                    if (((double)src.Width * 2) >= ((double)SrcImg[tabFlawControl.SelectedIndex].Width / dRatio[tabFlawControl.SelectedIndex] * 4))
-                    {
-                        dest = new Bitmap(src.Width, src.Height);
-                    }
-                    else
-                    {
-                        dest = new Bitmap(src.Width * 2, src.Height * 2);
-                    }
-                }
-                else if (e.Button == MouseButtons.Right)
-                {
-                    //dest = new Bitmap(src.Width / 2, src.Height / 2);
-                    if (((double)src.Width / 2) <= ((double)SrcImg[tabFlawControl.SelectedIndex].Width / dRatio[tabFlawControl.SelectedIndex] / 6))
-                    {
-                        dest = new Bitmap(src.Width, src.Height);
-                    }
-                    else
-                    {
-                        dest = new Bitmap(src.Width / 2, src.Height / 2);
-                    }
-                    //dRatio[tabFlawControl.SelectedIndex] /= 2;
-                }
+                int newWidth = (int)(((double)SrcImg[tabFlawControl.SelectedIndex].Width / dRatio[tabFlawControl.SelectedIndex]) * ((double)tkbImg.Value / 100));
+                int newHeight = (int)(((double)SrcImg[tabFlawControl.SelectedIndex].Height / dRatio[tabFlawControl.SelectedIndex]) * ((double)tkbImg.Value / 100));
+                dest = new Bitmap(newWidth, newHeight);
 
                 Graphics g = Graphics.FromImage(dest);
                 g.DrawImage(SrcImg[tabFlawControl.SelectedIndex], new Rectangle(0, 0, dest.Width, dest.Height));
@@ -216,15 +320,8 @@ namespace PxP
                 pb.Image = dest;
             }
         }
-
         #endregion
 
-        private void tabFlawControl_DoubleClick(object sender, EventArgs e)
-        {
-            MapWindowThreadStatus.UpdateChange = true; 
-            PxPVariable.ChooseFlawID = Convert.ToInt32(this.Tag);
-            MapWindowThreadStatus.IsTableLayoutRefresh = true;
-            PxPTab.MapThreadEvent.Set();
-        }
+       
     }
 }

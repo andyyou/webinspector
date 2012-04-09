@@ -46,9 +46,7 @@
             this.lbAreaVal = new System.Windows.Forms.Label();
             this.lbCDVal = new System.Windows.Forms.Label();
             this.lbLengthVal = new System.Windows.Forms.Label();
-            this.btnZoomIn = new System.Windows.Forms.Button();
-            this.btnZoomOut = new System.Windows.Forms.Button();
-            this.tkbImage = new PxP.TransparentTrackBar();
+            this.tkbImage = new PxP.Toolkit.FusionTrackBar();
             this.tlbFlawInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tkbImage)).BeginInit();
             this.SuspendLayout();
@@ -262,41 +260,19 @@
             this.lbLengthVal.TabIndex = 8;
             this.lbLengthVal.Text = "Length Value";
             // 
-            // btnZoomIn
-            // 
-            this.btnZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnZoomIn.BackgroundImage = global::PxP.Properties.Resources.Zoom_In;
-            this.btnZoomIn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnZoomIn.Location = new System.Drawing.Point(442, 12);
-            this.btnZoomIn.Name = "btnZoomIn";
-            this.btnZoomIn.Size = new System.Drawing.Size(40, 40);
-            this.btnZoomIn.TabIndex = 2;
-            this.btnZoomIn.UseVisualStyleBackColor = true;
-            this.btnZoomIn.Click += new System.EventHandler(this.btnZoomIn_Click);
-            // 
-            // btnZoomOut
-            // 
-            this.btnZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnZoomOut.BackgroundImage = global::PxP.Properties.Resources.Zoom_Out;
-            this.btnZoomOut.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnZoomOut.Location = new System.Drawing.Point(442, 58);
-            this.btnZoomOut.Name = "btnZoomOut";
-            this.btnZoomOut.Size = new System.Drawing.Size(40, 40);
-            this.btnZoomOut.TabIndex = 3;
-            this.btnZoomOut.UseVisualStyleBackColor = true;
-            this.btnZoomOut.Click += new System.EventHandler(this.btnZoomOut_Click);
-            // 
             // tkbImage
             // 
             this.tkbImage.BackColor = System.Drawing.Color.Transparent;
-            this.tkbImage.Location = new System.Drawing.Point(376, 390);
-            this.tkbImage.Maximum = 4;
-            this.tkbImage.Minimum = 1;
+            this.tkbImage.LargeChange = 25;
+            this.tkbImage.Location = new System.Drawing.Point(382, 390);
+            this.tkbImage.Maximum = 400;
+            this.tkbImage.Minimum = 25;
             this.tkbImage.Name = "tkbImage";
             this.tkbImage.Size = new System.Drawing.Size(100, 45);
             this.tkbImage.TabIndex = 4;
             this.tkbImage.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.tkbImage.Value = 1;
+            this.tkbImage.Value = 100;
+            this.tkbImage.Scroll += new System.EventHandler(this.tkbImage_Scroll);
             // 
             // FlawForm
             // 
@@ -305,8 +281,6 @@
             this.BackgroundImage = global::PxP.Properties.Resources.bgRight;
             this.ClientSize = new System.Drawing.Size(494, 419);
             this.Controls.Add(this.tkbImage);
-            this.Controls.Add(this.btnZoomOut);
-            this.Controls.Add(this.btnZoomIn);
             this.Controls.Add(this.tlbFlawInfo);
             this.Controls.Add(this.tcPicture);
             this.Name = "FlawForm";
@@ -332,8 +306,6 @@
         private System.Windows.Forms.Label lbArea;
         private System.Windows.Forms.Label lbCD;
         private System.Windows.Forms.Label lbLength;
-        private System.Windows.Forms.Button btnZoomIn;
-        private System.Windows.Forms.Button btnZoomOut;
         private System.Windows.Forms.Label lbFlawIDVal;
         private System.Windows.Forms.Label lbFlawClassVal;
         private System.Windows.Forms.Label lbMDVal;
@@ -342,6 +314,6 @@
         private System.Windows.Forms.Label lbAreaVal;
         private System.Windows.Forms.Label lbCDVal;
         private System.Windows.Forms.Label lbLengthVal;
-        private PxP.TransparentTrackBar tkbImage;
+        public PxP.Toolkit.FusionTrackBar tkbImage;
     }
 }

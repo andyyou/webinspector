@@ -22,6 +22,7 @@ namespace PxP
         #region MapWindow Variables
         private NChart nChartMap;
         private NPointSeries nPoint;
+        
         #endregion
 
         #region Conturctor
@@ -214,6 +215,7 @@ namespace PxP
                     break;
             }
         }
+        
         #endregion
 
         #region Action Events
@@ -231,6 +233,8 @@ namespace PxP
             MapWindowThreadStatus.UpdateChange = true;
             PxPTab.MapThreadEvent.Set();
         }
+       
+
         #endregion
 
         private void rb_CheckedChanged(object sender, EventArgs e)

@@ -106,9 +106,14 @@
     <Compile Include="SingleFlawControl.Designer.cs">
       <DependentUpon>SingleFlawControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="TransparentTrackBar.cs">
+    <Compile Include="TransparentTrackbar\FusionTrackBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TransparentTrackbar\NativeMethods.cs" />
+    <Compile Include="TransparentTrackbar\TrackBarDrawItemEventArgs.cs" />
+    <Compile Include="TransparentTrackbar\TrackBarItemState.cs" />
+    <Compile Include="TransparentTrackbar\TrackBarOwnerDrawnParts.cs" />
+    <Compile Include="TransparentTrackbar\TrackDrawModeEditor.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Zoom Out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Hand.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
