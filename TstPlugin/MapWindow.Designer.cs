@@ -57,6 +57,11 @@
             this.rbFail = new System.Windows.Forms.RadioButton();
             this.rbPass = new System.Windows.Forms.RadioButton();
             this.btnMapSetup = new System.Windows.Forms.Button();
+            this.lbPageCurrent = new System.Windows.Forms.Label();
+            this.lbPageTotal = new System.Windows.Forms.Label();
+            this.lbNothing = new System.Windows.Forms.Label();
+            this.btnNextPiece = new System.Windows.Forms.Button();
+            this.btnPrevPiece = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gvFlawClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlawType)).BeginInit();
             this.tlpMapInfo.SuspendLayout();
@@ -78,11 +83,11 @@
             // gvFlawClass
             // 
             this.gvFlawClass.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvFlawClass.Location = new System.Drawing.Point(14, 625);
+            this.gvFlawClass.Location = new System.Drawing.Point(14, 639);
             this.gvFlawClass.Name = "gvFlawClass";
             this.gvFlawClass.RowHeadersVisible = false;
             this.gvFlawClass.RowTemplate.Height = 24;
-            this.gvFlawClass.Size = new System.Drawing.Size(622, 208);
+            this.gvFlawClass.Size = new System.Drawing.Size(622, 194);
             this.gvFlawClass.TabIndex = 1;
             // 
             // tlpMapInfo
@@ -372,12 +377,74 @@
             this.btnMapSetup.UseVisualStyleBackColor = true;
             this.btnMapSetup.Click += new System.EventHandler(this.btnMapSetup_Click);
             // 
+            // lbPageCurrent
+            // 
+            this.lbPageCurrent.BackColor = System.Drawing.Color.Transparent;
+            this.lbPageCurrent.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPageCurrent.Location = new System.Drawing.Point(263, 608);
+            this.lbPageCurrent.Name = "lbPageCurrent";
+            this.lbPageCurrent.Size = new System.Drawing.Size(52, 23);
+            this.lbPageCurrent.TabIndex = 12;
+            this.lbPageCurrent.Text = "--";
+            this.lbPageCurrent.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lbPageTotal
+            // 
+            this.lbPageTotal.BackColor = System.Drawing.Color.Transparent;
+            this.lbPageTotal.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPageTotal.Location = new System.Drawing.Point(335, 608);
+            this.lbPageTotal.Name = "lbPageTotal";
+            this.lbPageTotal.Size = new System.Drawing.Size(52, 23);
+            this.lbPageTotal.TabIndex = 11;
+            this.lbPageTotal.Text = "--";
+            this.lbPageTotal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lbNothing
+            // 
+            this.lbNothing.AutoSize = true;
+            this.lbNothing.BackColor = System.Drawing.Color.Transparent;
+            this.lbNothing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNothing.Location = new System.Drawing.Point(318, 609);
+            this.lbNothing.Name = "lbNothing";
+            this.lbNothing.Size = new System.Drawing.Size(14, 20);
+            this.lbNothing.TabIndex = 10;
+            this.lbNothing.Text = "/";
+            // 
+            // btnNextPiece
+            // 
+            this.btnNextPiece.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.btnNextPiece.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnNextPiece.Location = new System.Drawing.Point(406, 603);
+            this.btnNextPiece.Name = "btnNextPiece";
+            this.btnNextPiece.Size = new System.Drawing.Size(30, 30);
+            this.btnNextPiece.TabIndex = 9;
+            this.btnNextPiece.Text = ">";
+            this.btnNextPiece.UseVisualStyleBackColor = false;
+            this.btnNextPiece.Click += new System.EventHandler(this.btnNextPiece_Click);
+            // 
+            // btnPrevPiece
+            // 
+            this.btnPrevPiece.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.btnPrevPiece.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnPrevPiece.Location = new System.Drawing.Point(214, 603);
+            this.btnPrevPiece.Name = "btnPrevPiece";
+            this.btnPrevPiece.Size = new System.Drawing.Size(30, 30);
+            this.btnPrevPiece.TabIndex = 8;
+            this.btnPrevPiece.Text = "<";
+            this.btnPrevPiece.UseVisualStyleBackColor = false;
+            this.btnPrevPiece.Click += new System.EventHandler(this.btnPrevPiece_Click);
+            // 
             // MapWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
             this.BackgroundImage = global::PxP.Properties.Resources.bgLeft;
+            this.Controls.Add(this.lbPageCurrent);
+            this.Controls.Add(this.lbPageTotal);
+            this.Controls.Add(this.lbNothing);
+            this.Controls.Add(this.btnNextPiece);
+            this.Controls.Add(this.btnPrevPiece);
             this.Controls.Add(this.btnMapSetup);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tlpMapInfo);
@@ -425,6 +492,11 @@
         private System.Windows.Forms.Label lbJobIDValue;
         private System.Windows.Forms.Label lbOperatorValue;
         private System.Windows.Forms.Label lbDateTimeValue;
+        private System.Windows.Forms.Label lbPageCurrent;
+        private System.Windows.Forms.Label lbPageTotal;
+        private System.Windows.Forms.Label lbNothing;
+        private System.Windows.Forms.Button btnNextPiece;
+        private System.Windows.Forms.Button btnPrevPiece;
 
     }
 }

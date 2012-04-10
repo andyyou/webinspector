@@ -69,7 +69,7 @@ namespace PxP
         internal static double CurrentCutPosition = 0;                                       //紀錄目前裁切位置
         internal static int PieceLimit = 20;                                                      //Piece限制數量
         internal static int PieceTotal;                                                      //紀錄目前Cut幾片
-        internal static IList<IFlawTypeName> FlawTypeName = new List<IFlawTypeName>();       //載入工單時先儲存方便各事件處理
+        internal static IList<FlawTypeNameExtend> FlawTypeName = new List<FlawTypeNameExtend>();       //載入工單時先儲存方便各事件處理
         internal static IList<ISeverityInfo> SeverityInfo = new List<ISeverityInfo>();       //嚴重缺點優先順序
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
         internal static IPxPInfo PxPInfo;
@@ -286,7 +286,7 @@ namespace PxP
             this.Width = width;
         }
     }
-    public class FlawInfoAddPriority
+    public class FlawInfoAddPriority 
     {
         public int FlawID { set; get; }
         public string Area { set; get; }
@@ -308,18 +308,20 @@ namespace PxP
             
         }
         ////////////////////////////////////////////////////////////////////////////////
+       
+
     }
 
     public class FlawTypeNameExtend
     {
         public string Name { set; get; }
-        public string FlawType { set; get; }
+        public int FlawType { set; get; }
         //Add Other Properties
         public bool Display { set; get; }
         public int Count { set; get; }
         public string Letter { set; get; }
         public string Color { set; get; }
-        public string Sharp { set; get; }
+        public Sharp Sharp { set; get; }
     }
     public class Pair
     {
@@ -334,6 +336,9 @@ namespace PxP
     }
     
     public class ConfFile { public string Name { get; set; } }
+
+    // 三角形, 倒三角形, 正方形, 圓形, 十字, 叉叉, 星號
+    public enum Sharp { Triangle, Ellipse, Square, Cone, Cross, LineDiagonalCross, Star }; 
     #endregion
 
 

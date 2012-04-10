@@ -403,7 +403,7 @@
             this.gvSeries.ReadOnly = true;
             this.gvSeries.RowHeadersVisible = false;
             this.gvSeries.RowTemplate.Height = 24;
-            this.gvSeries.Size = new System.Drawing.Size(382, 345);
+            this.gvSeries.Size = new System.Drawing.Size(382, 301);
             this.gvSeries.TabIndex = 2;
             // 
             // Class

@@ -149,6 +149,7 @@ namespace PxP
             bsFlaw.DataSource = MapWindowVariable.FlawPiece;
             Dgv.DataSource = bsFlaw;
             Dgv.AllowUserToOrderColumns = true;
+            
 
             foreach (var column in PxPVariable.DoffGridSetup)
             {
@@ -250,9 +251,9 @@ namespace PxP
                     int flag = ((PxPVariable.PageCurrent - 1) * PxPVariable.PageSize) + i;
                     if (flag >= gvFlaw.Rows.Count) break;
                     flag = gvFlaw.Rows[flag].Index;
-                    if (flag < FlawPieces[PieceID].Count)
+                    if (flag < FlawPieces[PieceID - 1].Count )
                     {
-                        SingleFlawControl sfc = new SingleFlawControl(FlawPieces[PieceID][flag]);
+                        SingleFlawControl sfc = new SingleFlawControl(FlawPieces[PieceID - 1][flag]);
                         sfc.Width = ImgPlaceHolderWidth;
                         sfc.Height = ImgPlaceHolderHeight;
                         sfc.Name = sfc.Tag.ToString();
@@ -547,25 +548,34 @@ namespace PxP
         {
             //MessageBox.Show("OnCut");
             //DebugTool.WriteLog("PxPTab.cs", "OnCut");
+            MapWindowVariable.FlawPiece.Clear();
+            foreach (var f in MapWindowVariable.Flaws)
+            {
+                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPInfo.Height && f.MD > PxPVariable.CurrentCutPosition)
+                    MapWindowVariable.FlawPiece.Add(f);
+            }
+            MapWindowVariable.Flaws.Clear();
+
+            List<FlawInfoAddPriority> subPiece = new List<FlawInfoAddPriority>();
+            foreach (var f in MapWindowVariable.FlawPiece)
+            {
+                subPiece.Add(f);
+            }
+            MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
+            PxPVariable.CurrentCutPosition = md;
+
             if (PxPThreadStatus.IsOnOnline)
             {
-                MapWindowVariable.FlawPiece.Clear();
-                foreach (var f in MapWindowVariable.Flaws)
-                {
-                    if (f.MD < PxPVariable.CurrentCutPosition + 3 && f.MD > PxPVariable.CurrentCutPosition)
-                        MapWindowVariable.FlawPiece.Add(f);
-                }
+                gvFlaw.DataSource = bsFlaw;
                 SortGridViewByColumn(PxPVariable.FlawGridViewOrderColumn);
                 //MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) {  return f2.Width.CompareTo(f1.Width); });
-                MapWindowVariable.Flaws.Clear();
                 bsFlaw.ResetBindings(false);
                 bsFlaw.ResumeBinding();
 
-                PxPVariable.CurrentCutPosition = md;
                 PxPThreadStatus.IsOnCut = true;
                 PxPThreadEvent.Set();
             }
-        }
+        }
 
         #endregion
 
@@ -581,7 +591,13 @@ namespace PxP
             //MessageBox.Show("OnJobLoaded");
             //DebugTool.WriteLog("PxPTab.cs", "OnJobLoaded");
             PxPVariable.FlawTypeName.Clear();
-            PxPVariable.FlawTypeName = flawTypes;
+            //PxPVariable.FlawTypeName = flawTypes;
+            foreach (var i in flawTypes)
+            {
+                FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                tmp.FlawType = i.FlawType;
+                tmp.Name = i.Name;
+            }
             PxPVariable.JobInfo = jobInfo;
             PxPVariable.SeverityInfo = severityInfo;
             PxPThreadStatus.IsOnJobLoaded = true;
@@ -735,13 +751,21 @@ namespace PxP
             //MessageBox.Show("OnOnline");
             //DebugTool.WriteLog("PxPTab.cs", "OnOnline");
             PxPThreadStatus.IsOnOnline = isOnline;
+           
             if (isOnline)
             {
+                bsFlaw.DataSource = MapWindowVariable.FlawPiece;
                 gvFlaw.Rows.Clear();
                 tlpDoffGrid.Controls.Clear();
                 MapWindowVariable.MapWindowController.ClearMap();
+
                 lbPageTotal.Text = "--";
                 lbPageCurrent.Text = "--";
+            }
+            else
+            {
+                if (MapWindowVariable.CurrentPiece > 0)
+                  bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1 ];
             }
             PxPThreadEvent.Set();
         }
@@ -1358,6 +1382,8 @@ namespace PxP
             
         }
         #endregion
+        
+       
 
         
 

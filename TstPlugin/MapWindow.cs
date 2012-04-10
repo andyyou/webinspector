@@ -22,7 +22,6 @@ namespace PxP
         #region MapWindow Variables
         private NChart nChartMap;
         private NPointSeries nPoint;
-        
         #endregion
 
         #region Conturctor
@@ -36,7 +35,10 @@ namespace PxP
             InitNChart(ref nChart, out nChartMap, out nPoint);
             InitGvFlawClass();
             SetFilterRadioButtons();
-            
+            btnPrevPiece.Enabled = false;
+            btnNextPiece.Enabled = false;
+            lbPageCurrent.Text = "0";
+            lbPageTotal.Text = "0";
         }
         ~MapWindow()
         {
@@ -101,17 +103,31 @@ namespace PxP
         public void DrawPieceFlaw(List<FlawInfoAddPriority> flawPiece)
         {
             nPoint.ClearDataPoints();
-            
-            MapWindowVariable.FlawPieces.Add(flawPiece); //把PxP處理完的每一片儲存
+
+            //List<FlawInfoAddPriority> subPiece = new List<FlawInfoAddPriority>();
+            //foreach (FlawInfoAddPriority flaw in flawPiece)
+            //{
+            //    subPiece.Add(flaw);
+            //}
+            //MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
+
+            //MapWindowVariable.FlawPieces.Add(flawPiece); //把PxP處理完的每一片儲存
             if (flawPiece.Count > 0)
             {
                 foreach (var f in flawPiece)
                 {
                     nPoint.AddDataPoint(new NDataPoint(f.CD, f.RMD));
                 }
+
             }
             nChart.Refresh();
-
+            MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
+            lbPageCurrent.Text = MapWindowVariable.FlawPieces.Count.ToString();
+            lbPageTotal.Text = lbPageCurrent.Text;
+            if (MapWindowVariable.FlawPieces.Count > 1)
+            {
+                btnPrevPiece.Enabled = true;
+            }
         }
         public void RefreshPieceFlaw(List<FlawInfoAddPriority> flawPiece)
         {
@@ -148,9 +164,9 @@ namespace PxP
             gvFlawClass.Columns.Add("JobNum", "JobNum");
             gvFlawClass.Columns.Add("DoffNum", "DoffNum");
         }
-        public void SetGvFlawClass(IList<IFlawTypeName> flawTypes)
+        public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)
         {
-            DebugTool.WriteLog("MapWindow.cs", "SetGvFlawClass");
+            //DebugTool.WriteLog("MapWindow.cs", "SetGvFlawClass");
 
             bsFlawType.DataSource = flawTypes;
         }
@@ -215,7 +231,6 @@ namespace PxP
                     break;
             }
         }
-        
         #endregion
 
         #region Action Events
@@ -233,8 +248,48 @@ namespace PxP
             MapWindowThreadStatus.UpdateChange = true;
             PxPTab.MapThreadEvent.Set();
         }
-       
 
+        private void btnPrevPiece_Click(object sender, EventArgs e)
+        {
+            if (PxPThreadStatus.IsOnOnline)
+            {
+                //Set WebInspector Offline
+                MapWindowThreadStatus.UpdateChange = true;
+                PxPTab.MapThreadEvent.Set();
+                PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
+                lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
+            }
+
+            MapWindowVariable.CurrentPiece--;
+
+            if ((MapWindowVariable.CurrentPiece == 1) || (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece - PxPVariable.PieceLimit))
+                btnPrevPiece.Enabled = false;
+            btnNextPiece.Enabled = true;
+
+            lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
+            RefreshPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]);
+        }
+
+        private void btnNextPiece_Click(object sender, EventArgs e)
+        {
+            if (PxPThreadStatus.IsOnOnline)
+            {
+                //Set WebInspector Offline
+                MapWindowThreadStatus.UpdateChange = true;
+                PxPTab.MapThreadEvent.Set();
+                PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
+                lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
+            }
+
+            MapWindowVariable.CurrentPiece++;
+
+            if (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece)
+                btnNextPiece.Enabled = false;
+            btnPrevPiece.Enabled = true;
+
+            lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
+            RefreshPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]);
+        }
         #endregion
 
         private void rb_CheckedChanged(object sender, EventArgs e)

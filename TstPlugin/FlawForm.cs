@@ -23,7 +23,7 @@ namespace PxP
         public FlawForm(int PointIndex)
         {
             InitializeComponent();
-            flaws = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece][PointIndex];
+            flaws = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1][PointIndex];
             pb = new PictureBox[PxPVariable.JobInfo.NumberOfStations];
             
             SrcImg = new Image[PxPVariable.JobInfo.NumberOfStations];
@@ -147,7 +147,6 @@ namespace PxP
             this.MousePt = e.Location;
             FormDragging = true;
         }
-
         private void pb_MouseMove(object sender, MouseEventArgs e)
         {
             if (FormDragging)
@@ -156,13 +155,11 @@ namespace PxP
      -tcPicture.TabPages[tcPicture.SelectedIndex].AutoScrollPosition.Y + (MousePt.Y - e.Y));
             }
         }
-
         private void pb_MouseUp(object sender,
         System.Windows.Forms.MouseEventArgs e)
         {
             FormDragging = false;
         }
-
         public void pb_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             tkbImage.Value = 100;
@@ -178,7 +175,6 @@ namespace PxP
         #endregion
 
         #region Method
-
         public double Init_Image(Bitmap bmp, TabPage tp, PictureBox pb)
         {
             double Width_d = (double)bmp.Width / (double)tp.ClientSize.Width;
