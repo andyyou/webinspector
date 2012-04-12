@@ -602,41 +602,39 @@ namespace PxP
             #endregion
             //MessageBox.Show("OnJobLoaded");
             //DebugTool.WriteLog("PxPTab.cs", "OnJobLoaded");
-            PxPVariable.FlawTypeName.Clear();
+            //PxPVariable.FlawTypeName.Clear();
             //PxPVariable.FlawTypeName = flawTypes;
+            IList<FlawTypeNameExtend> tmpList = new List<FlawTypeNameExtend>();
+            var random = new Random();
             foreach (var i in flawTypes)
             {
-                FlawTypeNameExtend tmp = new FlawTypeNameExtend();
-                tmp.FlawType = i.FlawType;
-                tmp.Name = i.Name;
-                tmp.Display = true;
-                var random = new Random();
-                tmp.Color = String.Format("#{0:X6}", random.Next(0x1000000));
-                tmp.Shape = Shape.Cross.ToString();
-                PxPVariable.FlawTypeName.Add(tmp);
                 foreach(var f in PxPVariable.FlawTypeName )
                 {
                     
-                    //if(i.Name == f.Name)
-                    //{
+                    if(i.Name == f.Name)
+                    {
                        
-                    //}else
-                    //{
+                    }else
+                    {
                         //Default
-                        //FlawTypeNameExtend tmp = new FlawTypeNameExtend();
-                        //tmp.FlawType = i.FlawType;
-                        //tmp.Name = i.Name;
-                        //tmp.Display =true; 
-                        //var random = new Random();
-                        //tmp.Color =String.Format("#{0:X6}", random.Next(0x1000000));
-                        //tmp.Shape = Shape.Cross.ToString();
-                        //PxPVariable.FlawTypeName.Add(tmp);
-                    //}
+                        FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                        tmp.FlawType = i.FlawType;
+                        tmp.Name = i.Name;
+                        tmp.Display =true; 
+                       
+                        tmp.Color =String.Format("#{0:X6}", random.Next(0x1000000));
+                        tmp.Shape = Shape.Cross.ToGraphic();
+                        tmpList.Add(tmp);
+
+                    }
                     
                 }
-                
-                
             }
+            foreach (var el in tmpList)
+            {
+                PxPVariable.FlawTypeName.Add(el);
+            }
+            PxPVariable.FlawTypeName.Sort(delegate(FlawTypeNameExtend f1, FlawTypeNameExtend f2) { return f1.FlawType.CompareTo(f2.FlawType); });
             PxPVariable.JobInfo = jobInfo;
             PxPVariable.SeverityInfo = severityInfo;
             PxPThreadStatus.IsOnJobLoaded = true;
@@ -829,7 +827,10 @@ namespace PxP
             else
             {
                 if (MapWindowVariable.CurrentPiece > 0)
-                  bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1 ];
+                {
+                    PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
+                    bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
+                }
             }
             PxPThreadEvent.Set();
         }
@@ -855,7 +856,14 @@ namespace PxP
         {
             //MessageBox.Show("OnDoffResult");
             //DebugTool.WriteLog("PxPTab.cs", "OnDoffResult");
+            if (pass)
+                PxPVariable.PassNum++;
+            else
+                PxPVariable.FailNum++;
+
+            PxPVariable.DoffNum = doffNumber;
             PxPThreadStatus.IsOnDoffResult = true;
+            MapWindowVariable.MapWindowController.SetMapInfoLabel();
             PxPThreadEvent.Set();
         }
 
@@ -1135,6 +1143,13 @@ namespace PxP
                         MethodInvoker RefreshThread = new MethodInvoker(TableLayoutRefresh);
                         this.BeginInvoke(RefreshThread);
                     }
+
+                    if (MapWindowThreadStatus.IsPageRefresh)
+                    {
+                        MapWindowThreadStatus.IsPageRefresh = false;
+                        MethodInvoker RefreshThread = new MethodInvoker(PageRefresh);
+                        this.BeginInvoke(RefreshThread);
+                    }
                     //if (v_update)
                     //{
                     //    v_update = false;
@@ -1204,7 +1219,7 @@ namespace PxP
             //MessageBox.Show("ProcessOnCut");
             //DebugTool.WriteLog("PxPTab.cs", "ProcessOnCut");
 
-            MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece);
+            MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece, true);
             //處理右下角圖片
             DrawTablePictures(MapWindowVariable.FlawPieces,MapWindowVariable.CurrentPiece,1);
             //MapWindowVariable.CurrentPiece++;
@@ -1374,7 +1389,7 @@ namespace PxP
                 ListSortDirection lsd;
                 SortGridViewByColumn(NewColumn.Name);
                 DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
-                MapWindowVariable.MapWindowController.RefreshPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
+                MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece], false);
             }
                 /*
             // Offical Way

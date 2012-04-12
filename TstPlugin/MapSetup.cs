@@ -184,7 +184,19 @@ namespace PxP
                 
                 
                 ////////////////////////////////////////////////////////////////////////////////
-                
+                //Change Global Variable
+                PxPVariable.ImgRowsSet = int.TryParse(xImgRowsSet.Value, out PxPVariable.ImgRowsSet) ? PxPVariable.ImgRowsSet : 3;
+                PxPVariable.ImgColsSet = int.TryParse(xImgColsSet.Value, out PxPVariable.ImgColsSet) ? PxPVariable.ImgColsSet : 3;
+                MapWindowVariable.MapProportion = cboxMapSize.SelectedIndex;
+                MapWindowVariable.ShowGridSet = rbMapGridOn.Checked ? true : false;
+                MapWindowVariable.MapGridSet = rbFixCellSize.Checked ? 0 : 1;
+                MapWindowVariable.BottomAxe = cboxButtomAxe.SelectedIndex;
+                MapWindowVariable.MDInver = cbMDInverse.Checked ? 1 : 0;
+                MapWindowVariable.CDInver = cbCDInverse.Checked ? 1 : 0;
+                ////////////////////////////////////////////////////////////////////////////////
+                MapWindowVariable.MapWindowController.SetMapProperty();
+                MapWindowThreadStatus.IsPageRefresh = true;
+                PxPTab.MapThreadEvent.Set();
                 MessageBox.Show("設定已套用！");
             }
             catch (Exception ex)

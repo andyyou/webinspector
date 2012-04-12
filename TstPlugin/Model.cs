@@ -69,7 +69,7 @@ namespace PxP
         internal static double CurrentCutPosition = 0;                                       //紀錄目前裁切位置
         internal static int PieceLimit = 20;                                                      //Piece限制數量
         internal static int PieceTotal;                                                      //紀錄目前Cut幾片
-        internal static IList<FlawTypeNameExtend> FlawTypeName = new List<FlawTypeNameExtend>();       //載入工單時先儲存方便各事件處理
+        internal static List<FlawTypeNameExtend> FlawTypeName = new List<FlawTypeNameExtend>();       //載入工單時先儲存方便各事件處理
         internal static IList<ISeverityInfo> SeverityInfo = new List<ISeverityInfo>();       //嚴重缺點優先順序
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
         internal static IPxPInfo PxPInfo;
@@ -87,6 +87,9 @@ namespace PxP
         internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
         
         internal static int ChooseFlawID = -1;
+        internal static int PassNum = 0;
+        internal static int FailNum = 0;
+        internal static int DoffNum = 0;
     }
     public class MapWindowThreadStatus
     {
@@ -374,6 +377,7 @@ namespace PxP
             Key = k;
             Value = v;
         }
+        
     }
     
     public class ConfFile { public string Name { get; set; } }
@@ -389,13 +393,12 @@ namespace PxP
         Square,
         [DescriptionAttribute("●")]
         Cone,
-        [DescriptionAttribute("✚")]
+        [DescriptionAttribute("+")]
         Cross,
-        [DescriptionAttribute("✖")]
+        [DescriptionAttribute("╳")]
         LineDiagonalCross,
         [DescriptionAttribute("★")]
         Star 
-    
     }; 
     #endregion
     static class ExtensionMethods

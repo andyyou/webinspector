@@ -80,6 +80,7 @@
             // btnPrevGrid
             // 
             this.btnPrevGrid.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.btnPrevGrid.Enabled = false;
             this.btnPrevGrid.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnPrevGrid.Location = new System.Drawing.Point(269, 700);
             this.btnPrevGrid.Name = "btnPrevGrid";
@@ -92,6 +93,7 @@
             // btnNextGrid
             // 
             this.btnNextGrid.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.btnNextGrid.Enabled = false;
             this.btnNextGrid.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnNextGrid.Location = new System.Drawing.Point(461, 700);
             this.btnNextGrid.Name = "btnNextGrid";
