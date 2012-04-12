@@ -13,6 +13,7 @@ using Nevron.Chart.WinForm;
 using System.Xml.Linq;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace PxP
 {
@@ -33,7 +34,7 @@ namespace PxP
             InitializeComponent();
             SystemVariable.LoadConfig();
             InitNChart(ref nChart, out nChartMap, out nPoint);
-            InitGvFlawClass();
+            
             SetFilterRadioButtons();
             btnPrevPiece.Enabled = false;
             btnNextPiece.Enabled = false;
@@ -71,13 +72,14 @@ namespace PxP
 
             //Set chart axis property
             chart.Axis(StandardAxis.Depth).Visible = false;
-            chart.BoundsMode = BoundsMode.Stretch;
-            chart.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, 0), true, false);
-            chart.Axis(StandardAxis.PrimaryX).ScaleConfigurator = GetScaleConfigurator();
-            chart.Axis(StandardAxis.PrimaryX).PagingView.MinPageLength = 0.01f;
-            chart.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, 0), true, false);
-            chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
-            chart.Axis(StandardAxis.PrimaryY).PagingView.MinPageLength = 0.01f;
+            //chart.BoundsMode = BoundsMode.Stretch;
+            SetMapSize();
+            chart.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
+            //chart.Axis(StandardAxis.PrimaryX).ScaleConfigurator = GetScaleConfigurator();
+            //chart.Axis(StandardAxis.PrimaryX).PagingView.MinPageLength = 0.01f;
+            chart.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
+            //chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
+            //chart.Axis(StandardAxis.PrimaryY).PagingView.MinPageLength = 0.01f;
 
             np = (NPointSeries)nChartMap.Series.Add(SeriesType.Point);
             np.Name = "PointName";
@@ -151,18 +153,31 @@ namespace PxP
         {
             DebugTool.WriteLog("MapWindow.cs", "InitGvFlawClass");
 
-            IList<IFlawTypeName> tmpFlawTypes = new List<IFlawTypeName>();
+            //IList<FlawTypeNameExtend> tmpFlawTypes = new List<FlawTypeNameExtend>();
+            bsFlawType.DataSource = PxPVariable.FlawTypeName;
             gvFlawClass.DataSource = bsFlawType;
-            bsFlawType.DataSource = tmpFlawTypes; 
+            gvFlawClass.AllowUserToAddRows = false;
+           
 
+
+            foreach (var column in MapWindowVariable.DoffTypeGridSetup)
+            {
+                gvFlawClass.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
+                gvFlawClass.Columns[column.ColumnName].HeaderText = column.HeaderText;
+                gvFlawClass.Columns[column.ColumnName].DisplayIndex = column.Index;
+                gvFlawClass.Columns[column.ColumnName].Width = column.Width;
+            }
+            //bsFlawType.ResetBindings(false);
+            //gvFlawClass.Columns["Display"].DisplayIndex = 0 ;
+            //gvFlawClass.Columns["FlawType"].DisplayIndex = 1 ;
             //gvFlawClass.Columns["FlawType"].HeaderText = "缺陷類型";
             //gvFlawClass.Columns["Name"].HeaderText = "缺陷名稱";
-            DataGridViewCheckBoxColumn cboxDisplay = new DataGridViewCheckBoxColumn();
-            cboxDisplay.Name = "Display";
+            //DataGridViewCheckBoxColumn cboxDisplay = new DataGridViewCheckBoxColumn();
+            //cboxDisplay.Name = "Display";
             //cboxDisplay.HeaderText = "顯示";
-            gvFlawClass.Columns.Insert(0, cboxDisplay);
-            gvFlawClass.Columns.Add("JobNum", "JobNum");
-            gvFlawClass.Columns.Add("DoffNum", "DoffNum");
+            //gvFlawClass.Columns.Insert(0, cboxDisplay);
+            //gvFlawClass.Columns.Add("JobNum", "JobNum");
+            //gvFlawClass.Columns.Add("DoffNum", "DoffNum");
         }
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)
         {
@@ -231,9 +246,61 @@ namespace PxP
                     break;
             }
         }
+        public void SetMapSize()
+        {
+            NCartesianChart chart = (NCartesianChart)nChart.Charts[0];
+            switch (MapWindowVariable.MapProportion)
+            {
+                case 0: // 1:1
+                    chart.Width = 400;
+                    chart.Height = 400;
+                    break;
+                case 1: // 2:1
+                    chart.Width = 400;
+                    chart.Height = 200;
+                    break;
+                case 2: // 4:3
+                    chart.Width = 400;
+                    chart.Height = 300;
+                    break;
+                case 3: // 3:4
+                    chart.Width = 300;
+                    chart.Height = 400;
+                    break;
+                case 4: // 16:9
+                    chart.Width = 608;
+                    chart.Height = 342;
+                    break;
+                default:
+                    chart.Width = 400;
+                    chart.Height = 400;
+                    break;
+            }
+            nChart.Refresh();
+        }
+        public void SetMapAxis()
+        {
+            NCartesianChart chart = (NCartesianChart)nChart.Charts[0];
+            chart.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+            chart.Axis(StandardAxis.PrimaryX).ScaleConfigurator = GetScaleConfigurator();
+            chart.Axis(StandardAxis.PrimaryX).PagingView.MinPageLength = 0.01f;
+            chart.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
+            chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
+            chart.Axis(StandardAxis.PrimaryY).PagingView.MinPageLength = 0.01f;
+            nChart.Refresh();
+        }
+        public void ResetBinding()
+        { 
+            
+        }
         #endregion
 
         #region Action Events
+        private void MapWindow_Load(object sender, EventArgs e)
+        {
+            InitGvFlawClass();
+            
+        }
         private void btnMapSetup_Click(object sender, EventArgs e)
         {
             if (!PxPThreadStatus.IsOnOnline && !PxPThreadStatus.IsOnJobLoaded || !PxPThreadStatus.IsOnOnline && PxPThreadStatus.IsOnJobStopped)
@@ -289,9 +356,7 @@ namespace PxP
 
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
             RefreshPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]);
-        }
-        #endregion
-
+        }
         private void rb_CheckedChanged(object sender, EventArgs e)
         {
             if (((RadioButton)sender).Checked == true)
@@ -310,6 +375,39 @@ namespace PxP
                 }
             }
         }
+        
+        #endregion
+
+        private void gvFlawClass_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            //int[] rgb = {
+            //         Convert.ToInt32(gvFlawClass.Rows[e.RowIndex].Cells["Color"].Value.ToString().Substring(1,2)),
+            //         Convert.ToInt32(gvFlawClass.Rows[e.RowIndex].Cells["Color"].Value.ToString().Substring(3,2)),
+            //         Convert.ToInt32(gvFlawClass.Rows[e.RowIndex].Cells["Color"].Value.ToString().Substring(5,2)),
+            //};
+
+           
+            //string[] rgb = Regex.Split(gvFlawClass.Rows[e.RowIndex].Cells["Color"].Value.ToString(), @"(\d{2})");
+          
+
+            if (e.ColumnIndex == 5)
+                e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(gvFlawClass.Rows[e.RowIndex].Cells["Color"].Value.ToString());
+            if (e.ColumnIndex == 4)
+                e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(e.Value.ToString());
+
+        }
+
+       
+
+      
+
+        
+
+        
+
+       
+
+       
 
 
     }

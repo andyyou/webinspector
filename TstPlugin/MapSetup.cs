@@ -18,6 +18,7 @@ namespace PxP
         string tmpMDSize = "";
         string tmpCDSize = "";
         #endregion
+
         #region Constructor
         public MapSetup()
         {
@@ -30,6 +31,7 @@ namespace PxP
             
         }
         #endregion
+
         #region Reflactoring
         //取得Folder底下所有XML清單
         List<string> GetConfList()
@@ -101,6 +103,11 @@ namespace PxP
             ///////////////////////////////////////////////////////////////////////////////////////
             cbCDInverse.Checked = (MapWindowVariable.CDInver == 1) ? true : false;
             cbMDInverse.Checked = (MapWindowVariable.MDInver == 1) ? true : false;
+
+            ///////////////////////////////////////////////////////////////////////////////////////
+
+            //Add List here and binding to datagridvew
+
 
         }
         #endregion

@@ -85,6 +85,7 @@ namespace PxP
         internal static int PageTotal = 0;                         //計算當OnCut發生時右下角DataGrid的頁數
         internal static string FlawGridViewOrderColumn = "";       //右上角GridView排序的欄位
         internal static List<DoffGridColumns> DoffGridSetup = new List<DoffGridColumns>();      //紀錄右上角DataGrid欄位左右排序
+        
         internal static int ChooseFlawID = -1;
     }
     public class MapWindowThreadStatus
@@ -116,6 +117,7 @@ namespace PxP
         internal static int MDInver = 0;                            //紀錄是否反轉座標軸
         internal static int CDInver = 0;
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
+        internal static List<DoffGridColumns> DoffTypeGridSetup;    //紀錄左下角DataGrid欄位左右排序
         public MapWindowVariable()
         {
             //FlawInfoExtend x = new FlawInfoExtend();
@@ -127,7 +129,6 @@ namespace PxP
         internal static string ConfigFileName ;                     //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
         internal static e_Language Language = e_Language.English;   //預設為英語
         internal static string FlawLock = "FlawLock";               //OnFlaws & OnCut 鎖定
-        
        
         internal static bool IsSystemFreez = false;                 //判斷系統現在是否在offline凍結狀態
 
@@ -220,6 +221,21 @@ namespace PxP
                 }
                 XElement OrderByColumn = XSysConf.Element("SystemConfig").Element("DoffGrid").Element("OrderBy");
                 PxPVariable.FlawGridViewOrderColumn = OrderByColumn.Value;
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+                if (MapWindowVariable.DoffTypeGridSetup == null)
+                    MapWindowVariable.DoffTypeGridSetup = new List<DoffGridColumns>();
+                else
+                    MapWindowVariable.DoffTypeGridSetup.Clear();
+                IEnumerable<XElement> XDoffTypeGrid = XSysConf.Element("SystemConfig").Element("DoffTypeGrid").Elements("Column"); //自動儲存右上方GridView的排序和欄位Size
+                foreach (XElement el in XDoffTypeGrid)
+                {
+                    DoffGridColumns d = new DoffGridColumns(int.Parse(el.Element("Index").Value), el.Attribute("Name").Value, int.Parse(el.Element("Size").Value));
+                    MapWindowVariable.DoffTypeGridSetup.Add(d);
+                }
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+
             }
             catch (Exception ex)
             {
@@ -267,6 +283,29 @@ namespace PxP
                 MapWindowVariable.MDInver = 0;
                 MapWindowVariable.CDInver = 0;
             }
+
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            IEnumerable<XElement> xMapFlawTypeName = XConf.Element("Config").Element("MapVariable").Elements("FlawTypeName");
+            try
+            {
+                PxPVariable.FlawTypeName.Clear();
+                foreach (var el in xMapFlawTypeName)
+                {
+                    FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                    tmp.Display = (int.Parse(el.Element("Display").Value) == 1) ? true : false;
+                    tmp.Color = el.Element("Color").Value.ToString();
+                    tmp.Name = el.Element("Name").Value.ToString();
+                    tmp.Shape = ((Shape)Enum.Parse(typeof(Shape),el.Element("Shape").Value.ToString(),false)).ToGraphic();
+                    
+                    tmp.FlawType = int.Parse(el.Element("Display").Value.ToString());
+                    PxPVariable.FlawTypeName.Add(tmp);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail :  MapDoffTypeGrid \n" + ex.Message);
+            }
         }
         #endregion
     }
@@ -308,7 +347,7 @@ namespace PxP
             
         }
         ////////////////////////////////////////////////////////////////////////////////
-       
+        
 
     }
 
@@ -319,9 +358,11 @@ namespace PxP
         //Add Other Properties
         public bool Display { set; get; }
         public int Count { set; get; }
-        public string Letter { set; get; }
+        //public string Letter { set; get; }
         public string Color { set; get; }
-        public Sharp Sharp { set; get; }
+        public string Shape { set; get; }
+        public int JobNum { set; get; }
+        public int DoffNum { set; get; }
     }
     public class Pair
     {
@@ -338,9 +379,45 @@ namespace PxP
     public class ConfFile { public string Name { get; set; } }
 
     // 三角形, 倒三角形, 正方形, 圓形, 十字, 叉叉, 星號
-    public enum Sharp { Triangle, Ellipse, Square, Cone, Cross, LineDiagonalCross, Star }; 
+    //public enum Shape { Triangle, Ellipse, Square, Cone, Cross, LineDiagonalCross, Star };
+    public enum Shape {
+        [DescriptionAttribute("▲")]
+        Triangle,
+        [DescriptionAttribute("▼")]
+        Ellipse,
+        [DescriptionAttribute("■")]
+        Square,
+        [DescriptionAttribute("●")]
+        Cone,
+        [DescriptionAttribute("✚")]
+        Cross,
+        [DescriptionAttribute("✖")]
+        LineDiagonalCross,
+        [DescriptionAttribute("★")]
+        Star 
+    
+    }; 
     #endregion
+    static class ExtensionMethods
+    {
+        public static string ToGraphic(this Enum en) //ext method
 
+        {
+
+            Type type = en.GetType();
+            MemberInfo[] memInfo = type.GetMember(en.ToString());
+            if (memInfo != null && memInfo.Length > 0)
+            {
+                object[] attrs = memInfo[0].GetCustomAttributes(
+                                              typeof(DescriptionAttribute), 
+                                              false);
+                if (attrs != null && attrs.Length > 0)
+                    return ((DescriptionAttribute)attrs[0]).Description;
+            }
+            return en.ToString();
+        }
+
+    }
 
 
     

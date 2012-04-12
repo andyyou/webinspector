@@ -89,6 +89,7 @@
             this.gvFlawClass.RowTemplate.Height = 24;
             this.gvFlawClass.Size = new System.Drawing.Size(622, 194);
             this.gvFlawClass.TabIndex = 1;
+            this.gvFlawClass.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gvFlawClass_CellFormatting);
             // 
             // tlpMapInfo
             // 
@@ -404,7 +405,7 @@
             this.lbNothing.AutoSize = true;
             this.lbNothing.BackColor = System.Drawing.Color.Transparent;
             this.lbNothing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNothing.Location = new System.Drawing.Point(318, 609);
+            this.lbNothing.Location = new System.Drawing.Point(318, 611);
             this.lbNothing.Name = "lbNothing";
             this.lbNothing.Size = new System.Drawing.Size(14, 20);
             this.lbNothing.TabIndex = 10;
@@ -452,6 +453,7 @@
             this.Controls.Add(this.nChart);
             this.Name = "MapWindow";
             this.Size = new System.Drawing.Size(650, 848);
+            this.Load += new System.EventHandler(this.MapWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gvFlawClass)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlawType)).EndInit();
             this.tlpMapInfo.ResumeLayout(false);
@@ -466,8 +468,8 @@
         #endregion
 
         private Nevron.Chart.WinForm.NChartControl nChart;
-        private System.Windows.Forms.DataGridView gvFlawClass;
-        private System.Windows.Forms.BindingSource bsFlawType;
+        public System.Windows.Forms.DataGridView gvFlawClass;
+        public System.Windows.Forms.BindingSource bsFlawType;
         private System.Windows.Forms.TableLayoutPanel tlpMapInfo;
         private System.Windows.Forms.Label lbOrderNumber;
         private System.Windows.Forms.Label lbJobID;

@@ -537,6 +537,17 @@ namespace PxP
             //MessageBox.Show("OnEvents");
             //DebugTool.WriteLog("PxPTab.cs", "OnEvents");
             PxPThreadStatus.IsOnEvents = true;
+            foreach (var eventInfo in events)
+            {
+                switch ((e_EventID)eventInfo.EventType)
+                {
+                    case e_EventID.STOP_JOB:
+                        PxPThreadStatus.IsOnOnline = false;
+                        PxPThreadStatus.IsOnJobStopped = true;
+                        break;
+                    default: break;
+                }
+            }
             PxPThreadEvent.Set();
         }
 
@@ -570,6 +581,7 @@ namespace PxP
                 SortGridViewByColumn(PxPVariable.FlawGridViewOrderColumn);
                 //MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) {  return f2.Width.CompareTo(f1.Width); });
                 bsFlaw.ResetBindings(false);
+                
                 bsFlaw.ResumeBinding();
 
                 PxPThreadStatus.IsOnCut = true;
@@ -597,6 +609,33 @@ namespace PxP
                 FlawTypeNameExtend tmp = new FlawTypeNameExtend();
                 tmp.FlawType = i.FlawType;
                 tmp.Name = i.Name;
+                tmp.Display = true;
+                var random = new Random();
+                tmp.Color = String.Format("#{0:X6}", random.Next(0x1000000));
+                tmp.Shape = Shape.Cross.ToString();
+                PxPVariable.FlawTypeName.Add(tmp);
+                foreach(var f in PxPVariable.FlawTypeName )
+                {
+                    
+                    //if(i.Name == f.Name)
+                    //{
+                       
+                    //}else
+                    //{
+                        //Default
+                        //FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                        //tmp.FlawType = i.FlawType;
+                        //tmp.Name = i.Name;
+                        //tmp.Display =true; 
+                        //var random = new Random();
+                        //tmp.Color =String.Format("#{0:X6}", random.Next(0x1000000));
+                        //tmp.Shape = Shape.Cross.ToString();
+                        //PxPVariable.FlawTypeName.Add(tmp);
+                    //}
+                    
+                }
+                
+                
             }
             PxPVariable.JobInfo = jobInfo;
             PxPVariable.SeverityInfo = severityInfo;
@@ -605,6 +644,8 @@ namespace PxP
             //Disable MapSetup Button
             MapWindowVariable.MapWindowController.btnMapSetup.Enabled = false;
             MapWindowVariable.MapWindowController.SetJobInfo();
+            MapWindowVariable.MapWindowController.SetMapAxis();
+            MapWindowVariable.MapWindowController.bsFlawType.ResetBindings(false);
             PxPThreadEvent.Set();
         }
         #endregion
@@ -655,7 +696,28 @@ namespace PxP
                         }
                     }
                 }
-                
+                /////////////////////////////////////////////////////////////////////////////////
+                IEnumerable<XElement> MapFlawClassGridColumns = XDocLang.Element("Language").Element("MapWindow").Element("DoffSettingGrid").Elements("Column");
+                //foreach (DataGridViewColumn column in MapWindowVariable.MapWindowController.gvFlawClass.Columns)
+                //{
+                //    foreach (var i in MapFlawClassGridColumns)
+                //    {
+                //        if (column.Name == i.Attribute("Name").Value)
+                //        {
+                //            column.HeaderText = i.Value.ToString();
+                //        }
+                //    }
+                //}
+                foreach (var column in MapWindowVariable.DoffTypeGridSetup)
+                {
+                    foreach (var i in MapFlawClassGridColumns)
+                    {
+                        if (column.ColumnName == i.Attribute("Name").Value)
+                        {
+                            column.HeaderText = i.Value.ToString();
+                        }
+                    }
+                }
                 /////////////////////////////////////////////////////////////////////////////////
                 IEnumerable<XElement> MapWindowButtons = XDocLang.Element("Language").Element("MapWindow").Element("Object").Elements("Button");
                 var btns = GetAll(MapWindowVariable.MapWindowController, typeof(Button));
@@ -682,6 +744,8 @@ namespace PxP
                         }
                     }
                 }
+                
+                 
                 /////////////////////////////////////////////////////////////////////////////////
                 //刷新所有須改變語系的物件
                 PageRefresh();
