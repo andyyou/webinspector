@@ -39,7 +39,28 @@ namespace PxP
         }
         ~MapWindow()
         {
-            
+            try
+            {
+                string FolderPath = Path.GetDirectoryName(
+           Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
+                string FullSystemPath = FolderPath + SystemVariable.ConfigFileName;
+                XDocument XDoc = XDocument.Load(FullSystemPath);
+                XElement xShowFlag = XDoc.Element("Config").Element("MapVariable").Element("ShowFlag");
+                //紀錄顯示項目 0:All, 1:Pass, 2:Fail
+                if (rbAll.Checked)
+                    xShowFlag.Value = "0";
+                else if (rbPass.Checked)
+                    xShowFlag.Value = "1";
+                else if (rbFail.Checked)
+                    xShowFlag.Value = "2";
+                else
+                    xShowFlag.Value = "0";
+                XDoc.Save(FullSystemPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Map Setup UnConstructor Error");
+            }
         }
         #endregion
 
@@ -86,22 +107,76 @@ namespace PxP
         {
             nChartMap.Series.Clear();
 
-           
             if (flawPiece.Count > 0)
             {
+                bool skipFlag = false;
                 foreach (var f in flawPiece)
                 {
+                    skipFlag = false;
                     NPointSeries point = (NPointSeries)nChartMap.Series.Add(SeriesType.Point);
                     point.Name = f.FlawID.ToString();
-                    point.PointShape = PointShape.Cross;
+                    point.Labels.Add(f.FlawID);
                     point.Size = new NLength(3, NRelativeUnit.ParentPercentage);
                     point.BorderStyle.Width = new NLength(0, NGraphicsUnit.Millimeter);
+                    //NDataLabelStyle dataLabel = new NDataLabelStyle();
+                    //dataLabel.Format = "<label>";
+                    //point.DataLabelStyles[0] = dataLabel;
+                    //point.DataLabelStyle = dataLabel;
                     point.DataLabelStyle.Visible = false;
-                    point.FillStyle = new NColorFillStyle(Color.Blue);
-                    point.UseXValues = true;
-                    point.AddDataPoint(new NDataPoint(f.CD, f.RMD));
-                }
+                    foreach (DataGridViewRow row in gvFlawClass.Rows)
+                    {
+                        DataGridViewCheckBoxCell col = (DataGridViewCheckBoxCell)row.Cells[2];
+                        if (f.FlawType == Convert.ToInt32(row.Cells["FlawType"].Value))
+                        {
+                            if (!Convert.ToBoolean(row.Cells["Display"].EditedFormattedValue))
+                            {
+                                skipFlag = true;
+                                break;
+                            }
 
+                            point.FillStyle = new NColorFillStyle(System.Drawing.ColorTranslator.FromHtml(row.Cells["Color"].Value.ToString()));
+                            switch (row.Cells["Shape"].Value.ToString())
+                            {
+                                case "▲":
+                                    point.PointShape = PointShape.DiagonalCross;
+                                    //point.PointShape = PointShape.Cone
+                                    break;
+                                case "▼":
+                                    point.PointShape = PointShape.InvertedCone;
+                                    //point.PointShape = PointShape.InvertedPyramid;
+                                    break;
+                                case "■":
+                                    point.PointShape = PointShape.Bar;
+                                    break;
+                                case "●":
+                                    point.PointShape = PointShape.Sphere;
+                                    //point.PointShape = PointShape.Ellipse
+                                    break;
+                                case "+":
+                                    point.PointShape = PointShape.Cross;
+                                    break;
+                                case "╳":
+                                    point.PointShape = PointShape.DiagonalCross;
+                                    break;
+                                case "★":
+                                    point.PointShape = PointShape.Star;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    if (skipFlag)
+                        continue;
+
+                    point.Tag = f.FlawType;
+                    point.UseXValues = true;
+                    //When BottomAxe equals zero, bottom axis is CD otherwise is RMD
+                    if (MapWindowVariable.BottomAxe == 0)
+                        point.AddDataPoint(new NDataPoint(f.CD, f.RMD));
+                    else
+                        point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
+                }
             }
             nChart.Refresh();
             if (drawFlag)
@@ -128,13 +203,20 @@ namespace PxP
             bsFlawType.DataSource = PxPVariable.FlawTypeName;
             gvFlawClass.DataSource = bsFlawType;
             gvFlawClass.AllowUserToAddRows = false;
+            
             foreach (var column in MapWindowVariable.DoffTypeGridSetup)
             {
+                if (column.ColumnName == "Display")
+                    gvFlawClass.Columns[column.ColumnName].ReadOnly = false;
+                else
+                    gvFlawClass.Columns[column.ColumnName].ReadOnly = true;
                 gvFlawClass.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
                 gvFlawClass.Columns[column.ColumnName].HeaderText = column.HeaderText;
                 gvFlawClass.Columns[column.ColumnName].DisplayIndex = column.Index;
                 gvFlawClass.Columns[column.ColumnName].Width = column.Width;
             }
+            //Display
+            gvFlawClass.Columns["Count"].Visible = false;
          
         }
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)
@@ -142,6 +224,18 @@ namespace PxP
             //DebugTool.WriteLog("MapWindow.cs", "SetGvFlawClass");
 
             bsFlawType.DataSource = flawTypes;
+        }
+        public void ResetGvFlawClassDoffNum()
+        {
+            foreach (DataGridViewRow r in gvFlawClass.Rows)
+            {
+                r.Cells["DoffNum"].Value = 0;
+            }
+        }
+        public void RefreshGvFlawClass()
+        {
+            gvFlawClass.Refresh();
+            gvFlawClass.EndEdit();
         }
         private NLinearScaleConfigurator GetScaleConfigurator()
         {
@@ -166,7 +260,7 @@ namespace PxP
                 if (series != null)
                 {
                     FlawForm FlawFormController = new FlawForm(
-                        Convert.ToInt32(series.Name) - MapWindowVariable.FlawPieces[PxPVariable.FreezPiece - 1][0].FlawID
+                        Convert.ToInt32(series.Name) - MapWindowVariable.FlawPieces[Convert.ToInt32(lbPageCurrent.Text) - 1][0].FlawID
                     );
                     FlawFormController.ShowDialog();
                 }
@@ -182,20 +276,25 @@ namespace PxP
                 {
                     //MessageBox.Show(hitTestResult.Series.Id.ToString());
                     series.FillStyle = new NColorFillStyle(Color.Red);
-                    series.DataLabelStyle.Visible = true;
+                    //series.DataLabelStyle.Visible = true;
                 }
             }
             else
             {
                 foreach (NSeries point in nChartMap.Series)
                 {
-                    point.FillStyle = new NColorFillStyle(Color.Blue);
-                    point.DataLabelStyle.Visible = false;
+                    foreach (DataGridViewRow row in gvFlawClass.Rows)
+                    {
+                        if (point.Tag.ToString() == row.Cells["FlawType"].Value.ToString())
+                        {
+                            point.FillStyle = new NColorFillStyle(System.Drawing.ColorTranslator.FromHtml(row.Cells["Color"].Value.ToString()));
+                        }
+                    }
+                    //point.DataLabelStyle.Visible = false;
                 }
             }
             nChart.Refresh();
-        }
-        public void SetJobInfo()
+        }        public void SetJobInfo()
         {
             lbOrderNumberValue.Text = PxPVariable.JobInfo.OrderNumber;
             lbJobIDValue.Text = PxPVariable.JobInfo.JobID;
@@ -263,10 +362,18 @@ namespace PxP
         }
         public void SetMapAxis()
         {
-            nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+            if (MapWindowVariable.BottomAxe == 0)
+            {
+                nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+                nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
+            }
+            else
+            {
+                nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
+                nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+            }
             nChartMap.Axis(StandardAxis.PrimaryX).ScaleConfigurator = GetScaleConfigurator();
             nChartMap.Axis(StandardAxis.PrimaryX).PagingView.MinPageLength = 0.01f;
-            nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
             nChartMap.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
             nChartMap.Axis(StandardAxis.PrimaryY).PagingView.MinPageLength = 0.01f;
             nChart.Refresh();
@@ -277,6 +384,56 @@ namespace PxP
             lbFailValue.Text = PxPVariable.FailNum.ToString();
             lbPassValue.Text = PxPVariable.PassNum.ToString();
             lbYieldValue.Text = (Math.Round((double)PxPVariable.PassNum / (double)(PxPVariable.PassNum + PxPVariable.FailNum), 4) * 100).ToString() + "%";
+        }
+        public void SetUserTermLabel(IUserTerms terms)
+        {
+            lbDoff.Text = terms.Doff;
+            lbJobID.Text =   terms.JobID;
+            lbMeterialType.Text =  terms.MaterialType;
+            lbOperator.Text =  terms.OperatorName;
+            lbOrderNumber.Text =  terms.OrderNumber;
+        }
+        public void CountFlawPieceDoffNum()
+        {
+            foreach (var c in PxPVariable.FlawTypeName)
+            {
+                c.DoffNum = 0;
+            }
+            foreach (var f in MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1])
+            {
+                
+                foreach (var ft in PxPVariable.FlawTypeName)
+                {
+                    if (ft.FlawType == f.FlawType)
+                    {
+                        ft.DoffNum++;
+                    }
+                }
+            }
+            gvFlawClass.Refresh();
+        }
+        public int CheckPieceNum(int PageNum, string Direction)
+        {
+            if ((PageNum < PxPVariable.FreezPiece - PxPVariable.PieceLimit) || (PageNum > PxPVariable.FreezPiece))
+            { }
+            //return MapWindowVariable.CurrentPiece - 1; //Not Found
+            else
+            {
+                bool result = MapWindowVariable.PieceResult[PageNum - 1];
+
+                if ((MapWindowVariable.ShowFlag == 1 && result) || (MapWindowVariable.ShowFlag == 2 && !result))
+                    return PageNum;
+                else
+                    if (PageNum == 1)
+                    { }
+                    //return MapWindowVariable.CurrentPiece - 1; //Not Found
+                    else
+                        if (Direction == "Next")
+                            return CheckPieceNum(PageNum + 1, Direction);
+                        else
+                            return CheckPieceNum(PageNum - 1, Direction);
+            }
+            return MapWindowVariable.CurrentPiece; //Not Found
         }
         #endregion
 
@@ -299,27 +456,34 @@ namespace PxP
         {
             MapWindowThreadStatus.UpdateChange = true;
             PxPTab.MapThreadEvent.Set();
+            PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
         }
-
         private void btnPrevPiece_Click(object sender, EventArgs e)
         {
             if (PxPThreadStatus.IsOnOnline)
             {
                 //Set WebInspector Offline
                 MapWindowThreadStatus.UpdateChange = true;
-                PxPTab.MapThreadEvent.Set();
-                PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
+                PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
             }
-
-            MapWindowVariable.CurrentPiece--;
-
+            PxPTab.MapThreadEvent.Set();
+            int PieceNum = MapWindowVariable.CurrentPiece - 1;
+            if (MapWindowVariable.ShowFlag != 0)
+            {
+                PieceNum = CheckPieceNum(PieceNum, "Prev");
+                //MessageBox.Show(PieceNum.ToString());
+            }
+            MapWindowVariable.CurrentPiece = PieceNum;
             if ((MapWindowVariable.CurrentPiece == 1) || (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece - PxPVariable.PieceLimit))
                 btnPrevPiece.Enabled = false;
-            btnNextPiece.Enabled = true;
-
+            if (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece)
+                btnNextPiece.Enabled = false;
+            else
+                btnNextPiece.Enabled = true;
+            CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-            DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
+            DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
         }
 
         private void btnNextPiece_Click(object sender, EventArgs e)
@@ -328,19 +492,27 @@ namespace PxP
             {
                 //Set WebInspector Offline
                 MapWindowThreadStatus.UpdateChange = true;
-                PxPTab.MapThreadEvent.Set();
-                PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
+                PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
+               
             }
-
-            MapWindowVariable.CurrentPiece++;
-
+            PxPTab.MapThreadEvent.Set();
+            int PieceNum = MapWindowVariable.CurrentPiece + 1;
+            if (MapWindowVariable.ShowFlag != 0)
+            {
+                PieceNum = CheckPieceNum(PieceNum, "Next");
+                //MessageBox.Show(PieceNum.ToString());
+            }
+            MapWindowVariable.CurrentPiece = PieceNum;
             if (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece)
                 btnNextPiece.Enabled = false;
-            btnPrevPiece.Enabled = true;
-
+            if ((MapWindowVariable.CurrentPiece == 1) || (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece - PxPVariable.PieceLimit))
+                btnPrevPiece.Enabled = false;
+            else
+                btnPrevPiece.Enabled = true;
+            CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-            DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
+            DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
         }
         private void rb_CheckedChanged(object sender, EventArgs e)
         {
@@ -360,8 +532,6 @@ namespace PxP
                 }
             }
         }
-        
-        #endregion
 
         private void gvFlawClass_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -372,6 +542,29 @@ namespace PxP
                 e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(e.Value.ToString());
 
         }
+        #endregion
+
+        private void gvFlawClass_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            foreach (DataGridViewRow row in gvFlawClass.Rows)
+            {
+                try
+                {
+                    if (e.ColumnIndex == row.Cells["Display"].ColumnIndex)
+                    {
+                        if (MapWindowVariable.FlawPieces.Count > 0)
+                            if (Convert.ToBoolean(row.Cells["Display"].EditedFormattedValue))
+                                DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+       
 
        
 

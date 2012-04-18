@@ -46,8 +46,8 @@ namespace PxP
         public PictureBox[] pbFlaws;
         public int ImgPlaceHolderWidth;
         public int ImgPlaceHolderHeight;                  //右下角DataGrid內置放圖片容器寬高
-        string NowColumn = "";
         bool SortSwitch = false;
+        bool IsFreeze = false;
 
         
         #endregion
@@ -115,7 +115,7 @@ namespace PxP
                 }
                 //Order by which column
                 XElement OrderByColumn = XDoc.Element("SystemConfig").Element("DoffGrid").Element("OrderBy");
-                OrderByColumn.Value = NowColumn;
+                OrderByColumn.Value = PxPVariable.FlawGridViewOrderColumn;
                 XDoc.Save(FullFilePath);
                 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -169,6 +169,7 @@ namespace PxP
         //更新頁面,該換圖或Map調整,語系變更,全域變數變更時更新物件資料
         public void PageRefresh()
         {
+            tlpDoffGrid.Controls.Clear();
             InitTableLayout(tlpDoffGrid); //重置TableLayout
             DefineDataGridView(gvFlaw);   //重繪右上角DataGridView
         }
@@ -305,74 +306,130 @@ namespace PxP
             switch (ColumnName)
             {
                 case "FlawID":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.FlawID.CompareTo(f1.FlawID); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.FlawID.CompareTo(f1.FlawID); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.FlawID.CompareTo(f2.FlawID); });
-                    NowColumn = "FlawID";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.FlawID.CompareTo(f2.FlawID); });
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "FlawID";
+                   
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
                 case "Priority":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Priority.CompareTo(f1.Priority); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Priority.CompareTo(f1.Priority); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Priority.CompareTo(f2.Priority); });
-                    NowColumn = "Priority";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Priority.CompareTo(f2.Priority); });
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "Priority";
+                   
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
                 case "FlawClass":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.FlawClass.CompareTo(f1.FlawClass); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.FlawClass.CompareTo(f1.FlawClass); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.FlawClass.CompareTo(f2.FlawClass); });
-                    NowColumn = "FlawClass";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.FlawClass.CompareTo(f2.FlawClass); });
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "FlawClass";
+                   
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
                 case "MD":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.MD.CompareTo(f1.MD); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.MD.CompareTo(f1.MD); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.MD.CompareTo(f2.MD); });
-                    NowColumn = "MD";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.MD.CompareTo(f2.MD); });
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "MD";
+                   
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
                 case "CD":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.CD.CompareTo(f1.CD); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.CD.CompareTo(f1.CD); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.CD.CompareTo(f2.CD); });
-                    NowColumn = "CD";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.CD.CompareTo(f2.CD); });
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "CD";
+                   
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
                 case "Area":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Area.CompareTo(f1.Area); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Area.CompareTo(f1.Area); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Area.CompareTo(f2.Area); });
-                    NowColumn = "Area";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Area.CompareTo(f2.Area); });
+
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "Area";
+                   
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
                 case "Width":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Width.CompareTo(f1.Width); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Width.CompareTo(f1.Width); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Width.CompareTo(f2.Width); });
-                    NowColumn = "Width";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Width.CompareTo(f2.Width); });
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "Width";
+                    
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
                 case "Length":
-                    if (NowColumn == ColumnName && SortSwitch)
+                    if (PxPVariable.FlawGridViewOrderColumn == ColumnName && SortSwitch)
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Length.CompareTo(f1.Length); });
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f2.Length.CompareTo(f1.Length); });
+                    }
                     else
+                    {
                         MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Length.CompareTo(f2.Length); });
-                    NowColumn = "Length";
+                        MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) { return f1.Length.CompareTo(f2.Length); });
+                    }
+                    //PxPVariable.FlawGridViewOrderColumn = "Length";
                     SortSwitch = !SortSwitch;
                     gvFlaw.Refresh();
                     break;
@@ -450,7 +507,7 @@ namespace PxP
             switch (lang)
             {
                 case e_Language.Chinese:
-                    name = "玻璃組件";
+                    name = "片狀檢查";
                     break;
                 default:
                     name = "PxP";
@@ -494,6 +551,7 @@ namespace PxP
             try
             {   // Deal flaws  extend other data
                 IList<FlawInfoAddPriority> temp = new List<FlawInfoAddPriority>();
+                
                 foreach (var i in flaws)
                 {
                     FlawInfoAddPriority f = new FlawInfoAddPriority();
@@ -515,6 +573,9 @@ namespace PxP
                     f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
 
                     temp.Add(f);
+                    /////////////////////////////////////////////////////////////////
+                    
+                   
                 }
 
                 MapWindowVariable.Flaws.AddRange(temp);
@@ -544,8 +605,26 @@ namespace PxP
                     case e_EventID.STOP_JOB:
                         PxPThreadStatus.IsOnOnline = false;
                         PxPThreadStatus.IsOnJobStopped = true;
+                        if (MapWindowVariable.CurrentPiece > 0)
+                        {
+                            PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+                        }
                         break;
+                    case e_EventID.STOP_INSPECTION:
+                        PxPThreadStatus.IsOnOnline = false;
+                        if (MapWindowVariable.CurrentPiece > 0)
+                        {
+                            PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+                            bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
+                        }
+                        break;
+                    case e_EventID.START_INSPECTION:
+                        PxPThreadStatus.IsOnOnline = true;
+                        bsFlaw.DataSource = MapWindowVariable.FlawPiece;
+                        break;
+                       
                     default: break;
+                        
                 }
             }
             PxPThreadEvent.Set();
@@ -578,12 +657,62 @@ namespace PxP
             if (PxPThreadStatus.IsOnOnline)
             {
                 gvFlaw.DataSource = bsFlaw;
-                SortGridViewByColumn(PxPVariable.FlawGridViewOrderColumn);
+                //SortGridViewByColumn(PxPVariable.FlawGridViewOrderColumn);
                 //MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) {  return f2.Width.CompareTo(f1.Width); });
                 bsFlaw.ResetBindings(false);
-                
                 bsFlaw.ResumeBinding();
+                //Update left datagridview of flawtype
+                foreach (var ft in PxPVariable.FlawTypeName)
+                {
+                    ft.DoffNum = 0;
+                    ft.JobNum = 0 ;
+                }
+                //foreach (var fs in MapWindowVariable.FlawPieces)
+                //{
+                //    foreach (var f in fs)
+                //    {
+                //        foreach (var ft in PxPVariable.FlawTypeName)
+                //        {
+                //            if (ft.FlawType == f.FlawType)
+                //            {
+                //                ft.JobNum++;
+                //            }
+                //        }
+                //    }
+                //}
+                //統計FlawPiece裡面的FlawType 分類統計
+                for (int i = 0; i < MapWindowVariable.FlawPieces.Count(); i++)
+                {
+                    List<FlawInfoAddPriority> fs = MapWindowVariable.FlawPieces[i];
+                    foreach (var f in fs)
+                    {
+                        if (i < MapWindowVariable.FlawPieces.Count() - 1)
+                        {
+                            foreach (var ft in PxPVariable.FlawTypeName)
+                            {
+                                if (ft.FlawType == f.FlawType)
+                                {
+                                    ft.JobNum++;
+                                }
 
+                            }
+                        }
+                        else
+                        {
+                            foreach (var ft in PxPVariable.FlawTypeName)
+                            {
+                                if (ft.FlawType == f.FlawType)
+                                {
+                                    ft.JobNum++;
+                                    ft.DoffNum++;
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                MapWindowVariable.MapWindowController.RefreshGvFlawClass();
                 PxPThreadStatus.IsOnCut = true;
                 PxPThreadEvent.Set();
             }
@@ -613,7 +742,14 @@ namespace PxP
                     
                     if(i.Name == f.Name)
                     {
-                       
+                        FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                        tmp.FlawType = i.FlawType;
+                        tmp.Name = i.Name;
+                        tmp.Display = f.Display;
+                        tmp.Count = f.Count;
+                        tmp.Color = f.Color;
+                        tmp.Shape = f.Shape;
+                        tmpList.Add(tmp);
                     }else
                     {
                         //Default
@@ -622,14 +758,17 @@ namespace PxP
                         tmp.Name = i.Name;
                         tmp.Display =true; 
                        
-                        tmp.Color =String.Format("#{0:X6}", random.Next(0x1000000));
-                        tmp.Shape = Shape.Cross.ToGraphic();
+                        //tmp.Color =String.Format("#{0:X6}", random.Next(0x1000000));
+                        //tmp.Shape = Shape.Cross.ToGraphic();
+                        tmp.Color = "#000000";
+                        tmp.Shape = Shape.Cone.ToGraphic();
                         tmpList.Add(tmp);
 
                     }
                     
                 }
             }
+            PxPVariable.FlawTypeName.Clear();
             foreach (var el in tmpList)
             {
                 PxPVariable.FlawTypeName.Add(el);
@@ -640,7 +779,7 @@ namespace PxP
             PxPThreadStatus.IsOnJobLoaded = true;
             
             //Disable MapSetup Button
-            MapWindowVariable.MapWindowController.btnMapSetup.Enabled = false;
+            MapWindowVariable.MapWindowController.btnMapSetup.Enabled = true;
             MapWindowVariable.MapWindowController.SetJobInfo();
             MapWindowVariable.MapWindowController.SetMapAxis();
             MapWindowVariable.MapWindowController.bsFlawType.ResetBindings(false);
@@ -656,6 +795,7 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnJobStarted");
             PxPVariable.JobKey = jobKey;
             PxPThreadStatus.IsOnJobStarted = true;
+            MapWindowVariable.PieceResult.Clear();
             PxPThreadEvent.Set();
         }
         #endregion
@@ -747,6 +887,7 @@ namespace PxP
                 /////////////////////////////////////////////////////////////////////////////////
                 //刷新所有須改變語系的物件
                 PageRefresh();
+                MapWindowVariable.MapWindowController.InitGvFlawClass();
             }
             catch (Exception ex)
             {
@@ -813,14 +954,18 @@ namespace PxP
             //MessageBox.Show("OnOnline");
             //DebugTool.WriteLog("PxPTab.cs", "OnOnline");
             PxPThreadStatus.IsOnOnline = isOnline;
-           
+            
             if (isOnline)
             {
+                MapWindowVariable.MapWindowController.btnMapSetup.Enabled = false;
                 bsFlaw.DataSource = MapWindowVariable.FlawPiece;
                 gvFlaw.Rows.Clear();
                 tlpDoffGrid.Controls.Clear();
                 MapWindowVariable.MapWindowController.ClearMap();
-
+                MapWindowVariable.MapWindowController.ResetGvFlawClassDoffNum();
+                
+                btnNextGrid.Enabled = false;
+                btnPrevGrid.Enabled = false;
                 lbPageTotal.Text = "--";
                 lbPageCurrent.Text = "--";
             }
@@ -828,7 +973,8 @@ namespace PxP
             {
                 if (MapWindowVariable.CurrentPiece > 0)
                 {
-                    PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
+                    //PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
+                    PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                     bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
                 }
             }
@@ -843,7 +989,7 @@ namespace PxP
         {
             //MessageBox.Show("OnUserTermsChanged");
             //DebugTool.WriteLog("PxPTab.cs", "OnUserTermsChanged");
-
+            MapWindowVariable.MapWindowController.SetUserTermLabel(terms);
             PxPThreadStatus.IsOnUserTermsChanged = true;
             PxPThreadEvent.Set();
         }
@@ -856,6 +1002,7 @@ namespace PxP
         {
             //MessageBox.Show("OnDoffResult");
             //DebugTool.WriteLog("PxPTab.cs", "OnDoffResult");
+            MapWindowVariable.PieceResult.Add(doffNumber, pass);
             if (pass)
                 PxPVariable.PassNum++;
             else
@@ -1386,10 +1533,11 @@ namespace PxP
             {
                 DataGridViewColumn NewColumn = gvFlaw.Columns[e.ColumnIndex];
                 DataGridViewColumn OlderColumn = gvFlaw.SortedColumn;
-                ListSortDirection lsd;
-                SortGridViewByColumn(NewColumn.Name);
+                //ListSortDirection lsd;
+                PxPVariable.FlawGridViewOrderColumn = NewColumn.Name;
+                SortGridViewByColumn(PxPVariable.FlawGridViewOrderColumn);
                 DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
-                MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece], false);
+                MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
             }
                 /*
             // Offical Way

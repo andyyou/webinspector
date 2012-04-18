@@ -60,16 +60,13 @@
             this.lbMapSize = new System.Windows.Forms.Label();
             this.gbSeriesSetting = new System.Windows.Forms.GroupBox();
             this.gvSeries = new System.Windows.Forms.DataGridView();
-            this.Class = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Sharp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Letter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rbLetter = new System.Windows.Forms.RadioButton();
             this.rbSharp = new System.Windows.Forms.RadioButton();
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnConfirm = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.bsConfList = new System.Windows.Forms.BindingSource(this.components);
+            this.bsFlawTypeName = new System.Windows.Forms.BindingSource(this.components);
             this.gbImgSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgCols)).BeginInit();
@@ -78,6 +75,7 @@
             this.gbSeriesSetting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvSeries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsConfList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsFlawTypeName)).BeginInit();
             this.SuspendLayout();
             // 
             // lbLabelConfig
@@ -196,8 +194,8 @@
             this.cboxButtomAxe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxButtomAxe.FormattingEnabled = true;
             this.cboxButtomAxe.Items.AddRange(new object[] {
-            "MD",
-            "CD"});
+            "CD",
+            "MD"});
             this.cboxButtomAxe.Location = new System.Drawing.Point(113, 228);
             this.cboxButtomAxe.Name = "cboxButtomAxe";
             this.cboxButtomAxe.Size = new System.Drawing.Size(121, 20);
@@ -393,42 +391,13 @@
             this.gvSeries.AllowUserToAddRows = false;
             this.gvSeries.AllowUserToDeleteRows = false;
             this.gvSeries.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvSeries.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Class,
-            this.Color,
-            this.Sharp,
-            this.Letter});
+            this.gvSeries.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.gvSeries.Location = new System.Drawing.Point(6, 50);
             this.gvSeries.Name = "gvSeries";
-            this.gvSeries.ReadOnly = true;
             this.gvSeries.RowHeadersVisible = false;
             this.gvSeries.RowTemplate.Height = 24;
             this.gvSeries.Size = new System.Drawing.Size(382, 301);
             this.gvSeries.TabIndex = 2;
-            // 
-            // Class
-            // 
-            this.Class.HeaderText = "Class";
-            this.Class.Name = "Class";
-            this.Class.ReadOnly = true;
-            // 
-            // Color
-            // 
-            this.Color.HeaderText = "Color";
-            this.Color.Name = "Color";
-            this.Color.ReadOnly = true;
-            // 
-            // Sharp
-            // 
-            this.Sharp.HeaderText = "Sharp";
-            this.Sharp.Name = "Sharp";
-            this.Sharp.ReadOnly = true;
-            // 
-            // Letter
-            // 
-            this.Letter.HeaderText = "Letter";
-            this.Letter.Name = "Letter";
-            this.Letter.ReadOnly = true;
             // 
             // rbLetter
             // 
@@ -440,6 +409,7 @@
             this.rbLetter.TabStop = true;
             this.rbLetter.Text = "Letter";
             this.rbLetter.UseVisualStyleBackColor = true;
+            this.rbLetter.Visible = false;
             // 
             // rbSharp
             // 
@@ -451,6 +421,7 @@
             this.rbSharp.TabStop = true;
             this.rbSharp.Text = "Sharp";
             this.rbSharp.UseVisualStyleBackColor = true;
+            this.rbSharp.Visible = false;
             // 
             // btnSaveAs
             // 
@@ -508,6 +479,7 @@
             this.gbSeriesSetting.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvSeries)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsConfList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsFlawTypeName)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -546,15 +518,12 @@
         private System.Windows.Forms.CheckBox cbMDInverse;
         private System.Windows.Forms.GroupBox gbSeriesSetting;
         private System.Windows.Forms.DataGridView gvSeries;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Class;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Color;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Sharp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Letter;
         private System.Windows.Forms.RadioButton rbLetter;
         private System.Windows.Forms.RadioButton rbSharp;
         private System.Windows.Forms.Button btnSaveAs;
         private System.Windows.Forms.Button btnConfirm;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.BindingSource bsConfList;
+        private System.Windows.Forms.BindingSource bsFlawTypeName;
     }
 }

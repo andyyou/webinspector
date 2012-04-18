@@ -121,6 +121,7 @@ namespace PxP
         internal static int CDInver = 0;
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
         internal static List<DoffGridColumns> DoffTypeGridSetup;    //紀錄左下角DataGrid欄位左右排序
+        internal static Dictionary<int, bool> PieceResult = new Dictionary<int, bool>();          //紀錄每片玻璃的檢測結果
         public MapWindowVariable()
         {
             //FlawInfoExtend x = new FlawInfoExtend();
@@ -345,6 +346,7 @@ namespace PxP
         public int Priority { get; set; }
         public double RMD { get; set; }
         public double RCD { get; set; }
+        
         public FlawInfoAddPriority()
         { 
             
@@ -385,26 +387,28 @@ namespace PxP
     // 三角形, 倒三角形, 正方形, 圓形, 十字, 叉叉, 星號
     //public enum Shape { Triangle, Ellipse, Square, Cone, Cross, LineDiagonalCross, Star };
     public enum Shape {
-        [DescriptionAttribute("▲")]
+        [DescriptionAttribute("▲"), EnumDescription("▲")]
         Triangle,
-        [DescriptionAttribute("▼")]
+        [DescriptionAttribute("▼"), EnumDescription("▼")]
         Ellipse,
-        [DescriptionAttribute("■")]
+        [DescriptionAttribute("■"), EnumDescription("■")]
         Square,
-        [DescriptionAttribute("●")]
+        [DescriptionAttribute("●"), EnumDescription("●")]
         Cone,
-        [DescriptionAttribute("+")]
+        [DescriptionAttribute("+"), EnumDescription("+")]
         Cross,
-        [DescriptionAttribute("╳")]
+        [DescriptionAttribute("╳"), EnumDescription("╳")]
         LineDiagonalCross,
-        [DescriptionAttribute("★")]
+        [DescriptionAttribute("★"), EnumDescription("★")]
         Star 
     }; 
-    #endregion
+    #endregion 
+
+
+    #region 增加列舉型別ENUM其他功能
     static class ExtensionMethods
     {
         public static string ToGraphic(this Enum en) //ext method
-
         {
 
             Type type = en.GetType();
@@ -419,11 +423,102 @@ namespace PxP
             }
             return en.ToString();
         }
-
     }
+    /// <summary>
+    /// Provides a description for an enumerated type.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field,
+     AllowMultiple = false)]
+    public sealed class EnumDescriptionAttribute : Attribute
+    {
+        private string description;
 
+        /// <summary>
+        /// Gets the description stored in this attribute.
+        /// </summary>
+        /// <value>The description stored in the attribute.</value>
+        public string Description
+        {
+            get
+            {
+                return this.description;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the
+        /// <see cref="EnumDescriptionAttribute"/> class.
+        /// </summary>
+        /// <param name="description">The description to store in this attribute.
+        /// </param>
+        public EnumDescriptionAttribute(string description)
+            : base()
+        {
+            this.description = description;
+        }
+    }
+    /// <summary>
+    /// Provides a static utility object of methods and properties to interact
+    /// with enumerated types.
+    /// </summary>
+    public static class EnumHelper
+    {
+        /// <summary>
+        /// Gets the <see cref="DescriptionAttribute" /> of an <see cref="Enum" />
+        /// type value.
+        /// </summary>
+        /// <param name="value">The <see cref="Enum" /> type value.</param>
+        /// <returns>A string containing the text of the
+        /// <see cref="DescriptionAttribute"/>.</returns>
+        public static string GetDescription(Enum value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            string description = value.ToString();
+            FieldInfo fieldInfo = value.GetType().GetField(description);
+            EnumDescriptionAttribute[] attributes =
+               (EnumDescriptionAttribute[])
+             fieldInfo.GetCustomAttributes(typeof(EnumDescriptionAttribute), false);
+
+            if (attributes != null && attributes.Length > 0)
+            {
+                description = attributes[0].Description;
+            }
+            return description;
+        }
+
+        /// <summary>
+        /// Converts the <see cref="Enum" /> type to an <see cref="IList" /> 
+        /// compatible object.
+        /// </summary>
+        /// <param name="type">The <see cref="Enum"/> type.</param>
+        /// <returns>An <see cref="IList"/> containing the enumerated
+        /// type value and description.</returns>
+        public static IList ToList(Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            ArrayList list = new ArrayList();
+            Array enumValues = Enum.GetValues(type);
+
+            foreach (Enum value in enumValues)
+            {
+                list.Add(new KeyValuePair<Enum, string>(value, GetDescription(value)));
+            }
+
+            return list;
+        }
+    }
+    #endregion
 
     
 
-    
+
+
 }

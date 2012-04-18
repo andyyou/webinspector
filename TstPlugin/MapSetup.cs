@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
+using System.Collections;
 
 namespace PxP
 {
@@ -28,7 +29,7 @@ namespace PxP
 
         ~MapSetup()
         {
-            
+           
         }
         #endregion
 
@@ -107,9 +108,92 @@ namespace PxP
             ///////////////////////////////////////////////////////////////////////////////////////
 
             //Add List here and binding to datagridvew
+           
+            if (PxPVariable.FlawTypeName != null && PxPVariable.FlawTypeName.Count > 0)
+            {
+                /* New DataTable
+                DataTable dtFlawTypeName = new DataTable();
+                dtFlawTypeName.Columns.Add("FlawType");
+                dtFlawTypeName.Columns.Add("Name");
+                DataGridViewComboBoxColumn cboxShape = new DataGridViewComboBoxColumn();
+                cboxShape.DataPropertyName = "Shpae";
+                cboxShape.DataSource = EnumHelper.ToList(typeof(Shape));
+                cboxShape.DisplayMember = "Value";
+                cboxShape.ValueMember = "Key";
+                dtFlawTypeName.Columns.Add("Shape");
+                foreach (var i in PxPVariable.FlawTypeName)
+                {
+                    DataRow dr = dtFlawTypeName.NewRow();
+                    dr["FlawType"] = i.FlawType;
+                    dr["Name"] = i.Name;
+                    dr["Color"] = i.Color;
+                    dr["Shape"] = i.Shape;
+                    dtFlawTypeName.Rows.Add(dr);
+                }
+                 * 
+                 */
 
+               
+                bsFlawTypeName.DataSource = PxPVariable.FlawTypeName;
+                gvSeries.DataSource = bsFlawTypeName;
+                gvSeries.AutoGenerateColumns = false;
+               
+
+                // Init Combobox for color and shape
+
+                //ComboBox cboxColor = new ComboBox();
+                //cboxColor.DropDownStyle = ComboBoxStyle.DropDownList;
+                //cboxColor.DataSource = EnumHelper.ToList(typeof(Shape));
+                //cboxColor.DisplayMember = "Value";
+                //cboxColor.ValueMember = "Key";
+
+                //重這裡重新NEW一個DataTable
+               
+                foreach (var column in MapWindowVariable.DoffTypeGridSetup)
+                {
+                    if (column.ColumnName == "Display" || column.ColumnName == "Shape")
+                        gvSeries.Columns[column.ColumnName].ReadOnly = false;
+                    else
+                        gvSeries.Columns[column.ColumnName].ReadOnly = true;
+
+                    gvSeries.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
+                    gvSeries.Columns[column.ColumnName].HeaderText = column.HeaderText;
+                    gvSeries.Columns[column.ColumnName].DisplayIndex = column.Index;
+                    gvSeries.Columns[column.ColumnName].Width = column.Width;
+
+                    if (column.ColumnName == "Shape")
+                    {
+                        DataGridViewComboBoxColumn cboxShape = new DataGridViewComboBoxColumn();
+                        cboxShape.DataPropertyName = "Shape";
+                        cboxShape.DataSource = EnumHelper.ToList(typeof(Shape));
+                        cboxShape.DisplayMember = "Value";
+                        cboxShape.ValueMember = "Value";
+                        
+                       
+
+                        this.gvSeries.Columns.Add(cboxShape);
+ 
+                    }
+                }
+                //Display and Change Order
+                gvSeries.Columns["FlawType"].DisplayIndex = 0;
+                gvSeries.Columns["Display"].Visible = false;
+                gvSeries.Columns["Count"].Visible = false;
+                gvSeries.Columns["DoffNum"].Visible = false;
+                gvSeries.Columns["JobNum"].Visible = false;
+
+                
+               
+            }
+            //PxPVariable.FlawTypeName
+            /**
+             * 
+             * 
+             * help this
+             */
 
         }
+       
         #endregion
 
         
@@ -228,12 +312,45 @@ namespace PxP
             tboxCountSizeMD.Text = MapWindowVariable.MapMDSet.ToString();
             tboxFixSizeCD.Text = "";
             tboxFixSizeMD.Text = "";
-            
         }
         #endregion
 
        
 
+       
+
+       
+        #region 增加ILIST To DataTable 模組功能
+        public static DataTable ListToDataTable(IList ResList)
+        {
+            DataTable TempDT = new DataTable();
+
+            System.Reflection.PropertyInfo[] p = ResList[0].GetType().GetProperties();
+            foreach (System.Reflection.PropertyInfo pi in p)
+            {
+                TempDT.Columns.Add(pi.Name, System.Type.GetType(pi.PropertyType.ToString()));
+            }
+
+            for (int i = 0; i < ResList.Count; i++)
+            {
+                IList TempList = new ArrayList();
+                foreach (System.Reflection.PropertyInfo pi in p)
+                {
+                    object oo = pi.GetValue(ResList[i], null);
+                    TempList.Add(oo);
+                }
+
+                object[] itm = new object[p.Length];
+                for (int j = 0; j < TempList.Count; j++)
+                {
+                    itm.SetValue(TempList[j], j);
+                }
+                TempDT.LoadDataRow(itm, true);
+            }
+            return TempDT;
+        }
+    
+    #endregion
         
 
         

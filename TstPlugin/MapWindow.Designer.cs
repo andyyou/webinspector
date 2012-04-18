@@ -90,6 +90,7 @@
             this.gvFlawClass.Size = new System.Drawing.Size(622, 194);
             this.gvFlawClass.TabIndex = 1;
             this.gvFlawClass.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gvFlawClass_CellFormatting);
+            this.gvFlawClass.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvFlawClass_CellContentClick);
             // 
             // tlpMapInfo
             // 
