@@ -10,6 +10,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Collections;
+using PxP.Toolkit;
 
 namespace PxP
 {
@@ -18,6 +19,7 @@ namespace PxP
         #region Local Variable
         string tmpMDSize = "";
         string tmpCDSize = "";
+        IList<FlawTypeNameExtend> TmpFlawTypeName;
         #endregion
 
         #region Constructor
@@ -111,51 +113,29 @@ namespace PxP
            
             if (PxPVariable.FlawTypeName != null && PxPVariable.FlawTypeName.Count > 0)
             {
-                /* New DataTable
-                DataTable dtFlawTypeName = new DataTable();
-                dtFlawTypeName.Columns.Add("FlawType");
-                dtFlawTypeName.Columns.Add("Name");
-                DataGridViewComboBoxColumn cboxShape = new DataGridViewComboBoxColumn();
-                cboxShape.DataPropertyName = "Shpae";
-                cboxShape.DataSource = EnumHelper.ToList(typeof(Shape));
-                cboxShape.DisplayMember = "Value";
-                cboxShape.ValueMember = "Key";
-                dtFlawTypeName.Columns.Add("Shape");
-                foreach (var i in PxPVariable.FlawTypeName)
+                TmpFlawTypeName = new List<FlawTypeNameExtend>();
+                foreach (var ft in PxPVariable.FlawTypeName)
                 {
-                    DataRow dr = dtFlawTypeName.NewRow();
-                    dr["FlawType"] = i.FlawType;
-                    dr["Name"] = i.Name;
-                    dr["Color"] = i.Color;
-                    dr["Shape"] = i.Shape;
-                    dtFlawTypeName.Rows.Add(dr);
+                    
+                    FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                    tmp.Color = ft.Color;
+                    tmp.FlawType = ft.FlawType;
+                    tmp.Name = ft.Name;
+                    tmp.Shape = ft.Shape;
+                    tmp.Display = ft.Display;
+                    tmp.Count = ft.Count;
+                    tmp.JobNum = ft.JobNum;
+                    tmp.DoffNum = ft.DoffNum;
+                    TmpFlawTypeName.Add(tmp);
                 }
-                 * 
-                 */
 
-               
-                bsFlawTypeName.DataSource = PxPVariable.FlawTypeName;
+
+                bsFlawTypeName.DataSource = TmpFlawTypeName;
                 gvSeries.DataSource = bsFlawTypeName;
                 gvSeries.AutoGenerateColumns = false;
                
-
-                // Init Combobox for color and shape
-
-                //ComboBox cboxColor = new ComboBox();
-                //cboxColor.DropDownStyle = ComboBoxStyle.DropDownList;
-                //cboxColor.DataSource = EnumHelper.ToList(typeof(Shape));
-                //cboxColor.DisplayMember = "Value";
-                //cboxColor.ValueMember = "Key";
-
-                //重這裡重新NEW一個DataTable
-               
                 foreach (var column in MapWindowVariable.DoffTypeGridSetup)
                 {
-                    if (column.ColumnName == "Display" || column.ColumnName == "Shape")
-                        gvSeries.Columns[column.ColumnName].ReadOnly = false;
-                    else
-                        gvSeries.Columns[column.ColumnName].ReadOnly = true;
-
                     gvSeries.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
                     gvSeries.Columns[column.ColumnName].HeaderText = column.HeaderText;
                     gvSeries.Columns[column.ColumnName].DisplayIndex = column.Index;
@@ -165,32 +145,30 @@ namespace PxP
                     {
                         DataGridViewComboBoxColumn cboxShape = new DataGridViewComboBoxColumn();
                         cboxShape.DataPropertyName = "Shape";
+                        cboxShape.HeaderText = column.HeaderText;
+                        cboxShape.DisplayIndex = column.Index;
+                        cboxShape.Width = column.Width;
                         cboxShape.DataSource = EnumHelper.ToList(typeof(Shape));
                         cboxShape.DisplayMember = "Value";
                         cboxShape.ValueMember = "Value";
-                        
-                       
 
                         this.gvSeries.Columns.Add(cboxShape);
  
                     }
+                   
                 }
                 //Display and Change Order
                 gvSeries.Columns["FlawType"].DisplayIndex = 0;
                 gvSeries.Columns["Display"].Visible = false;
                 gvSeries.Columns["Count"].Visible = false;
                 gvSeries.Columns["DoffNum"].Visible = false;
+                gvSeries.Columns["Shape"].Visible = false;
                 gvSeries.Columns["JobNum"].Visible = false;
 
                 
                
             }
-            //PxPVariable.FlawTypeName
-            /**
-             * 
-             * 
-             * help this
-             */
+
 
         }
        
@@ -198,7 +176,10 @@ namespace PxP
 
         
         #region Method
-        
+        public void DealSaveDataToXDocumnet()
+        { 
+            
+        }
         #endregion
 
         #region Action Events
@@ -264,9 +245,26 @@ namespace PxP
                 xMDInver.Value = cbMDInverse.Checked ? "1" : "0";
                 XElement xCDInver = XDocConf.Element("Config").Element("MapVariable").Element("CDInver");
                 xCDInver.Value = cbCDInverse.Checked ? "1" : "0";
+               
+                
+                ////////////////////////////////////////////////////////////////////////////////
+                //Save FlawTypeName Grid
+                XDocConf.Element("Config").Element("MapVariable").Elements("FlawTypeName").Remove();
+                foreach (DataGridViewRow dr in gvSeries.Rows)
+                {
+                    
+                    XDocConf.Element("Config").Element("MapVariable").Add(new XElement("FlawTypeName",
+                                               new XElement("FlawType", dr.Cells[1].Value.ToString()),
+                                               new XElement("Name", dr.Cells[0].Value.ToString()),
+                                               new XElement("Color", dr.Cells[4].Value.ToString()),
+                                               new XElement("Shape", EnumHelper.GetItemString(dr.Cells[5].Value.ToString())),
+                                               new XElement("Display", (dr.Cells[2].Value.ToString().ToLower().Trim() == "true") ? "1":"0")
+                                               ));
+
+                   
+                }
                 XDocConf.Save(FullConfPath);
-                
-                
+
                 ////////////////////////////////////////////////////////////////////////////////
                 //Change Global Variable
                 PxPVariable.ImgRowsSet = int.TryParse(xImgRowsSet.Value, out PxPVariable.ImgRowsSet) ? PxPVariable.ImgRowsSet : 3;
@@ -277,8 +275,12 @@ namespace PxP
                 MapWindowVariable.BottomAxe = cboxButtomAxe.SelectedIndex;
                 MapWindowVariable.MDInver = cbMDInverse.Checked ? 1 : 0;
                 MapWindowVariable.CDInver = cbCDInverse.Checked ? 1 : 0;
+                PxPVariable.FlawTypeName.Clear();
+                PxPVariable.FlawTypeName.AddRange(TmpFlawTypeName);
+                
                 ////////////////////////////////////////////////////////////////////////////////
                 MapWindowVariable.MapWindowController.SetMapProperty();
+                MapWindowVariable.MapWindowController.SetMapAxis();
                 MapWindowThreadStatus.IsPageRefresh = true;
                 PxPTab.MapThreadEvent.Set();
                 MessageBox.Show("設定已套用！");
@@ -351,6 +353,133 @@ namespace PxP
         }
     
     #endregion
+
+
+        private void gvSeries_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == 4)
+                e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(e.Value.ToString());
+        }
+
+        private void gvSeries_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            if (e.ColumnIndex == 4)
+            {
+                
+                DialogResult dr =  cd.ShowDialog();
+                if(dr == DialogResult.OK)
+                    gvSeries.Rows[e.RowIndex].Cells[4].Value = String.Format("#{0:X2}{1:X2}{2:X2}",
+                                                                cd.Color.R,
+                                                                cd.Color.G,
+                                                                cd.Color.B);
+            }
+        }
+
+        private void btnSaveAs_Click(object sender, EventArgs e)
+        {
+            string ConfPath = Path.GetDirectoryName(
+                   Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/conf/";
+
+            	SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = " txt files(*.xml)|*.xml|All files(*.*)|*.*";
+                sfd.Title = "Save New Config File";
+                sfd.InitialDirectory = ConfPath;
+                sfd.CreatePrompt = false;
+                sfd.OverwritePrompt = true; 
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+
+                    string fileName = sfd.FileName;
+                    try
+                    {
+                        //Save config of setup filename 
+                        string FolderPath = Path.GetDirectoryName(
+                    Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
+                        string FullSystemPath = FolderPath + "sys.xml";
+                        XDocument XDoc = XDocument.Load(FullSystemPath);
+                        XElement XConfFile = XDoc.Element("SystemConfig").Element("ConfFile");
+                        XConfFile.Value = cboxConfList.SelectedItem.ToString();
+                        XDoc.Save(FullSystemPath);
+
+                        ////////////////////////////////////////////////////////////////////////////////
+
+                        
+                        string ConfFile = cboxConfList.SelectedItem.ToString();
+                        string FullConfPath = ConfPath + ConfFile + ".xml";
+                        XDocument XDocConf = XDocument.Load(FullConfPath);
+                        XElement xImgRowsSet = XDocConf.Element("Config").Element("MapVariable").Element("ImgRowsSet");
+                        xImgRowsSet.Value = ndImgRows.Value.ToString();
+                        XElement xImgColsSet = XDocConf.Element("Config").Element("MapVariable").Element("ImgColsSet");
+                        xImgColsSet.Value = ndImgCols.Value.ToString();
+                        XElement xMapProportion = XDocConf.Element("Config").Element("MapVariable").Element("MapProportion");
+                        xMapProportion.Value = cboxMapSize.SelectedIndex.ToString();
+                        XElement xShowGridSet = XDocConf.Element("Config").Element("MapVariable").Element("ShowGridSet");
+                        xShowGridSet.Value = rbMapGridOn.Checked ? "1" : "0";
+                        XElement xMapGridSet = XDocConf.Element("Config").Element("MapVariable").Element("MapGridSet"); //選擇使用的Grid間隔依據 0: EachCellSize , 1: EachCellCount
+                        xMapGridSet.Value = rbFixCellSize.Checked ? "0" : "1";
+
+                        XElement xMapMDSet = XDocConf.Element("Config").Element("MapVariable").Element("MapMDSet");
+                        XElement xMapCDSet = XDocConf.Element("Config").Element("MapVariable").Element("MapCDSet");
+                        if (rbFixCellSize.Checked)
+                        {
+                            xMapMDSet.Value = tboxFixSizeMD.Text;
+                            xMapCDSet.Value = tboxFixSizeCD.Text;
+                            MapWindowVariable.MapCDSet = double.TryParse(tboxFixSizeCD.Text, out MapWindowVariable.MapCDSet) ? MapWindowVariable.MapCDSet : 3;
+                            MapWindowVariable.MapMDSet = double.TryParse(tboxFixSizeMD.Text, out MapWindowVariable.MapMDSet) ? MapWindowVariable.MapMDSet : 3;
+
+                        }
+                        else if (rbCountSize.Checked)
+                        {
+                            xMapMDSet.Value = tboxCountSizeMD.Text;
+                            xMapCDSet.Value = tboxCountSizeCD.Text;
+                            MapWindowVariable.MapCDSet = double.TryParse(tboxCountSizeCD.Text, out MapWindowVariable.MapCDSet) ? MapWindowVariable.MapCDSet : 3;
+                            MapWindowVariable.MapMDSet = double.TryParse(tboxCountSizeMD.Text, out MapWindowVariable.MapMDSet) ? MapWindowVariable.MapMDSet : 3;
+                        }
+
+                        XElement xSeriesSet = XDocConf.Element("Config").Element("MapVariable").Element("SeriesSet");
+                        if (rbSharp.Checked)
+                            xSeriesSet.Value = "0";
+                        else if (rbLetter.Checked)
+                            xSeriesSet.Value = "1";
+                        XElement xBottomAxe = XDocConf.Element("Config").Element("MapVariable").Element("BottomAxe");
+                        xBottomAxe.Value = cboxButtomAxe.SelectedIndex.ToString();
+
+                        XElement xMDInver = XDocConf.Element("Config").Element("MapVariable").Element("MDInver");
+                        xMDInver.Value = cbMDInverse.Checked ? "1" : "0";
+                        XElement xCDInver = XDocConf.Element("Config").Element("MapVariable").Element("CDInver");
+                        xCDInver.Value = cbCDInverse.Checked ? "1" : "0";
+
+
+                        ////////////////////////////////////////////////////////////////////////////////
+                        //Save FlawTypeName Grid
+                        XDocConf.Element("Config").Element("MapVariable").Elements("FlawTypeName").Remove();
+                        foreach (DataGridViewRow dr in gvSeries.Rows)
+                        {
+
+                            XDocConf.Element("Config").Element("MapVariable").Add(new XElement("FlawTypeName",
+                                                       new XElement("FlawType", dr.Cells[1].Value.ToString()),
+                                                       new XElement("Name", dr.Cells[0].Value.ToString()),
+                                                       new XElement("Color", dr.Cells[4].Value.ToString()),
+                                                       new XElement("Shape", EnumHelper.GetItemString(dr.Cells[5].Value.ToString())),
+                                                       new XElement("Display", (dr.Cells[2].Value.ToString().ToLower().Trim() == "true") ? "1" : "0")
+                                                       ));
+
+
+                        }
+                        
+                        XDocConf.Save(fileName);
+
+                       
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                }
+        }
+
+   
         
 
         

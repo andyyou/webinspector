@@ -67,6 +67,7 @@ namespace PxP
         public static AutoResetEvent MapThreadEvent = new AutoResetEvent(false);
         private IAsyncResult CutResult;
         #endregion
+
         //////////////////////////////////////////////////////////////////////////
 
         #region Contructor
@@ -733,47 +734,67 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnJobLoaded");
             //PxPVariable.FlawTypeName.Clear();
             //PxPVariable.FlawTypeName = flawTypes;
-            IList<FlawTypeNameExtend> tmpList = new List<FlawTypeNameExtend>();
-            var random = new Random();
-            foreach (var i in flawTypes)
+            List<FlawTypeNameExtend> tmpList = new List<FlawTypeNameExtend>();
+            tmpList.AddRange(PxPVariable.FlawTypeName);
+            var DifferencesList = flawTypes.Where(x => !tmpList.Any(x1 => x1.Name == x.Name && x1.FlawType == x.FlawType ));
+            foreach (var i in DifferencesList)
             {
-                foreach(var f in PxPVariable.FlawTypeName )
-                {
-                    
-                    if(i.Name == f.Name)
-                    {
-                        FlawTypeNameExtend tmp = new FlawTypeNameExtend();
-                        tmp.FlawType = i.FlawType;
-                        tmp.Name = i.Name;
-                        tmp.Display = f.Display;
-                        tmp.Count = f.Count;
-                        tmp.Color = f.Color;
-                        tmp.Shape = f.Shape;
-                        tmpList.Add(tmp);
-                    }else
-                    {
-                        //Default
-                        FlawTypeNameExtend tmp = new FlawTypeNameExtend();
-                        tmp.FlawType = i.FlawType;
-                        tmp.Name = i.Name;
-                        tmp.Display =true; 
-                       
-                        //tmp.Color =String.Format("#{0:X6}", random.Next(0x1000000));
-                        //tmp.Shape = Shape.Cross.ToGraphic();
-                        tmp.Color = "#000000";
-                        tmp.Shape = Shape.Cone.ToGraphic();
-                        tmpList.Add(tmp);
+                //Default
+                FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                tmp.FlawType = i.FlawType;
+                tmp.Name = i.Name;
+                tmp.Display = true;
+                tmp.Color = "#000000";
+                tmp.Shape = Shape.Cone.ToGraphic();
+                tmpList.Add(tmp);
+            }
 
-                    }
+
+            //var random = new Random();
+            //foreach (var i in flawTypes)
+            //{
+            //    FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                
+
+            //    foreach (var f in PxPVariable.FlawTypeName)
+            //    {
+
+            //        if (i.Name != f.Name)
+            //        {
+            //            //Default
+            //            tmp.FlawType = i.FlawType;
+            //            tmp.Name = i.Name;
+            //            tmp.Display = true;
+            //            //tmp.Color =String.Format("#{0:X6}", random.Next(0x1000000));
+            //            //tmp.Shape = Shape.Cross.ToGraphic();
+            //            tmp.Color = "#000000";
+            //            tmp.Shape = Shape.Cone.ToGraphic();
+            //            tmpList.Add(tmp);
+            //        }
+            //    }
+               
+            //}
+                
                     
-                }
-            }
+                
+            
             PxPVariable.FlawTypeName.Clear();
-            foreach (var el in tmpList)
-            {
-                PxPVariable.FlawTypeName.Add(el);
-            }
+            PxPVariable.FlawTypeName.AddRange(tmpList);
+            
             PxPVariable.FlawTypeName.Sort(delegate(FlawTypeNameExtend f1, FlawTypeNameExtend f2) { return f1.FlawType.CompareTo(f2.FlawType); });
+            //Copy a temp for setup gridview display. Not save to global variable just for display.
+            PxPVariable.TmpFlawTypeNameForSetup.Clear();
+            foreach (var ft in PxPVariable.FlawTypeName)
+            {
+                FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                tmp.FlawType = ft.FlawType;
+                tmp.Name = ft.Name;
+                tmp.Display = ft.Display;
+                tmp.Count = ft.Count;
+                tmp.Color = ft.Color;
+                tmp.Shape = ft.Shape;
+                PxPVariable.TmpFlawTypeNameForSetup.Add(tmp);
+            }
             PxPVariable.JobInfo = jobInfo;
             PxPVariable.SeverityInfo = severityInfo;
             PxPThreadStatus.IsOnJobLoaded = true;

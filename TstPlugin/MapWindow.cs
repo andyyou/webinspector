@@ -242,13 +242,63 @@ namespace PxP
             NLinearScaleConfigurator linearScale = new NLinearScaleConfigurator();
 
             linearScale.SetPredefinedScaleStyle(PredefinedScaleStyle.Scientific);
-            linearScale.MinorTickCount = 5;
+            //linearScale.MinorTickCount = 5;
 
             linearScale.MajorGridStyle.SetShowAtWall(ChartWallType.Back, MapWindowVariable.ShowGridSet);
             linearScale.MajorGridStyle.LineStyle.Pattern = LinePattern.Dot;
 
+            linearScale.RoundToTickMin = false;
+            linearScale.RoundToTickMax = false;
             return linearScale;
         }
+        private void AxisScaleConfigurator()
+        {
+            double tmpScale = 0;
+            //Configure X axis scale
+            NAxis xAxis = nChartMap.Axis(StandardAxis.PrimaryX);
+            NLinearScaleConfigurator xLinearScale = xAxis.ScaleConfigurator as NLinearScaleConfigurator;
+
+            xLinearScale.MajorTickMode = MajorTickMode.CustomStep;
+            if (MapWindowVariable.MapGridSet == 0)
+            {
+                xLinearScale.CustomStep = MapWindowVariable.MapCDSet;
+            }
+            else
+            {
+                if (PxPVariable.PxPInfo != null)
+                {
+                    xLinearScale.CustomStep = PxPVariable.PxPInfo.Width / MapWindowVariable.MapCDSet;
+                }
+            }
+            xLinearScale.CustomStep = Math.Round(xLinearScale.CustomStep, 2);
+
+            //Configure Y axis scale
+            NAxis yAxis = nChartMap.Axis(StandardAxis.PrimaryY);
+            NLinearScaleConfigurator yLinearScale = yAxis.ScaleConfigurator as NLinearScaleConfigurator;
+
+            yLinearScale.MajorTickMode = MajorTickMode.CustomStep;
+            if (MapWindowVariable.MapGridSet == 0)
+            {
+                yLinearScale.CustomStep = MapWindowVariable.MapMDSet;
+            }
+            else
+            {
+                if (PxPVariable.PxPInfo != null)
+                {
+                    yLinearScale.CustomStep = PxPVariable.PxPInfo.Height / MapWindowVariable.MapMDSet;
+                }
+            }
+            yLinearScale.CustomStep = Math.Round(yLinearScale.CustomStep, 2);
+
+            if (MapWindowVariable.BottomAxe == 1)
+            {
+                tmpScale = xLinearScale.CustomStep;
+                xLinearScale.CustomStep = yLinearScale.CustomStep;
+                yLinearScale.CustomStep = tmpScale;
+            }
+            xAxis.UpdateScale();
+            yAxis.UpdateScale();
+        }
         public void OnChartMouseDoubleClick(object sender, MouseEventArgs e)
         {
             MapWindowThreadStatus.UpdateChange = true;
@@ -358,25 +408,35 @@ namespace PxP
             nChartMap.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
             nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
             nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
+            AxisScaleConfigurator();
             nChart.Refresh();
         }
         public void SetMapAxis()
         {
-            if (MapWindowVariable.BottomAxe == 0)
+            if (PxPVariable.PxPInfo != null)
             {
-                nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
-                nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
+                if (MapWindowVariable.BottomAxe == 0)
+                {
+                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
+                }
+                else
+                {
+                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+                }
             }
             else
             {
-                nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
-                nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+                nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
+                nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
             }
             nChartMap.Axis(StandardAxis.PrimaryX).ScaleConfigurator = GetScaleConfigurator();
             nChartMap.Axis(StandardAxis.PrimaryX).PagingView.MinPageLength = 0.01f;
             nChartMap.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
             nChartMap.Axis(StandardAxis.PrimaryY).PagingView.MinPageLength = 0.01f;
             nChart.Refresh();
+            AxisScaleConfigurator();
         }
         public void SetMapInfoLabel()
         {
@@ -449,6 +509,7 @@ namespace PxP
             {
                 MapSetup MapSetup = new MapSetup();
                 MapSetup.ShowDialog();
+                gvFlawClass.Refresh();
             }
         }
 

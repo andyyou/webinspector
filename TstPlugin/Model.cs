@@ -70,6 +70,7 @@ namespace PxP
         internal static int PieceLimit = 20;                                                      //Piece限制數量
         internal static int PieceTotal;                                                      //紀錄目前Cut幾片
         internal static List<FlawTypeNameExtend> FlawTypeName = new List<FlawTypeNameExtend>();       //載入工單時先儲存方便各事件處理
+        internal static List<FlawTypeNameExtend> TmpFlawTypeNameForSetup = new List<FlawTypeNameExtend>();       //載入工單時先儲存方便各事件處理
         internal static IList<ISeverityInfo> SeverityInfo = new List<ISeverityInfo>();       //嚴重缺點優先順序
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
         internal static IPxPInfo PxPInfo;
@@ -301,7 +302,7 @@ namespace PxP
                     tmp.Name = el.Element("Name").Value.ToString();
                     tmp.Shape = ((Shape)Enum.Parse(typeof(Shape),el.Element("Shape").Value.ToString(),false)).ToGraphic();
                     
-                    tmp.FlawType = int.Parse(el.Element("Display").Value.ToString());
+                    tmp.FlawType = int.Parse(el.Element("FlawType").Value.ToString());
                     PxPVariable.FlawTypeName.Add(tmp);
                 }
                 
@@ -513,6 +514,37 @@ namespace PxP
             }
 
             return list;
+        }
+        public static string GetItemString(string Description)
+        {
+            string result = "";
+            switch (Description)
+            {
+                case "▲":
+                    result = "Triangle";
+                    break;
+                case "▼":
+                    result = "Ellipse";
+                    break;
+                case "■":
+                    result = "Square";
+                    break;
+                case "●":
+                    result = "Cone";
+                    break;
+                case "+":
+                    result = "Cross";
+                    break;
+                case "╳":
+                    result = "LineDiagonalCross";
+                    break;
+                case "★":
+                    result = "Star";
+                    break;
+                default:
+                    break;
+            }
+            return result;
         }
     }
     #endregion

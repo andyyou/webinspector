@@ -398,6 +398,8 @@
             this.gvSeries.RowTemplate.Height = 24;
             this.gvSeries.Size = new System.Drawing.Size(382, 301);
             this.gvSeries.TabIndex = 2;
+            this.gvSeries.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvSeries_CellDoubleClick);
+            this.gvSeries.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gvSeries_CellFormatting);
             // 
             // rbLetter
             // 
@@ -431,6 +433,7 @@
             this.btnSaveAs.TabIndex = 5;
             this.btnSaveAs.Text = "Save As";
             this.btnSaveAs.UseVisualStyleBackColor = true;
+            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
             // 
             // btnConfirm
             // 
