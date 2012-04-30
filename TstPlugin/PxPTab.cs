@@ -1040,6 +1040,7 @@ namespace PxP
                 {
                     //PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
                     PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+                    MapWindowVariable.MapWindowController.SetPieceTotalLabel();
                     bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
                 }
             }

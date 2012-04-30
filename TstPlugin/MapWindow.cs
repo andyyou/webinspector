@@ -453,6 +453,10 @@ namespace PxP
             lbOperator.Text =  terms.OperatorName;
             lbOrderNumber.Text =  terms.OrderNumber;
         }
+        public void SetPieceTotalLabel()
+        {
+            lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
+        }
         public void CountFlawPieceDoffNum()
         {
             foreach (var c in PxPVariable.FlawTypeName)
