@@ -528,6 +528,7 @@ namespace PxP
                 PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
             }
+            MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
             int PieceNum = MapWindowVariable.CurrentPiece - 1;
             if (MapWindowVariable.ShowFlag != 0)
@@ -557,6 +558,7 @@ namespace PxP
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
                
             }
+            MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
             int PieceNum = MapWindowVariable.CurrentPiece + 1;
             if (MapWindowVariable.ShowFlag != 0)

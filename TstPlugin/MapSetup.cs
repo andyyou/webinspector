@@ -384,9 +384,12 @@ namespace PxP
             	SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = " txt files(*.xml)|*.xml|All files(*.*)|*.*";
                 sfd.Title = "Save New Config File";
-                sfd.InitialDirectory = ConfPath;
+                sfd.InitialDirectory = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles) + "\\Web Ranger\\Parameter Files\\CPxP\\conf\\";
                 sfd.CreatePrompt = false;
-                sfd.OverwritePrompt = true; 
+                sfd.OverwritePrompt = true;
+                sfd.AddExtension = true;
+                sfd.CheckFileExists = true;
+                sfd.FileName = "Custom-Config-" + DateTime.Now.ToString("yyyy-MM-dd");
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
 

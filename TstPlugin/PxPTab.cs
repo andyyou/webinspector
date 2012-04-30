@@ -189,6 +189,10 @@ namespace PxP
                 
             }
         }
+        public void TableLayoutChangePiece()
+        {
+            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
+        }
         //設定初始化TableLayoutPanel
         void InitTableLayout(TableLayoutPanel Tlp)
         {
@@ -215,8 +219,18 @@ namespace PxP
             PxPVariable.PageTotal = gvFlaw.Rows.Count % PxPVariable.PageSize == 0 ?
                                        gvFlaw.Rows.Count / PxPVariable.PageSize :
                                        gvFlaw.Rows.Count / PxPVariable.PageSize + 1;
-            lbPageCurrent.Text = PxPVariable.PageCurrent.ToString();
-            lbPageTotal.Text = PxPVariable.PageTotal.ToString();
+            
+            //Edit at 2012/04/18 ******
+            if (PxPVariable.PageTotal < 1)
+            {
+                lbPageCurrent.Text = "--";
+                lbPageTotal.Text = "--";
+            }
+            else
+            {
+                lbPageCurrent.Text = PxPVariable.PageCurrent.ToString();
+                lbPageTotal.Text = PxPVariable.PageTotal.ToString();
+            }
             //Deal Button enable
             if (PxPVariable.PageCurrent < PxPVariable.PageTotal && PxPVariable.PageCurrent > 1)
             {
@@ -445,6 +459,18 @@ namespace PxP
                                       .Concat(controls)
                                       .Where(c => c.GetType() == type);
         }
+        public string Reverse(string str)
+        {
+            int len = str.Length;
+            char[] arr = new char[len];
+
+            for (int i = 0; i < len; i++)
+            {
+                arr[i] = str[len - 1 - i];
+            }
+
+            return new string(arr);
+        }
         #endregion
 
         #region Public Methods
@@ -515,7 +541,10 @@ namespace PxP
                     break;
             }
         }
-
+        public void Initialize(string unitsXMLPath)
+        {
+            PxPVariable.UnitsXMLPath = unitsXMLPath;
+        }
         /// <summary>
         /// 卸載Plugin
         /// </summary>
@@ -744,7 +773,22 @@ namespace PxP
                 tmp.FlawType = i.FlawType;
                 tmp.Name = i.Name;
                 tmp.Display = true;
-                tmp.Color = "#000000";
+                foreach (var f in PxPVariable.FlawLegend)
+                {
+                    if (f.Name.Trim() == tmp.Name.Trim())
+                    {
+                        string xxx = Convert.ToString(f.Color, 16);
+                        //tmp.Color = String.Format("#{0:X6}", Convert.ToString(f.Color, 16).PadRight(6,'0'));
+                        //var color = ColorTranslator.FromWin32(255);
+                        tmp.Color = String.Format("#{0:X6}", Reverse((f.Color).ToString("X6").PadRight(6, '0')));
+                        break;
+                    }
+                    else
+                    {
+                        tmp.Color = "#000000";
+                    }
+                }
+                
                 tmp.Shape = Shape.Cone.ToGraphic();
                 tmpList.Add(tmp);
             }
@@ -1039,12 +1083,12 @@ namespace PxP
 
         #region IOnPxPConfig 成員
 
-        public void OnPxPConfig(IPxPInfo info, string unitsXMLPath)
+        public void OnPxPConfig(IPxPInfo info)
         {
             //MessageBox.Show("OnPxPConfig");
             //DebugTool.WriteLog("PxPTab.cs", "OnPxPConfig");
             PxPVariable.PxPInfo = info;
-            PxPVariable.UnitsXMLPath = unitsXMLPath;
+            
 
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
@@ -1128,6 +1172,29 @@ namespace PxP
         }
 
         #endregion
+
+        #region IOnClassifyFlaw 成員
+
+        //存取顏色資訊
+        public void OnSetFlawLegend(List<FlawLegend> legend)
+        {
+            PxPVariable.FlawLegend.Clear();
+            PxPVariable.FlawLegend.AddRange(legend);
+        }
+
+        #endregion
+
+        #region IOnGlassEdges 成員
+
+        public void OnInitializeGlassEdges(int glassLeftMarginToROI, int glassRightMarginToROI)
+        {
+            
+        }
+
+
+        #endregion
+
+
         #endregion
 
         #region Thread Method
@@ -1318,45 +1385,7 @@ namespace PxP
                         MethodInvoker RefreshThread = new MethodInvoker(PageRefresh);
                         this.BeginInvoke(RefreshThread);
                     }
-                    //if (v_update)
-                    //{
-                    //    v_update = false;
-                    //    MethodInvoker UpdateThread = new MethodInvoker(UpdateChange);
-                    //    this.BeginInvoke(UpdateThread);
-                    //}
-
-                    //if (prev)
-                    //{
-                    //    prev = false;
-                    //    MethodInvoker GetPrev = new MethodInvoker(GetPrevFlaw);
-                    //    this.BeginInvoke(GetPrev);
-                    //}
-                    //if (next)
-                    //{
-                    //    next = false;
-                    //    MethodInvoker GetNext = new MethodInvoker(GetNextFlaw);
-                    //    this.BeginInvoke(GetNext);
-                    //}
-                    //if (filter_Change)
-                    //{
-                    //    filter_Change = false;
-                    //    MethodInvoker filter_Refresh = new MethodInvoker(filter_Update);
-                    //    this.BeginInvoke(filter_Refresh);
-                    //}
-                    //if (show_update)
-                    //{
-                    //    show_update = false;
-                    //    MethodInvoker show_change = new MethodInvoker(showChange);
-                    //    this.BeginInvoke(show_change);
-                    //}
-                    //if (GetPicID != -1)
-                    //{
-                    //    getid = GetPicID;
-                    //    GetPicID = -1;
-                    //    MethodInvoker get_info = new MethodInvoker(GetControlID);
-                    //    this.BeginInvoke(get_info);
-                    //}
-                }
+                    if (MapWindowThreadStatus.IsChangePiece)                    {                        MapWindowThreadStatus.IsChangePiece = false;                        MethodInvoker RefreshThread = new MethodInvoker(TableLayoutChangePiece);                        this.BeginInvoke(RefreshThread);                    }                }
             }
             catch(Exception ex)
             {
@@ -1630,21 +1659,25 @@ namespace PxP
             
         }
         #endregion
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
        
-
-        
-
-       
-
-       
-
-        
-
-
-
-
-        
     }
     
     

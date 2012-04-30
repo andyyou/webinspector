@@ -64,8 +64,6 @@
             // 
             // tlbFlawInfo
             // 
-            this.tlbFlawInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tlbFlawInfo.BackColor = System.Drawing.Color.Transparent;
             this.tlbFlawInfo.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tlbFlawInfo.ColumnCount = 4;
@@ -262,6 +260,7 @@
             // 
             // tkbImage
             // 
+            this.tkbImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.tkbImage.BackColor = System.Drawing.Color.Transparent;
             this.tkbImage.LargeChange = 25;
             this.tkbImage.Location = new System.Drawing.Point(382, 390);

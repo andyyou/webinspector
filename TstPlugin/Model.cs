@@ -73,6 +73,7 @@ namespace PxP
         internal static List<FlawTypeNameExtend> TmpFlawTypeNameForSetup = new List<FlawTypeNameExtend>();       //載入工單時先儲存方便各事件處理
         internal static IList<ISeverityInfo> SeverityInfo = new List<ISeverityInfo>();       //嚴重缺點優先順序
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
+        internal static List<FlawLegend> FlawLegend = new List<FlawLegend>();
         internal static IPxPInfo PxPInfo;
         internal static string UnitsXMLPath;
         internal static IJobInfo JobInfo;                                                    //工單資訊
@@ -99,6 +100,7 @@ namespace PxP
         public static bool IsTableLayoutRefresh= false;
         public static bool IsPageRefresh = false;
         public static bool UpdateChange = false;
+        public static bool IsChangePiece = false;
        
     }
     public class MapWindowVariable

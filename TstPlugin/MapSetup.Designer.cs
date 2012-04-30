@@ -67,6 +67,8 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.bsConfList = new System.Windows.Forms.BindingSource(this.components);
             this.bsFlawTypeName = new System.Windows.Forms.BindingSource(this.components);
+            this.lbSCellMDUnit = new System.Windows.Forms.Label();
+            this.lbSCellCDUnit = new System.Windows.Forms.Label();
             this.gbImgSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgCols)).BeginInit();
@@ -212,6 +214,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lbSCellCDUnit);
+            this.panel1.Controls.Add(this.lbSCellMDUnit);
             this.panel1.Controls.Add(this.lbCountSizeCD);
             this.panel1.Controls.Add(this.lbCountSizeMD);
             this.panel1.Controls.Add(this.tboxCountSizeCD);
@@ -251,28 +255,28 @@
             // 
             this.tboxCountSizeCD.Location = new System.Drawing.Point(144, 103);
             this.tboxCountSizeCD.Name = "tboxCountSizeCD";
-            this.tboxCountSizeCD.Size = new System.Drawing.Size(50, 22);
+            this.tboxCountSizeCD.Size = new System.Drawing.Size(34, 22);
             this.tboxCountSizeCD.TabIndex = 7;
             // 
             // tboxCountSizeMD
             // 
             this.tboxCountSizeMD.Location = new System.Drawing.Point(144, 75);
             this.tboxCountSizeMD.Name = "tboxCountSizeMD";
-            this.tboxCountSizeMD.Size = new System.Drawing.Size(50, 22);
+            this.tboxCountSizeMD.Size = new System.Drawing.Size(34, 22);
             this.tboxCountSizeMD.TabIndex = 6;
             // 
             // tboxFixSizeCD
             // 
             this.tboxFixSizeCD.Location = new System.Drawing.Point(144, 40);
             this.tboxFixSizeCD.Name = "tboxFixSizeCD";
-            this.tboxFixSizeCD.Size = new System.Drawing.Size(50, 22);
+            this.tboxFixSizeCD.Size = new System.Drawing.Size(34, 22);
             this.tboxFixSizeCD.TabIndex = 5;
             // 
             // tboxFixSizeMD
             // 
             this.tboxFixSizeMD.Location = new System.Drawing.Point(144, 12);
             this.tboxFixSizeMD.Name = "tboxFixSizeMD";
-            this.tboxFixSizeMD.Size = new System.Drawing.Size(50, 22);
+            this.tboxFixSizeMD.Size = new System.Drawing.Size(34, 22);
             this.tboxFixSizeMD.TabIndex = 4;
             // 
             // lbFixSizeCD
@@ -455,6 +459,22 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // lbSCellMDUnit
+            // 
+            this.lbSCellMDUnit.AutoSize = true;
+            this.lbSCellMDUnit.Location = new System.Drawing.Point(184, 17);
+            this.lbSCellMDUnit.Name = "lbSCellMDUnit";
+            this.lbSCellMDUnit.Size = new System.Drawing.Size(0, 12);
+            this.lbSCellMDUnit.TabIndex = 10;
+            // 
+            // lbSCellCDUnit
+            // 
+            this.lbSCellCDUnit.AutoSize = true;
+            this.lbSCellCDUnit.Location = new System.Drawing.Point(178, 45);
+            this.lbSCellCDUnit.Name = "lbSCellCDUnit";
+            this.lbSCellCDUnit.Size = new System.Drawing.Size(0, 12);
+            this.lbSCellCDUnit.TabIndex = 11;
+            // 
             // MapSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -528,5 +548,7 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.BindingSource bsConfList;
         private System.Windows.Forms.BindingSource bsFlawTypeName;
+        private System.Windows.Forms.Label lbSCellCDUnit;
+        private System.Windows.Forms.Label lbSCellMDUnit;
     }
 }
