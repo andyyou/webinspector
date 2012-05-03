@@ -136,8 +136,10 @@ namespace PxP
         internal static string ConfigFileName ;                     //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
         internal static e_Language Language = e_Language.English;   //預設為英語
         internal static string FlawLock = "FlawLock";               //OnFlaws & OnCut 鎖定
-       
+        internal static bool IsReadHistory = false;                 //判斷是否讀取歷史紀錄
         internal static bool IsSystemFreez = false;                 //判斷系統現在是否在offline凍結狀態
+        internal static IWebDBConnectionInfo DBConnectInfo;
+        internal static string DBConnectString;
 
         #region Constructor
         public SystemVariable()
@@ -404,7 +406,22 @@ namespace PxP
         LineDiagonalCross,
         [DescriptionAttribute("★"), EnumDescription("★")]
         Star 
-    }; 
+    };
+    public class ImageInfo :IImageInfo
+    {
+
+        #region IImageInfo 成員
+
+        public System.Drawing.Bitmap Image { set; get; }
+
+        public int Station { set; get; }
+        public ImageInfo(System.Drawing.Bitmap image, int station)
+        {
+            this.Image = image;
+            this.Station = station;
+        }
+        #endregion
+    }
     #endregion 
 
 

@@ -16,6 +16,7 @@ using Nevron.GraphicsCore;
 using Microsoft.Win32;
 using System.Xml.Linq;
 using System.ComponentModel;
+using System.Data.SqlClient;
 
 namespace PxP
 {
@@ -471,6 +472,36 @@ namespace PxP
 
             return new string(arr);
         }
+        //Deal History Cut
+        public void OnHistoryCut(double MD)
+        {
+            MD = Math.Round(MD, 2);
+            MapWindowVariable.FlawPiece.Clear();
+            foreach (var f in MapWindowVariable.Flaws)
+            {
+                //if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPInfo.Height && f.MD > PxPVariable.CurrentCutPosition)
+                if (f.MD <= MD && f.MD > PxPVariable.CurrentCutPosition)
+                    MapWindowVariable.FlawPiece.Add(f);
+            }
+
+            List<FlawInfoAddPriority> subPiece = new List<FlawInfoAddPriority>();
+            foreach (var f in MapWindowVariable.FlawPiece)
+            {
+                subPiece.Add(f);
+            }
+            MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
+            ///////////////////////////////////////////////////////////////////////
+
+           
+            //////////////////////////////////////////////////////////////////////
+            PxPVariable.CurrentCutPosition = MD;
+            gvFlaw.DataSource = bsFlaw;
+            bsFlaw.ResetBindings(false);
+            bsFlaw.ResumeBinding();
+            //MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
+            PxPThreadStatus.IsOnCut = true;
+            PxPThreadEvent.Set();
+        }
         #endregion
 
         #region Public Methods
@@ -581,7 +612,6 @@ namespace PxP
             try
             {   // Deal flaws  extend other data
                 IList<FlawInfoAddPriority> temp = new List<FlawInfoAddPriority>();
-                
                 foreach (var i in flaws)
                 {
                     FlawInfoAddPriority f = new FlawInfoAddPriority();
@@ -591,6 +621,7 @@ namespace PxP
                     f.FlawID = i.FlawID;
                     f.FlawType = i.FlawType;
                     f.Images = i.Images;
+                    
                     f.LeftEdge = i.LeftEdge;
                     f.Length = i.Length;
                     f.MD = Math.Round(i.MD,2);
@@ -601,7 +632,71 @@ namespace PxP
                     //特別處理Priority
                     int opv;
                     f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
+                    //特別處理Image 因為讀取歷史資料
+                    SystemVariable.IsReadHistory = true;
+                    if (SystemVariable.IsReadHistory)
+                    {
+                        bool blnShowImg = false;
+                        int intW = 0;
+                        int intH = 0;
+                        using (SqlConnection cn = new SqlConnection(SystemVariable.DBConnectString))
+                        {
+                            MemoryStream ms = null; 
+                            cn.Open();
+                            string QueryStr = "Select iImage From dbo.Jobs T1, dbo.Flaw T2, dbo.Image T3 Where T1.klKey = T2.klJobKey AND T2.pklFlawKey = T3.klFlawKey AND T1.JobID = @JobID AND T2.lFlawId = @FlawID";
+                            SqlCommand cmd = new SqlCommand(QueryStr, cn);
+                            cmd.Parameters.AddWithValue("@JobID", PxPVariable.JobInfo.JobID);
+                            cmd.Parameters.AddWithValue("@FlawID", i.FlawID);
+                            SqlDataReader sd = cmd.ExecuteReader();
+                            sd.Read();
+                            byte[] images = (Byte[])sd["iImage"];
+                            //byte[] newImages = images.Skip(8).ToArray();
+                            //////////////////////////////////////////////////////////////////////////////////
+                            intW = images[0] + images[1] * 256;
+                            intH = images[4] + images[5] * 256;
 
+                            if (intW == 0 & intH == 0)
+                            {
+                                intW = 1;
+                                intH = 1;
+                                blnShowImg = false;
+                            }
+                            else
+                            {
+                                blnShowImg = true;
+                            }
+                            //ms = new MemoryStream(newImages);
+                            //ms.Seek(0, SeekOrigin.Begin);
+                            //Bitmap newBitmap = new Bitmap(ms);
+                            //ms.Dispose();
+                            Bitmap bmpShowImg = new Bitmap(intW, intH);
+                            if (blnShowImg)
+                            {
+                                int intPixel = 8;
+                                for (int intY = 0; intY <= intH - 1; intY++)
+                                {
+                                    for (int intX = 0; intX <= intW - 1; intX++)
+                                    {
+                                        bmpShowImg.SetPixel(intX, intY, Color.FromArgb(images[intPixel], images[intPixel], images[intPixel]));
+                                        intPixel++;
+                                    }
+                                }
+                            }
+
+                            IImageInfo tmpImg = new ImageInfo(bmpShowImg, 0);
+                            //IImageInfo tmpImg = new ImageInfo(newBitmap, 0);
+                            f.Images.Add(tmpImg);
+
+                            //f.Images[0].Image = bmpShowImg;
+                            //f.Images = (System.Collections.Generic.IList<IImageInfo>)sd["iImage"];
+
+
+                        }
+                    }
+                    else
+                    {
+                        f.Images = i.Images;
+                    }
                     temp.Add(f);
                     /////////////////////////////////////////////////////////////////
                     
@@ -639,6 +734,8 @@ namespace PxP
                         {
                             PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                         }
+
+                       
                         break;
                     case e_EventID.STOP_INSPECTION:
                         PxPThreadStatus.IsOnOnline = false;
@@ -652,7 +749,10 @@ namespace PxP
                         PxPThreadStatus.IsOnOnline = true;
                         bsFlaw.DataSource = MapWindowVariable.FlawPiece;
                         break;
-                       
+                    case e_EventID.CUT_SIGNAL:
+                        OnHistoryCut(eventInfo.MD);
+                        break;
+                        
                     default: break;
                         
                 }
@@ -763,12 +863,22 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnJobLoaded");
             //PxPVariable.FlawTypeName.Clear();
             //PxPVariable.FlawTypeName = flawTypes;
+            
+            //Clear Some relative data
+            MapWindowVariable.FlawPieces.Clear();
+            PxPVariable.CurrentCutPosition = 0;
+            foreach (var ft in PxPVariable.FlawTypeName)
+            {
+                ft.DoffNum = 0;
+                ft.JobNum = 0;
+            }
             List<FlawTypeNameExtend> tmpList = new List<FlawTypeNameExtend>();
             tmpList.AddRange(PxPVariable.FlawTypeName);
             var DifferencesList = flawTypes.Where(x => !tmpList.Any(x1 => x1.Name == x.Name && x1.FlawType == x.FlawType ));
             foreach (var i in DifferencesList)
             {
                 //Default
+                
                 FlawTypeNameExtend tmp = new FlawTypeNameExtend();
                 tmp.FlawType = i.FlawType;
                 tmp.Name = i.Name;
@@ -777,10 +887,11 @@ namespace PxP
                 {
                     if (f.Name.Trim() == tmp.Name.Trim())
                     {
-                        string xxx = Convert.ToString(f.Color, 16);
                         //tmp.Color = String.Format("#{0:X6}", Convert.ToString(f.Color, 16).PadRight(6,'0'));
-                        //var color = ColorTranslator.FromWin32(255);
-                        tmp.Color = String.Format("#{0:X6}", Reverse((f.Color).ToString("X6").PadRight(6, '0')));
+                        tmp.Color = String.Format("#{0:X2}{1:X2}{2:X2}", ColorTranslator.FromWin32((int)f.Color).R,
+                                                        ColorTranslator.FromWin32((int)f.Color).G,
+                                                        ColorTranslator.FromWin32((int)f.Color).B);
+                        //tmp.Color = String.Format("#{0:X6}", Reverse((f.Color).ToString("X6").PadRight(6, '0')));
                         break;
                     }
                     else
@@ -971,6 +1082,43 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnJobStopped");
             MapWindowVariable.MapWindowController.btnMapSetup.Enabled = true;
             PxPThreadStatus.IsOnJobStopped = true;
+            if (SystemVariable.IsReadHistory)
+            {
+                OnHistoryCut(md);
+                //統計FlawPiece裡面的FlawType 分類統計
+                for (int i = 0; i < MapWindowVariable.FlawPieces.Count(); i++)
+                {
+                    List<FlawInfoAddPriority> fs = MapWindowVariable.FlawPieces[i];
+                    foreach (var f in fs)
+                    {
+                        if (i < MapWindowVariable.FlawPieces.Count() - 1)
+                        {
+                            foreach (var ft in PxPVariable.FlawTypeName)
+                            {
+                                if (ft.FlawType == f.FlawType)
+                                {
+                                    ft.JobNum++;
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            foreach (var ft in PxPVariable.FlawTypeName)
+                            {
+                                if (ft.FlawType == f.FlawType)
+                                {
+                                    ft.JobNum++;
+                                    ft.DoffNum++;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                MapWindowVariable.MapWindowController.RefreshGvFlawClass();
+            }
+            SystemVariable.IsReadHistory = false;
             PxPThreadEvent.Set();
         }
 
@@ -980,8 +1128,13 @@ namespace PxP
 
         public void OnWebDBConnected(IWebDBConnectionInfo info)
         {
+            
             //MessageBox.Show("OnWebDBConnected");
             //DebugTool.WriteLog("PxPTab.cs", "OnWebDBConnected");
+            SystemVariable.DBConnectInfo = info;
+            SystemVariable.DBConnectString = String.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3};",info.ServerName,info.DatabaseName,info.UserName,info.Password);
+            
+        
             PxPThreadStatus.IsOnWebDBConnected = true;
             PxPThreadEvent.Set();
         }
@@ -1116,6 +1269,7 @@ namespace PxP
         {
             //MessageBox.Show("OnOpenHistory");
             //DebugTool.WriteLog("PxPTab.cs", "OnOpenHistory");
+            MapWindowVariable.Flaws.Clear();
 
             PxPThreadStatus.IsOnOpenHistory = true;
             PxPThreadEvent.Set();
@@ -1556,7 +1710,7 @@ namespace PxP
 
         #region Action Events
         //操作事件
-         //Images Next Grid 
+        //Images Next Grid 
         private void btnNextGrid_Click(object sender, EventArgs e)
         {
             Job.SetOffline();
@@ -1638,14 +1792,19 @@ namespace PxP
 
             }
         }
-        
+
         private void gvFlaw_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+
             Job.SetOffline();
             PxPThreadStatus.IsOnOnline = false;
             int v = -1;
             int p = e.RowIndex / PxPVariable.PageSize + 1;
-            PxPVariable.ChooseFlawID = int.TryParse(gvFlaw.Rows[e.RowIndex].Cells["FlawID"].Value.ToString(), out v) ? v : -1;
+            if(e.RowIndex == -1)
+                PxPVariable.ChooseFlawID = int.TryParse(gvFlaw.Rows[0].Cells["FlawID"].Value.ToString(), out v) ? v : -1;
+            else
+                PxPVariable.ChooseFlawID = int.TryParse(gvFlaw.Rows[e.RowIndex].Cells["FlawID"].Value.ToString(), out v) ? v : -1;
+            
             if (PxPVariable.PageCurrent != p)
             {
                 PxPVariable.PageCurrent = p;
@@ -1654,10 +1813,8 @@ namespace PxP
             else
             {
                 this.tlpDoffGrid.Refresh();
+
             }
-            
-            
-            
         }
         #endregion
 
