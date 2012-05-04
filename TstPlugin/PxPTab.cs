@@ -53,13 +53,14 @@ namespace PxP
         
         #endregion
 
+       
         //////////////////////////////////////////////////////////////////////////
 
         #region Initialize Thread
         #region 註解
         /*
-         *  PxPThread : 執行外掛程式本身
-         *  MapThread : 持續繪圖至左邊區塊
+         *  PxPThread : 執行外掛程式本身接續在ON EVENT之後的動作當UI Thread停止時的Background Thread
+         *  MapThread : 判斷在暫停時部分需要中斷的程序或需要重繪的物件
          */
         #endregion
         private Thread PxPThread = null;
@@ -92,7 +93,7 @@ namespace PxP
             DefineDataGridView(gvFlaw);
            
         }
-        //解構子
+        //解構子- 關閉時儲存一些調整過的設定
         ~PxPTab()
         {
             try
@@ -174,7 +175,10 @@ namespace PxP
             tlpDoffGrid.Controls.Clear();
             InitTableLayout(tlpDoffGrid); //重置TableLayout
             DefineDataGridView(gvFlaw);   //重繪右上角DataGridView
+            
+            
         }
+        //右邊Grid更新 連動DataSource 吃gvFlaw的Controls
         public void TableLayoutRefresh()
         {
             this.tlpDoffGrid.Refresh();
@@ -190,9 +194,11 @@ namespace PxP
                 
             }
         }
+        //當變換Piece時單純只要重畫TableLayout
         public void TableLayoutChangePiece()
         {
             DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
+            bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
         }
         //設定初始化TableLayoutPanel
         void InitTableLayout(TableLayoutPanel Tlp)
@@ -212,7 +218,7 @@ namespace PxP
                 Tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             }
         }
-        //繪製TableLayoutPanel將圖片置入Control
+        //繪製TableLayoutPanel將圖片置入Control 包含計算頁面
         public void DrawTablePictures(List<List<FlawInfoAddPriority>> FlawPieces, int PieceID, int PageNum)
         {
             
@@ -254,7 +260,7 @@ namespace PxP
                 btnPrevGrid.Enabled = false;
             }
 
-            int FlawPointStart = (PxPVariable.PageCurrent - 1) * 9;
+            int FlawPointStart = (PxPVariable.PageCurrent - 1) * PxPVariable.PageSize;
             int FlawPointEnd = ((FlawPointStart + PxPVariable.PageSize) > gvFlaw.Rows.Count) ? gvFlaw.Rows.Count : (FlawPointStart + PxPVariable.PageSize);
             
             tlpDoffGrid.Controls.Clear();
@@ -284,34 +290,34 @@ namespace PxP
             tlpDoffGrid.Visible = true;
         }
         //調整圖片縮放讓整張圖可以完整呈現
-        public void ImageAdjust(Bitmap Bmp, PictureBox Pb)
-        {
-            double Width_d = (double)Bmp.Width / Pb.Width;
-            double Height_d = (double)Bmp.Height / Pb.Height;
-            double Ratio = 1.0;
-            if (Width_d > 1 || Height_d > 1)
-            {
-                if (Width_d > Height_d)
-                {
-                    Ratio = Width_d;
+        //public void ImageAdjust(Bitmap Bmp, PictureBox Pb)
+        //{
+        //    double Width_d = (double)Bmp.Width / Pb.Width;
+        //    double Height_d = (double)Bmp.Height / Pb.Height;
+        //    double Ratio = 1.0;
+        //    if (Width_d > 1 || Height_d > 1)
+        //    {
+        //        if (Width_d > Height_d)
+        //        {
+        //            Ratio = Width_d;
 
-                }
-                else
-                {
-                    Ratio = Height_d;
-                }
-            }
-            else if (Width_d < 1 && Height_d < 1)
-            {
-                if (Width_d > Height_d)
-                    Ratio = Width_d;
-                else
-                    Ratio = Height_d;
-            }
-            Pb.Width = (int)Math.Round(Bmp.Width / Ratio);
-            Pb.Height = (int)Math.Round(Bmp.Height / Ratio);
-            Pb.Image = Bmp;
-        }
+        //        }
+        //        else
+        //        {
+        //            Ratio = Height_d;
+        //        }
+        //    }
+        //    else if (Width_d < 1 && Height_d < 1)
+        //    {
+        //        if (Width_d > Height_d)
+        //            Ratio = Width_d;
+        //        else
+        //            Ratio = Height_d;
+        //    }
+        //    Pb.Width = (int)Math.Round(Bmp.Width / Ratio);
+        //    Pb.Height = (int)Math.Round(Bmp.Height / Ratio);
+        //    Pb.Image = Bmp;
+        //}
         //DataGridView排序
         public void SortGridViewByColumn(string ColumnName)
         {
@@ -451,7 +457,7 @@ namespace PxP
                     break;
             };
         }
-        //Find Control
+        //Find Control當需要從整個頁面找Control時用喔
         public IEnumerable<Control> GetAll(Control control, Type type)
         {
             var controls = control.Controls.Cast<Control>();
@@ -460,19 +466,21 @@ namespace PxP
                                       .Concat(controls)
                                       .Where(c => c.GetType() == type);
         }
-        public string Reverse(string str)
-        {
-            int len = str.Length;
-            char[] arr = new char[len];
+       
+        //反轉字元
+        //public string Reverse(string str)
+        //{
+        //    int len = str.Length;
+        //    char[] arr = new char[len];
 
-            for (int i = 0; i < len; i++)
-            {
-                arr[i] = str[len - 1 - i];
-            }
+        //    for (int i = 0; i < len; i++)
+        //    {
+        //        arr[i] = str[len - 1 - i];
+        //    }
 
-            return new string(arr);
-        }
-        //Deal History Cut
+        //    return new string(arr);
+        //}
+        //Deal History Cut 在開啟歷史資料時因為沒有最後一片CUT_Singnal所以把Function拉出來好在最後一次自行加入
         public void OnHistoryCut(double MD)
         {
             MD = Math.Round(MD, 2);
@@ -481,7 +489,12 @@ namespace PxP
             {
                 //if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPInfo.Height && f.MD > PxPVariable.CurrentCutPosition)
                 if (f.MD <= MD && f.MD > PxPVariable.CurrentCutPosition)
+                {
+                    // Adjust RMD, RCD value
+                    f.RMD = Math.Round(f.MD - PxPVariable.CurrentCutPosition, 2);
+                    f.RCD = Math.Round(f.CD - PxPVariable.CurrentCutPosition, 2);
                     MapWindowVariable.FlawPiece.Add(f);
+                }
             }
 
             List<FlawInfoAddPriority> subPiece = new List<FlawInfoAddPriority>();
@@ -505,11 +518,13 @@ namespace PxP
         #endregion
 
         #region Public Methods
+        //提供其他Form設定Online
         public  void SetJobOnline()
         {
             Job.SetOnline();
             PxPThreadStatus.IsOnOnline = true;
         }
+        //提供其他Form設定Offline
         public  void SetJobOffline()
         {
             Job.SetOffline();
@@ -519,6 +534,16 @@ namespace PxP
         #endregion
 
         #region Inherit Interface
+
+        #region 流程說明
+        /**
+         * 本Plugin的重點都在相關流程事件的控制,繼承之後左邊區塊為IWPlugin
+         * 右邊則是IWRMapWindow
+         * 其他OnCut, OnFlaw等目前都只有在PxPTab實作
+         * 主要共用的變數都在Model.cs
+         * 
+         */
+        #endregion
 
         #region IWRPlugIn 成員
         /*
@@ -575,6 +600,7 @@ namespace PxP
         public void Initialize(string unitsXMLPath)
         {
             PxPVariable.UnitsXMLPath = unitsXMLPath;
+            OnUnitsChanged();
         }
         /// <summary>
         /// 卸載Plugin
@@ -610,7 +636,7 @@ namespace PxP
             //MessageBox.Show("OnFlaws");
             //DebugTool.WriteLog("PxPTab.cs", "OnFlaws");
             try
-            {   // Deal flaws  extend other data
+            {   // Deal flaws  extend other data 因為需要增加優先順序和歷史資料所以改寫Class
                 IList<FlawInfoAddPriority> temp = new List<FlawInfoAddPriority>();
                 foreach (var i in flaws)
                 {
@@ -641,7 +667,6 @@ namespace PxP
                         int intH = 0;
                         using (SqlConnection cn = new SqlConnection(SystemVariable.DBConnectString))
                         {
-                            MemoryStream ms = null; 
                             cn.Open();
                             string QueryStr = "Select iImage From dbo.Jobs T1, dbo.Flaw T2, dbo.Image T3 Where T1.klKey = T2.klJobKey AND T2.pklFlawKey = T3.klFlawKey AND T1.JobID = @JobID AND T2.lFlawId = @FlawID";
                             SqlCommand cmd = new SqlCommand(QueryStr, cn);
@@ -665,6 +690,7 @@ namespace PxP
                             {
                                 blnShowImg = true;
                             }
+                            //MemoryStream ms = null; 
                             //ms = new MemoryStream(newImages);
                             //ms.Seek(0, SeekOrigin.Begin);
                             //Bitmap newBitmap = new Bitmap(ms);
@@ -698,9 +724,6 @@ namespace PxP
                         f.Images = i.Images;
                     }
                     temp.Add(f);
-                    /////////////////////////////////////////////////////////////////
-                    
-                   
                 }
 
                 MapWindowVariable.Flaws.AddRange(temp);
@@ -1194,7 +1217,7 @@ namespace PxP
                     //PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
                     PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                     MapWindowVariable.MapWindowController.SetPieceTotalLabel();
-                    bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
+                    //bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
                 }
             }
             PxPThreadEvent.Set();
@@ -1208,6 +1231,7 @@ namespace PxP
         {
             //MessageBox.Show("OnUserTermsChanged");
             //DebugTool.WriteLog("PxPTab.cs", "OnUserTermsChanged");
+            
             MapWindowVariable.MapWindowController.SetUserTermLabel(terms);
             PxPThreadStatus.IsOnUserTermsChanged = true;
             PxPThreadEvent.Set();
@@ -1308,7 +1332,24 @@ namespace PxP
         {
             //MessageBox.Show("OnUnitsChanged");
             //DebugTool.WriteLog("PxPTab.cs", "OnUnitsChanged");
+            var unitsDoc = XDocument.Load(PxPVariable.UnitsXMLPath);
 
+            // Get Flaw Map CD index into units table
+            var flawMapCD = from component in unitsDoc.Element("UnitsConfig").Element("Components").Elements("Component")
+                            where component.Attribute("name").Value == "Flaw Map CD"
+                            select component.Attribute("unit").Value;
+            int flawMapCDIndex = 0;
+            foreach (var record in flawMapCD)
+            {
+                flawMapCDIndex = Convert.ToInt32(record);
+            }
+
+            // Get units
+            var unitsData = new DataSet();
+            unitsData.ReadXml(PxPVariable.UnitsXMLPath);
+            PxPVariable.FullUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[0].ToString();
+            PxPVariable.AbbreviatedUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[1].ToString();
+            PxPVariable.UnitsConversion = Convert.ToDouble(unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[2]);
             PxPThreadStatus.IsOnUnitsChanged = true;
             PxPThreadEvent.Set();
         }
@@ -1354,6 +1395,12 @@ namespace PxP
 
         #region Thread Method
         //主要執行緒,負責處理繼承的介面,接收狀態值切換動作
+        #region 流程說明
+        /**
+         * 每一次按照繼承的Interface的OnEvent之後會接一個執行緒,功能為當UI Thread被停止時還可以
+         * 執行後續事件,但是本程式比重很少
+         */
+        #endregion
         private void WorkerThread()
         {
             try
@@ -1518,28 +1565,30 @@ namespace PxP
                 while (true)
                 {
                     MapThreadEvent.WaitOne();
+                    //強制中斷參數目前程式中沒有使用
                     if (MapWindowThreadStatus.StopMapThreading)
                         return;
-
+                    //除了PxPTab外其他頁面需要暫停Job使用
                     if (MapWindowThreadStatus.UpdateChange)
                     {
                         Job.SetOffline();
                         PxPThreadStatus.IsOnOnline = false;
                     }
-
+                    //MapWindow 等其他頁面呼叫Refresh Layout
                     if (MapWindowThreadStatus.IsTableLayoutRefresh)
                     {
                         MapWindowThreadStatus.IsTableLayoutRefresh = false;
                         MethodInvoker RefreshThread = new MethodInvoker(TableLayoutRefresh);
                         this.BeginInvoke(RefreshThread);
                     }
-
+                    //右邊Grid清空,重繪右下角等TableLayout
                     if (MapWindowThreadStatus.IsPageRefresh)
                     {
                         MapWindowThreadStatus.IsPageRefresh = false;
                         MethodInvoker RefreshThread = new MethodInvoker(PageRefresh);
                         this.BeginInvoke(RefreshThread);
                     }
+                    //當左邊切換頁面時,重繪DrawTablePictures
                     if (MapWindowThreadStatus.IsChangePiece)                    {                        MapWindowThreadStatus.IsChangePiece = false;                        MethodInvoker RefreshThread = new MethodInvoker(TableLayoutChangePiece);                        this.BeginInvoke(RefreshThread);                    }                }
             }
             catch(Exception ex)

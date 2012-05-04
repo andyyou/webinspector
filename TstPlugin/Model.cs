@@ -92,6 +92,10 @@ namespace PxP
         internal static int PassNum = 0;
         internal static int FailNum = 0;
         internal static int DoffNum = 0;
+
+        public static string FullUnitsName { get; set; }
+        public static string AbbreviatedUnitsName { get; set; }
+        public static double UnitsConversion { get; set; }
     }
     public class MapWindowThreadStatus
     {

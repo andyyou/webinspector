@@ -333,6 +333,7 @@ namespace PxP
             {
                 foreach (NSeries point in nChartMap.Series)
                 {
+                    if (point.Tag == null) continue;
                     foreach (DataGridViewRow row in gvFlawClass.Rows)
                     {
                         if (point.Tag.ToString() == row.Cells["FlawType"].Value.ToString())
@@ -340,6 +341,7 @@ namespace PxP
                             point.FillStyle = new NColorFillStyle(System.Drawing.ColorTranslator.FromHtml(row.Cells["Color"].Value.ToString()));
                         }
                     }
+                    
                     //point.DataLabelStyle.Visible = false;
                 }
             }
@@ -532,8 +534,7 @@ namespace PxP
                 PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
             }
-            MapWindowThreadStatus.IsChangePiece = true;
-            PxPTab.MapThreadEvent.Set();
+           
             int PieceNum = MapWindowVariable.CurrentPiece - 1;
             if (MapWindowVariable.ShowFlag != 0)
             {
@@ -550,6 +551,9 @@ namespace PxP
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
             DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
+            //2012-05-04 小心online時的不良影響 連動功能
+            MapWindowThreadStatus.IsChangePiece = true;
+            PxPTab.MapThreadEvent.Set();
         }
 
         private void btnNextPiece_Click(object sender, EventArgs e)
@@ -562,8 +566,8 @@ namespace PxP
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
                
             }
-            MapWindowThreadStatus.IsChangePiece = true;
-            PxPTab.MapThreadEvent.Set();
+           
+            
             int PieceNum = MapWindowVariable.CurrentPiece + 1;
             if (MapWindowVariable.ShowFlag != 0)
             {
@@ -580,6 +584,8 @@ namespace PxP
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
             DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
+            MapWindowThreadStatus.IsChangePiece = true;
+            PxPTab.MapThreadEvent.Set();
         }
         private void rb_CheckedChanged(object sender, EventArgs e)
         {

@@ -43,6 +43,8 @@
             this.cboxButtomAxe = new System.Windows.Forms.ComboBox();
             this.lbBottomAxe = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbSCellCDUnit = new System.Windows.Forms.Label();
+            this.lbSCellMDUnit = new System.Windows.Forms.Label();
             this.lbCountSizeCD = new System.Windows.Forms.Label();
             this.lbCountSizeMD = new System.Windows.Forms.Label();
             this.tboxCountSizeCD = new System.Windows.Forms.TextBox();
@@ -67,8 +69,8 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.bsConfList = new System.Windows.Forms.BindingSource(this.components);
             this.bsFlawTypeName = new System.Windows.Forms.BindingSource(this.components);
-            this.lbSCellMDUnit = new System.Windows.Forms.Label();
-            this.lbSCellCDUnit = new System.Windows.Forms.Label();
+            this.lbSCMD = new System.Windows.Forms.Label();
+            this.lbSCCD = new System.Windows.Forms.Label();
             this.gbImgSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgCols)).BeginInit();
@@ -214,6 +216,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lbSCCD);
+            this.panel1.Controls.Add(this.lbSCMD);
             this.panel1.Controls.Add(this.lbSCellCDUnit);
             this.panel1.Controls.Add(this.lbSCellMDUnit);
             this.panel1.Controls.Add(this.lbCountSizeCD);
@@ -230,6 +234,22 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(222, 144);
             this.panel1.TabIndex = 5;
+            // 
+            // lbSCellCDUnit
+            // 
+            this.lbSCellCDUnit.AutoSize = true;
+            this.lbSCellCDUnit.Location = new System.Drawing.Point(178, 45);
+            this.lbSCellCDUnit.Name = "lbSCellCDUnit";
+            this.lbSCellCDUnit.Size = new System.Drawing.Size(0, 12);
+            this.lbSCellCDUnit.TabIndex = 11;
+            // 
+            // lbSCellMDUnit
+            // 
+            this.lbSCellMDUnit.AutoSize = true;
+            this.lbSCellMDUnit.Location = new System.Drawing.Point(184, 17);
+            this.lbSCellMDUnit.Name = "lbSCellMDUnit";
+            this.lbSCellMDUnit.Size = new System.Drawing.Size(0, 12);
+            this.lbSCellMDUnit.TabIndex = 10;
             // 
             // lbCountSizeCD
             // 
@@ -459,21 +479,25 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lbSCellMDUnit
+            // lbSCMD
             // 
-            this.lbSCellMDUnit.AutoSize = true;
-            this.lbSCellMDUnit.Location = new System.Drawing.Point(184, 17);
-            this.lbSCellMDUnit.Name = "lbSCellMDUnit";
-            this.lbSCellMDUnit.Size = new System.Drawing.Size(0, 12);
-            this.lbSCellMDUnit.TabIndex = 10;
+            this.lbSCMD.AutoSize = true;
+            this.lbSCMD.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbSCMD.Location = new System.Drawing.Point(179, 22);
+            this.lbSCMD.Name = "lbSCMD";
+            this.lbSCMD.Size = new System.Drawing.Size(23, 12);
+            this.lbSCMD.TabIndex = 12;
+            this.lbSCMD.Text = "mm";
             // 
-            // lbSCellCDUnit
+            // lbSCCD
             // 
-            this.lbSCellCDUnit.AutoSize = true;
-            this.lbSCellCDUnit.Location = new System.Drawing.Point(178, 45);
-            this.lbSCellCDUnit.Name = "lbSCellCDUnit";
-            this.lbSCellCDUnit.Size = new System.Drawing.Size(0, 12);
-            this.lbSCellCDUnit.TabIndex = 11;
+            this.lbSCCD.AutoSize = true;
+            this.lbSCCD.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbSCCD.Location = new System.Drawing.Point(179, 49);
+            this.lbSCCD.Name = "lbSCCD";
+            this.lbSCCD.Size = new System.Drawing.Size(23, 12);
+            this.lbSCCD.TabIndex = 13;
+            this.lbSCCD.Text = "mm";
             // 
             // MapSetup
             // 
@@ -550,5 +574,7 @@
         private System.Windows.Forms.BindingSource bsFlawTypeName;
         private System.Windows.Forms.Label lbSCellCDUnit;
         private System.Windows.Forms.Label lbSCellMDUnit;
+        private System.Windows.Forms.Label lbSCCD;
+        private System.Windows.Forms.Label lbSCMD;
     }
 }

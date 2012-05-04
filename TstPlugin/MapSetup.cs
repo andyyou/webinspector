@@ -39,6 +39,7 @@ namespace PxP
         //取得Folder底下所有XML清單
         List<string> GetConfList()
         {
+            
             List<string> ConfList = new List<string>();
             string ConfPath = Path.GetDirectoryName(
                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/conf/";
@@ -107,6 +108,10 @@ namespace PxP
             cbCDInverse.Checked = (MapWindowVariable.CDInver == 1) ? true : false;
             cbMDInverse.Checked = (MapWindowVariable.MDInver == 1) ? true : false;
 
+            ///////////////////////////////////////////////////////////////////////////////////////////////
+            //Change Specify Cell Size Unit Label
+            lbSCCD.Text = PxPVariable.AbbreviatedUnitsName.ToString();
+            lbSCMD.Text = PxPVariable.AbbreviatedUnitsName.ToString();
             ///////////////////////////////////////////////////////////////////////////////////////
 
             //Add List here and binding to datagridvew
@@ -165,7 +170,7 @@ namespace PxP
                 gvSeries.Columns["Shape"].Visible = false;
                 gvSeries.Columns["JobNum"].Visible = false;
 
-                
+               
                
             }
 
@@ -249,19 +254,21 @@ namespace PxP
                 
                 ////////////////////////////////////////////////////////////////////////////////
                 //Save FlawTypeName Grid
-                XDocConf.Element("Config").Element("MapVariable").Elements("FlawTypeName").Remove();
-                foreach (DataGridViewRow dr in gvSeries.Rows)
+                if (gvSeries.Rows.Count > 0)
                 {
-                    
-                    XDocConf.Element("Config").Element("MapVariable").Add(new XElement("FlawTypeName",
-                                               new XElement("FlawType", dr.Cells[1].Value.ToString()),
-                                               new XElement("Name", dr.Cells[0].Value.ToString()),
-                                               new XElement("Color", dr.Cells[4].Value.ToString()),
-                                               new XElement("Shape", EnumHelper.GetItemString(dr.Cells[5].Value.ToString())),
-                                               new XElement("Display", (dr.Cells[2].Value.ToString().ToLower().Trim() == "true") ? "1":"0")
-                                               ));
+                    XDocConf.Element("Config").Element("MapVariable").Elements("FlawTypeName").Remove();
+                    foreach (DataGridViewRow dr in gvSeries.Rows)
+                    {
 
-                   
+                        XDocConf.Element("Config").Element("MapVariable").Add(new XElement("FlawTypeName",
+                                                   new XElement("FlawType", dr.Cells[1].Value.ToString()),
+                                                   new XElement("Name", dr.Cells[0].Value.ToString()),
+                                                   new XElement("Color", dr.Cells[4].Value.ToString()),
+                                                   new XElement("Shape", EnumHelper.GetItemString(dr.Cells[5].Value.ToString())),
+                                                   new XElement("Display", (dr.Cells[2].Value.ToString().ToLower().Trim() == "true") ? "1" : "0")
+                                                   ));
+
+                    }
                 }
                 XDocConf.Save(FullConfPath);
 
@@ -276,7 +283,8 @@ namespace PxP
                 MapWindowVariable.MDInver = cbMDInverse.Checked ? 1 : 0;
                 MapWindowVariable.CDInver = cbCDInverse.Checked ? 1 : 0;
                 PxPVariable.FlawTypeName.Clear();
-                PxPVariable.FlawTypeName.AddRange(TmpFlawTypeName);
+                if (TmpFlawTypeName != null)
+                    PxPVariable.FlawTypeName.AddRange(TmpFlawTypeName);
                 
                 ////////////////////////////////////////////////////////////////////////////////
                 MapWindowVariable.MapWindowController.SetMapProperty();
