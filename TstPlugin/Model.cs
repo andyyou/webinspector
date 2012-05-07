@@ -115,7 +115,8 @@ namespace PxP
         internal static int InitMapWidth;                                                                       //紀錄初始Map寬
         internal static int InitMapHeight;                                                                      //紀錄初始Map高
         internal static bool IsMapInit;                                                                         //紀錄Map是否紀錄初始狀態
-        internal static List<List<FlawInfoAddPriority>> FlawPieces = new List<List<FlawInfoAddPriority>>();                         //儲存Piece切割後的所有檔案
+        internal static List<IList<IFlawInfo>> OriginFlawPieces = new List<IList<IFlawInfo>>();                   //儲存原始資料已用來變更單位計算
+        internal static List<List<FlawInfoAddPriority>> FlawPieces = new List<List<FlawInfoAddPriority>>();     //儲存Piece切割後的所有檔案
         internal static int CurrentPiece = 0 ;                                                                  //儲存左邊目前看到哪片玻璃
         internal static int MapProportion = 0;                      //紀錄Map比例 0->1:1, 2->1:1, 2->2:1, 3->4:3, 4->3:4,  5->16:9
         internal static bool ShowGridSet = true;                    //是否顯示格線
@@ -355,6 +356,16 @@ namespace PxP
         public int Priority { get; set; }
         public double RMD { get; set; }
         public double RCD { get; set; }
+        //Keep origin value
+        public string OArea { set; get; }
+        public double OCD { set; get; }
+        public double OMD { set; get; }
+        public double OLeftEdge { set; get; }
+        public double ORightEdge { set; get; }
+        public double OLength { set; get; }
+        public double OWidth { set; get; }
+        public double ORMD { set; get; }
+        public double ORCD { set; get; }
         
         public FlawInfoAddPriority()
         { 

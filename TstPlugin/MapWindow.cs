@@ -501,6 +501,11 @@ namespace PxP
             }
             return MapWindowVariable.CurrentPiece; //Not Found
         }
+        public void InitLabel()
+        {
+            lbPageCurrent.Text = "--";
+            lbPageTotal.Text = "--";
+        }
         #endregion
 
         #region Action Events

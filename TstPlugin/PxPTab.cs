@@ -17,6 +17,8 @@ using Microsoft.Win32;
 using System.Xml.Linq;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace PxP
 {
@@ -52,8 +54,6 @@ namespace PxP
 
         
         #endregion
-
-       
         //////////////////////////////////////////////////////////////////////////
 
         #region Initialize Thread
@@ -93,7 +93,7 @@ namespace PxP
             DefineDataGridView(gvFlaw);
            
         }
-        //解構子- 關閉時儲存一些調整過的設定
+        //解構子 關閉時儲存一些調整過的設定
         ~PxPTab()
         {
             try
@@ -175,8 +175,6 @@ namespace PxP
             tlpDoffGrid.Controls.Clear();
             InitTableLayout(tlpDoffGrid); //重置TableLayout
             DefineDataGridView(gvFlaw);   //重繪右上角DataGridView
-            
-            
         }
         //右邊Grid更新 連動DataSource 吃gvFlaw的Controls
         public void TableLayoutRefresh()
@@ -197,8 +195,8 @@ namespace PxP
         //當變換Piece時單純只要重畫TableLayout
         public void TableLayoutChangePiece()
         {
-            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
             bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
+            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
         }
         //設定初始化TableLayoutPanel
         void InitTableLayout(TableLayoutPanel Tlp)
@@ -324,7 +322,7 @@ namespace PxP
             /*
               * false = 沒點過
               * true = 點過
-              */
+            */
             switch (ColumnName)
             {
                 case "FlawID":
@@ -457,7 +455,7 @@ namespace PxP
                     break;
             };
         }
-        //Find Control當需要從整個頁面找Control時用喔
+        //Find Control
         public IEnumerable<Control> GetAll(Control control, Type type)
         {
             var controls = control.Controls.Cast<Control>();
@@ -466,21 +464,7 @@ namespace PxP
                                       .Concat(controls)
                                       .Where(c => c.GetType() == type);
         }
-       
-        //反轉字元
-        //public string Reverse(string str)
-        //{
-        //    int len = str.Length;
-        //    char[] arr = new char[len];
-
-        //    for (int i = 0; i < len; i++)
-        //    {
-        //        arr[i] = str[len - 1 - i];
-        //    }
-
-        //    return new string(arr);
-        //}
-        //Deal History Cut 在開啟歷史資料時因為沒有最後一片CUT_Singnal所以把Function拉出來好在最後一次自行加入
+        //Deal History Cut
         public void OnHistoryCut(double MD)
         {
             MD = Math.Round(MD, 2);
@@ -492,7 +476,7 @@ namespace PxP
                 {
                     // Adjust RMD, RCD value
                     f.RMD = Math.Round(f.MD - PxPVariable.CurrentCutPosition, 2);
-                    f.RCD = Math.Round(f.CD - PxPVariable.CurrentCutPosition, 2);
+                    f.RCD = Math.Round(f.CD - PxPVariable.CurrentCutPosition, 2);
                     MapWindowVariable.FlawPiece.Add(f);
                 }
             }
@@ -514,6 +498,74 @@ namespace PxP
             //MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
             PxPThreadStatus.IsOnCut = true;
             PxPThreadEvent.Set();
+        }
+
+        public static Bitmap ToGrayBitmap(byte[] rawValues, int width, int height)
+        {
+            // Declare bitmap variable and lock memory
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+            BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+
+            // Get image parameter
+            int stride = bmpData.Stride;  // Width of scan line
+            int offset = stride - width;  // Display width and the scan line width of the gap
+            IntPtr iptr = bmpData.Scan0;  // Get bmpData start position in memory
+            int scanBytes = stride * height;   // Size of the memory area
+
+            // Convert the original display size of the byte array into an array of bytes actually stored in the memory
+            int posScan = 0, posReal = 0;   // Declare two pointer, point to source and destination arrays
+            byte[] pixelValues = new byte[scanBytes];  // Declare array size
+            for (int x = 0; x < height; x++)
+            {
+                // Emulate line scanning
+                for (int y = 0; y < width; y++)
+                {
+                    pixelValues[posScan++] = rawValues[posReal++];
+                }
+                posScan += offset;  //Line scan finished
+            }
+
+            // Using Marshal.Copy function copy pixelValues to BitmapData
+            Marshal.Copy(pixelValues, 0, iptr, scanBytes);
+            bmp.UnlockBits(bmpData);  // Unlock memory
+
+            // Change 8 bit bitmap index table to Grayscale
+            ColorPalette tempPalette;
+            using (Bitmap tempBmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
+            {
+                tempPalette = tempBmp.Palette;
+            }
+            for (int i = 0; i < 256; i++)
+            {
+                tempPalette.Entries[i] = Color.FromArgb(i, i, i);
+            }
+
+            bmp.Palette = tempPalette;
+
+            return bmp;
+        }
+        //Set Unit
+        public void SetUnitToGlobalVariable()
+        {
+            var unitsDoc = XDocument.Load(PxPVariable.UnitsXMLPath);
+
+            // Get Flaw Map CD index into units table
+            var flawMapCD = from component in unitsDoc.Element("UnitsConfig").Element("Components").Elements("Component")
+                            where component.Attribute("name").Value == "Flaw Map CD"
+                            select component.Attribute("unit").Value;
+            int flawMapCDIndex = 0;
+            foreach (var record in flawMapCD)
+            {
+                flawMapCDIndex = Convert.ToInt32(record);
+            }
+
+            // Get units
+            var unitsData = new DataSet();
+            unitsData.ReadXml(PxPVariable.UnitsXMLPath);
+            PxPVariable.FullUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[0].ToString();
+            PxPVariable.AbbreviatedUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[1].ToString();
+            PxPVariable.UnitsConversion = Convert.ToDouble(unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[2]);
         }
         #endregion
 
@@ -600,7 +652,7 @@ namespace PxP
         public void Initialize(string unitsXMLPath)
         {
             PxPVariable.UnitsXMLPath = unitsXMLPath;
-            OnUnitsChanged();
+            SetUnitToGlobalVariable();
         }
         /// <summary>
         /// 卸載Plugin
@@ -636,7 +688,10 @@ namespace PxP
             //MessageBox.Show("OnFlaws");
             //DebugTool.WriteLog("PxPTab.cs", "OnFlaws");
             try
-            {   // Deal flaws  extend other data 因為需要增加優先順序和歷史資料所以改寫Class
+            {
+                //保存原始資料
+                MapWindowVariable.OriginFlawPieces.Add(flaws);
+                // Deal flaws  extend other data
                 IList<FlawInfoAddPriority> temp = new List<FlawInfoAddPriority>();
                 foreach (var i in flaws)
                 {
@@ -655,6 +710,17 @@ namespace PxP
                     f.RCD = Math.Round(i.CD - PxPVariable.CurrentCutPosition, 2);
                     f.RightEdge = i.RightEdge;
                     f.Width = Math.Round(i.Width,4);
+
+                    //Keep origin value
+                    f.ORCD = Math.Round(i.CD - PxPVariable.CurrentCutPosition, 2);
+                    f.ORMD = Math.Round(i.MD - PxPVariable.CurrentCutPosition, 2);
+                    f.OArea = i.Area.ToString("0.######");
+                    f.OCD = Math.Round(i.CD, 2);
+                    f.OLeftEdge = i.LeftEdge;
+                    f.OLength = i.Length;
+                    f.OMD = Math.Round(i.MD, 2);
+                    f.ORightEdge = i.RightEdge;
+                    f.OWidth = Math.Round(i.Width, 4);
                     //特別處理Priority
                     int opv;
                     f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
@@ -667,6 +733,7 @@ namespace PxP
                         int intH = 0;
                         using (SqlConnection cn = new SqlConnection(SystemVariable.DBConnectString))
                         {
+                            MemoryStream ms = null;
                             cn.Open();
                             string QueryStr = "Select iImage From dbo.Jobs T1, dbo.Flaw T2, dbo.Image T3 Where T1.klKey = T2.klJobKey AND T2.pklFlawKey = T3.klFlawKey AND T1.JobID = @JobID AND T2.lFlawId = @FlawID";
                             SqlCommand cmd = new SqlCommand(QueryStr, cn);
@@ -690,13 +757,12 @@ namespace PxP
                             {
                                 blnShowImg = true;
                             }
-                            //MemoryStream ms = null; 
                             //ms = new MemoryStream(newImages);
                             //ms.Seek(0, SeekOrigin.Begin);
                             //Bitmap newBitmap = new Bitmap(ms);
                             //ms.Dispose();
                             Bitmap bmpShowImg = new Bitmap(intW, intH);
-                            if (blnShowImg)
+                            /*if (blnShowImg)
                             {
                                 int intPixel = 8;
                                 for (int intY = 0; intY <= intH - 1; intY++)
@@ -707,10 +773,16 @@ namespace PxP
                                         intPixel++;
                                     }
                                 }
+                            }*/
+
+                            ///////
+                            if (blnShowImg)
+                            {
+                                bmpShowImg = ToGrayBitmap(images, intW, intH);
                             }
+                            ///////
 
                             IImageInfo tmpImg = new ImageInfo(bmpShowImg, 0);
-                            //IImageInfo tmpImg = new ImageInfo(newBitmap, 0);
                             f.Images.Add(tmpImg);
 
                             //f.Images[0].Image = bmpShowImg;
@@ -724,6 +796,9 @@ namespace PxP
                         f.Images = i.Images;
                     }
                     temp.Add(f);
+                    /////////////////////////////////////////////////////////////////
+                    
+                   
                 }
 
                 MapWindowVariable.Flaws.AddRange(temp);
@@ -779,7 +854,8 @@ namespace PxP
                     default: break;
                         
                 }
-            }
+            }
+
             PxPThreadEvent.Set();
         }
 
@@ -869,7 +945,8 @@ namespace PxP
                 PxPThreadStatus.IsOnCut = true;
                 PxPThreadEvent.Set();
             }
-        }
+        }
+
 
         #endregion
 
@@ -889,6 +966,7 @@ namespace PxP
             
             //Clear Some relative data
             MapWindowVariable.FlawPieces.Clear();
+            MapWindowVariable.MapWindowController.InitLabel();
             PxPVariable.CurrentCutPosition = 0;
             foreach (var ft in PxPVariable.FlawTypeName)
             {
@@ -995,6 +1073,7 @@ namespace PxP
             PxPVariable.JobKey = jobKey;
             PxPThreadStatus.IsOnJobStarted = true;
             MapWindowVariable.PieceResult.Clear();
+           
             PxPThreadEvent.Set();
         }
         #endregion
@@ -1108,6 +1187,7 @@ namespace PxP
             if (SystemVariable.IsReadHistory)
             {
                 OnHistoryCut(md);
+                PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count();
                 //統計FlawPiece裡面的FlawType 分類統計
                 for (int i = 0; i < MapWindowVariable.FlawPieces.Count(); i++)
                 {
@@ -1204,7 +1284,8 @@ namespace PxP
                 tlpDoffGrid.Controls.Clear();
                 MapWindowVariable.MapWindowController.ClearMap();
                 MapWindowVariable.MapWindowController.ResetGvFlawClassDoffNum();
-                
+                
+
                 btnNextGrid.Enabled = false;
                 btnPrevGrid.Enabled = false;
                 lbPageTotal.Text = "--";
@@ -1216,7 +1297,8 @@ namespace PxP
                 {
                     //PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
                     PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
-                    MapWindowVariable.MapWindowController.SetPieceTotalLabel();
+                    MapWindowVariable.MapWindowController.SetPieceTotalLabel();
+
                     //bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
                 }
             }
@@ -1231,7 +1313,6 @@ namespace PxP
         {
             //MessageBox.Show("OnUserTermsChanged");
             //DebugTool.WriteLog("PxPTab.cs", "OnUserTermsChanged");
-            
             MapWindowVariable.MapWindowController.SetUserTermLabel(terms);
             PxPThreadStatus.IsOnUserTermsChanged = true;
             PxPThreadEvent.Set();
@@ -1332,24 +1413,9 @@ namespace PxP
         {
             //MessageBox.Show("OnUnitsChanged");
             //DebugTool.WriteLog("PxPTab.cs", "OnUnitsChanged");
-            var unitsDoc = XDocument.Load(PxPVariable.UnitsXMLPath);
 
-            // Get Flaw Map CD index into units table
-            var flawMapCD = from component in unitsDoc.Element("UnitsConfig").Element("Components").Elements("Component")
-                            where component.Attribute("name").Value == "Flaw Map CD"
-                            select component.Attribute("unit").Value;
-            int flawMapCDIndex = 0;
-            foreach (var record in flawMapCD)
-            {
-                flawMapCDIndex = Convert.ToInt32(record);
-            }
+            SetUnitToGlobalVariable();
 
-            // Get units
-            var unitsData = new DataSet();
-            unitsData.ReadXml(PxPVariable.UnitsXMLPath);
-            PxPVariable.FullUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[0].ToString();
-            PxPVariable.AbbreviatedUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[1].ToString();
-            PxPVariable.UnitsConversion = Convert.ToDouble(unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[2]);
             PxPThreadStatus.IsOnUnitsChanged = true;
             PxPThreadEvent.Set();
         }
@@ -1589,7 +1655,13 @@ namespace PxP
                         this.BeginInvoke(RefreshThread);
                     }
                     //當左邊切換頁面時,重繪DrawTablePictures
-                    if (MapWindowThreadStatus.IsChangePiece)                    {                        MapWindowThreadStatus.IsChangePiece = false;                        MethodInvoker RefreshThread = new MethodInvoker(TableLayoutChangePiece);                        this.BeginInvoke(RefreshThread);                    }                }
+                    if (MapWindowThreadStatus.IsChangePiece)
+                    {
+                        MapWindowThreadStatus.IsChangePiece = false;
+                        MethodInvoker RefreshThread = new MethodInvoker(TableLayoutChangePiece);
+                        this.BeginInvoke(RefreshThread);
+                    }
+                }
             }
             catch(Exception ex)
             {
