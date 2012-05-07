@@ -8,6 +8,7 @@ using System.IO;
 using System.Reflection;
 using System.ComponentModel;
 using System.Collections;
+using System.Data;
 
 namespace PxP
 {
@@ -93,9 +94,9 @@ namespace PxP
         internal static int FailNum = 0;
         internal static int DoffNum = 0;
 
-        public static string FullUnitsName { get; set; }
-        public static string AbbreviatedUnitsName { get; set; }
-        public static double UnitsConversion { get; set; }
+        public static Dictionary<string, int> UnitsKeys = new Dictionary<string,int>();
+        public static DataSet UnitsData ;
+
     }
     public class MapWindowThreadStatus
     {
@@ -360,8 +361,6 @@ namespace PxP
         public string OArea { set; get; }
         public double OCD { set; get; }
         public double OMD { set; get; }
-        public double OLeftEdge { set; get; }
-        public double ORightEdge { set; get; }
         public double OLength { set; get; }
         public double OWidth { set; get; }
         public double ORMD { set; get; }

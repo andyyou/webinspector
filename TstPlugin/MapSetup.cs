@@ -20,6 +20,7 @@ namespace PxP
         string tmpMDSize = "";
         string tmpCDSize = "";
         IList<FlawTypeNameExtend> TmpFlawTypeName;
+        DataSet UnitsData = new DataSet();
         #endregion
 
         #region Constructor
@@ -110,8 +111,8 @@ namespace PxP
 
             ///////////////////////////////////////////////////////////////////////////////////////////////
             //Change Specify Cell Size Unit Label
-            lbSCCD.Text = PxPVariable.AbbreviatedUnitsName.ToString();
-            lbSCMD.Text = PxPVariable.AbbreviatedUnitsName.ToString();
+            lbSCCD.Text = PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[1].ToString();
+            lbSCMD.Text = PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[1].ToString();
             ///////////////////////////////////////////////////////////////////////////////////////
 
             //Add List here and binding to datagridvew

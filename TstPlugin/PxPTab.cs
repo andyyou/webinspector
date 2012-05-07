@@ -51,7 +51,8 @@ namespace PxP
         public int ImgPlaceHolderHeight;                  //右下角DataGrid內置放圖片容器寬高
         bool SortSwitch = false;
         bool IsFreeze = false;
-
+        double PxPInfo_OW;
+        double PxPInfo_OH;
         
         #endregion
         //////////////////////////////////////////////////////////////////////////
@@ -172,10 +173,8 @@ namespace PxP
             Dgv.Columns["ORCD"].Visible = false;
             Dgv.Columns["OArea"].Visible = false;
             Dgv.Columns["OCD"].Visible = false;
-            Dgv.Columns["OLeftEdge"].Visible = false;
             Dgv.Columns["OLength"].Visible = false;
             Dgv.Columns["OMD"].Visible = false;
-            Dgv.Columns["ORightEdge"].Visible = false;
             Dgv.Columns["OWidth"].Visible = false;
         }       
         //更新頁面,該換圖或Map調整,語系變更,全域變數變更時更新物件資料
@@ -476,7 +475,8 @@ namespace PxP
         //Deal History Cut
         public void OnHistoryCut(double MD)
         {
-            MD = Math.Round(MD * PxPVariable.UnitsConversion , 2);
+            double Convertion = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString());
+            MD = Math.Round(MD * Convertion, 2);
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
@@ -555,27 +555,23 @@ namespace PxP
             return bmp;
         }
         //Set Unit
-        public void SetUnitToGlobalVariable()
+        public void InitUnitsData()
         {
             var unitsDoc = XDocument.Load(PxPVariable.UnitsXMLPath);
 
-            // Get Flaw Map CD index into units table
-            var flawMapCD = from component in unitsDoc.Element("UnitsConfig").Element("Components").Elements("Component")
-                            where component.Attribute("name").Value == "Flaw Map CD"
-                            select component.Attribute("unit").Value;
-            int flawMapCDIndex = 0;
-            foreach (var record in flawMapCD)
+            // Get Flaw index into units table
+            var flawUnits = from component in unitsDoc.Element("UnitsConfig").Element("Components").Elements("Component")
+                            select new { Name = component.Attribute("name").Value, Unit = component.Attribute("unit").Value };
+            PxPVariable.UnitsKeys.Clear();
+            foreach (var record in flawUnits)
             {
-                flawMapCDIndex = Convert.ToInt32(record);
+
+                PxPVariable.UnitsKeys.Add(record.Name, Convert.ToInt32(record.Unit));
             }
 
             // Get units
-            var unitsData = new DataSet();
-            unitsData.ReadXml(PxPVariable.UnitsXMLPath);
-            PxPVariable.FullUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[0].ToString();
-            PxPVariable.AbbreviatedUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[1].ToString();
-            //UnitArray
-            PxPVariable.UnitsConversion = Convert.ToDouble(unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[2]);
+            PxPVariable.UnitsData = new DataSet();
+            PxPVariable.UnitsData.ReadXml(PxPVariable.UnitsXMLPath);
         }
         #endregion
 
@@ -658,11 +654,13 @@ namespace PxP
                     name = "PxP";
                     break;
             }
+            if (MapWindowVariable.FlawPieces.Count > 0)
+                DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
         }
         public void Initialize(string unitsXMLPath)
         {
             PxPVariable.UnitsXMLPath = unitsXMLPath;
-            SetUnitToGlobalVariable();
+            InitUnitsData();
         }
         /// <summary>
         /// 卸載Plugin
@@ -702,33 +700,35 @@ namespace PxP
                
                 // Deal flaws  extend other data
                 IList<FlawInfoAddPriority> temp = new List<FlawInfoAddPriority>();
+                double ConverArea = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List Area"]].ItemArray[2].ToString());
+                double ConverCD = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List CD"]].ItemArray[2].ToString());
+                double ConverLength = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List Height"]].ItemArray[2].ToString());
+                double ConverMD = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString());
+                double ConverWidth = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List Width"]].ItemArray[2].ToString());
                 foreach (var i in flaws)
                 {
                     FlawInfoAddPriority f = new FlawInfoAddPriority();
-                    f.Area = (Convert.ToDouble(i.Area) * (PxPVariable.UnitsConversion * PxPVariable.UnitsConversion)).ToString("0.######");
-                    f.CD = Math.Round(i.CD * PxPVariable.UnitsConversion, 2);
+                    f.Area = (Convert.ToDouble(i.Area) * ConverArea).ToString("0.######");
+                    f.CD = Math.Round(i.CD * ConverCD, 2);
                     f.FlawClass = i.FlawClass;
                     f.FlawID = i.FlawID;
                     f.FlawType = i.FlawType;
                     f.Images = i.Images;
-
-                    f.LeftEdge = i.LeftEdge * PxPVariable.UnitsConversion;
-                    f.Length = i.Length * PxPVariable.UnitsConversion;
-                    f.MD = Math.Round(i.MD * PxPVariable.UnitsConversion, 2);
-                    f.RMD = Math.Round(i.MD * PxPVariable.UnitsConversion - PxPVariable.CurrentCutPosition, 2);
-                    f.RCD = Math.Round(i.CD * PxPVariable.UnitsConversion - PxPVariable.CurrentCutPosition, 2);
-                    f.RightEdge = i.RightEdge * PxPVariable.UnitsConversion;
-                    f.Width = Math.Round(i.Width * PxPVariable.UnitsConversion, 4);
+                    f.LeftEdge = i.LeftEdge ;
+                    f.Length = i.Length * ConverLength;
+                    f.MD = Math.Round(i.MD * ConverMD, 2);
+                    f.RMD = Math.Round(i.MD * ConverMD - PxPVariable.CurrentCutPosition, 2);
+                    f.RCD = Math.Round(i.CD * ConverCD - PxPVariable.CurrentCutPosition, 2);
+                    f.RightEdge = i.RightEdge ;
+                    f.Width = Math.Round(i.Width * ConverWidth, 4);
 
                     //Keep origin value
                     f.ORCD = Math.Round(i.CD - PxPVariable.CurrentCutPosition, 6);
                     f.ORMD = Math.Round(i.MD - PxPVariable.CurrentCutPosition, 6);
                     f.OArea = i.Area.ToString("0.######");
                     f.OCD = i.CD;
-                    f.OLeftEdge = i.LeftEdge;
                     f.OLength = i.Length;
                     f.OMD =i.MD;
-                    f.ORightEdge = i.RightEdge;
                     f.OWidth =i.Width;
                     //特別處理Priority
                     int opv;
@@ -742,7 +742,6 @@ namespace PxP
                         int intH = 0;
                         using (SqlConnection cn = new SqlConnection(SystemVariable.DBConnectString))
                         {
-                            MemoryStream ms = null;
                             cn.Open();
                             string QueryStr = "Select iImage From dbo.Jobs T1, dbo.Flaw T2, dbo.Image T3 Where T1.klKey = T2.klJobKey AND T2.pklFlawKey = T3.klFlawKey AND T1.JobID = @JobID AND T2.lFlawId = @FlawID";
                             SqlCommand cmd = new SqlCommand(QueryStr, cn);
@@ -890,7 +889,7 @@ namespace PxP
                 subPiece.Add(f);
             }
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
-            PxPVariable.CurrentCutPosition = md * PxPVariable.UnitsConversion ; //UnitTest
+            PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
 
             if (PxPThreadStatus.IsOnOnline)
             {
@@ -1335,16 +1334,23 @@ namespace PxP
         {
             //MessageBox.Show("OnDoffResult");
             //DebugTool.WriteLog("PxPTab.cs", "OnDoffResult");
-            MapWindowVariable.PieceResult.Add(doffNumber, pass);
-            if (pass)
-                PxPVariable.PassNum++;
-            else
-                PxPVariable.FailNum++;
+            try
+            {
+                MapWindowVariable.PieceResult.Add(doffNumber, pass);
+                if (pass)
+                    PxPVariable.PassNum++;
+                else
+                    PxPVariable.FailNum++;
 
-            PxPVariable.DoffNum = doffNumber;
-            PxPThreadStatus.IsOnDoffResult = true;
-            MapWindowVariable.MapWindowController.SetMapInfoLabel();
-            PxPThreadEvent.Set();
+                PxPVariable.DoffNum = doffNumber;
+                PxPThreadStatus.IsOnDoffResult = true;
+                MapWindowVariable.MapWindowController.SetMapInfoLabel();
+                PxPThreadEvent.Set();
+            }
+            catch (Exception ex)
+            {
+                MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.GeneralError, "OnDoffResult() Error!" + ex.Message, null, 0);
+            }
         }
 
         #endregion
@@ -1356,7 +1362,8 @@ namespace PxP
             //MessageBox.Show("OnPxPConfig");
             //DebugTool.WriteLog("PxPTab.cs", "OnPxPConfig");
             PxPVariable.PxPInfo = info;
-            
+            PxPInfo_OH = info.Height;
+            PxPInfo_OW = info.Width;
 
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
@@ -1423,24 +1430,30 @@ namespace PxP
             //MessageBox.Show("OnUnitsChanged");
             //DebugTool.WriteLog("PxPTab.cs", "OnUnitsChanged");
 
-            SetUnitToGlobalVariable();
+            InitUnitsData();
             /////////////////////////////////////////////////////////////////////////////////////////////////////
             //Change unit already into DataSource : MapWindowVariable.FlawPieces
+            double ConverArea = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List Area"]].ItemArray[2].ToString());
+            double ConverCD = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List CD"]].ItemArray[2].ToString());
+            double ConverLength = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List Height"]].ItemArray[2].ToString());
+            double ConverMD = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString());
+            double ConverWidth = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List Width"]].ItemArray[2].ToString());
             foreach (var flaws in MapWindowVariable.FlawPieces)
             {
                 foreach (var flaw in flaws)
                 {
-                    flaw.CD = flaw.OCD * PxPVariable.UnitsConversion;
-                    flaw.Area = (Convert.ToDouble(flaw.OArea) * (PxPVariable.UnitsConversion * PxPVariable.UnitsConversion)).ToString("0.######");
-                    flaw.LeftEdge = flaw.OLeftEdge * PxPVariable.UnitsConversion;
-                    flaw.Length = flaw.OLength * PxPVariable.UnitsConversion;
-                    flaw.MD = flaw.OMD * PxPVariable.UnitsConversion;
-                    flaw.RCD = flaw.ORCD * PxPVariable.UnitsConversion;
-                    flaw.RightEdge = flaw.ORightEdge * PxPVariable.UnitsConversion;
-                    flaw.RMD = flaw.ORMD * PxPVariable.UnitsConversion;
-                    flaw.Width = flaw.OWidth * PxPVariable.UnitsConversion;
+                    flaw.CD = flaw.OCD * ConverCD;
+                    flaw.Area = (Convert.ToDouble(flaw.OArea) * ConverArea).ToString("0.######");
+                    flaw.Length = flaw.OLength * ConverLength;
+                    flaw.MD = flaw.OMD * ConverMD;
+                    flaw.RCD = flaw.ORCD * ConverCD;
+                    flaw.RMD = flaw.ORMD * ConverMD;
+                    flaw.Width = flaw.OWidth * ConverWidth;
                 }
             }
+            PxPVariable.PxPInfo.Width = PxPInfo_OW * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
+            PxPVariable.PxPInfo.Height = PxPInfo_OH * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+            MapWindowVariable.MapWindowController.SetMapAxis();
             gvFlaw.Refresh();
             PxPThreadStatus.IsOnUnitsChanged = true;
             PxPThreadEvent.Set();
