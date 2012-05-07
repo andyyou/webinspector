@@ -168,6 +168,15 @@ namespace PxP
             Dgv.Columns["FlawType"].Visible = false;
             Dgv.Columns["RMD"].Visible = false;
             Dgv.Columns["RCD"].Visible = false;
+            Dgv.Columns["ORMD"].Visible = false;
+            Dgv.Columns["ORCD"].Visible = false;
+            Dgv.Columns["OArea"].Visible = false;
+            Dgv.Columns["OCD"].Visible = false;
+            Dgv.Columns["OLeftEdge"].Visible = false;
+            Dgv.Columns["OLength"].Visible = false;
+            Dgv.Columns["OMD"].Visible = false;
+            Dgv.Columns["ORightEdge"].Visible = false;
+            Dgv.Columns["OWidth"].Visible = false;
         }       
         //更新頁面,該換圖或Map調整,語系變更,全域變數變更時更新物件資料
         public void PageRefresh()
@@ -467,7 +476,7 @@ namespace PxP
         //Deal History Cut
         public void OnHistoryCut(double MD)
         {
-            MD = Math.Round(MD, 2);
+            MD = Math.Round(MD * PxPVariable.UnitsConversion , 2);
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
@@ -565,6 +574,7 @@ namespace PxP
             unitsData.ReadXml(PxPVariable.UnitsXMLPath);
             PxPVariable.FullUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[0].ToString();
             PxPVariable.AbbreviatedUnitsName = unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[1].ToString();
+            //UnitArray
             PxPVariable.UnitsConversion = Convert.ToDouble(unitsData.Tables["unit"].Rows[flawMapCDIndex].ItemArray[2]);
         }
         #endregion
@@ -689,38 +699,37 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnFlaws");
             try
             {
-                //保存原始資料
-                MapWindowVariable.OriginFlawPieces.Add(flaws);
+               
                 // Deal flaws  extend other data
                 IList<FlawInfoAddPriority> temp = new List<FlawInfoAddPriority>();
                 foreach (var i in flaws)
                 {
                     FlawInfoAddPriority f = new FlawInfoAddPriority();
-                    f.Area = i.Area.ToString("0.######");
-                    f.CD = Math.Round(i.CD,2);
+                    f.Area = (Convert.ToDouble(i.Area) * (PxPVariable.UnitsConversion * PxPVariable.UnitsConversion)).ToString("0.######");
+                    f.CD = Math.Round(i.CD * PxPVariable.UnitsConversion, 2);
                     f.FlawClass = i.FlawClass;
                     f.FlawID = i.FlawID;
                     f.FlawType = i.FlawType;
                     f.Images = i.Images;
-                    
-                    f.LeftEdge = i.LeftEdge;
-                    f.Length = i.Length;
-                    f.MD = Math.Round(i.MD,2);
-                    f.RMD = Math.Round(i.MD - PxPVariable.CurrentCutPosition, 2);
-                    f.RCD = Math.Round(i.CD - PxPVariable.CurrentCutPosition, 2);
-                    f.RightEdge = i.RightEdge;
-                    f.Width = Math.Round(i.Width,4);
+
+                    f.LeftEdge = i.LeftEdge * PxPVariable.UnitsConversion;
+                    f.Length = i.Length * PxPVariable.UnitsConversion;
+                    f.MD = Math.Round(i.MD * PxPVariable.UnitsConversion, 2);
+                    f.RMD = Math.Round(i.MD * PxPVariable.UnitsConversion - PxPVariable.CurrentCutPosition, 2);
+                    f.RCD = Math.Round(i.CD * PxPVariable.UnitsConversion - PxPVariable.CurrentCutPosition, 2);
+                    f.RightEdge = i.RightEdge * PxPVariable.UnitsConversion;
+                    f.Width = Math.Round(i.Width * PxPVariable.UnitsConversion, 4);
 
                     //Keep origin value
-                    f.ORCD = Math.Round(i.CD - PxPVariable.CurrentCutPosition, 2);
-                    f.ORMD = Math.Round(i.MD - PxPVariable.CurrentCutPosition, 2);
+                    f.ORCD = Math.Round(i.CD - PxPVariable.CurrentCutPosition, 6);
+                    f.ORMD = Math.Round(i.MD - PxPVariable.CurrentCutPosition, 6);
                     f.OArea = i.Area.ToString("0.######");
-                    f.OCD = Math.Round(i.CD, 2);
+                    f.OCD = i.CD;
                     f.OLeftEdge = i.LeftEdge;
                     f.OLength = i.Length;
-                    f.OMD = Math.Round(i.MD, 2);
+                    f.OMD =i.MD;
                     f.ORightEdge = i.RightEdge;
-                    f.OWidth = Math.Round(i.Width, 4);
+                    f.OWidth =i.Width;
                     //特別處理Priority
                     int opv;
                     f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
@@ -881,7 +890,7 @@ namespace PxP
                 subPiece.Add(f);
             }
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
-            PxPVariable.CurrentCutPosition = md;
+            PxPVariable.CurrentCutPosition = md * PxPVariable.UnitsConversion ; //UnitTest
 
             if (PxPThreadStatus.IsOnOnline)
             {
@@ -1415,7 +1424,24 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnUnitsChanged");
 
             SetUnitToGlobalVariable();
-
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Change unit already into DataSource : MapWindowVariable.FlawPieces
+            foreach (var flaws in MapWindowVariable.FlawPieces)
+            {
+                foreach (var flaw in flaws)
+                {
+                    flaw.CD = flaw.OCD * PxPVariable.UnitsConversion;
+                    flaw.Area = (Convert.ToDouble(flaw.OArea) * (PxPVariable.UnitsConversion * PxPVariable.UnitsConversion)).ToString("0.######");
+                    flaw.LeftEdge = flaw.OLeftEdge * PxPVariable.UnitsConversion;
+                    flaw.Length = flaw.OLength * PxPVariable.UnitsConversion;
+                    flaw.MD = flaw.OMD * PxPVariable.UnitsConversion;
+                    flaw.RCD = flaw.ORCD * PxPVariable.UnitsConversion;
+                    flaw.RightEdge = flaw.ORightEdge * PxPVariable.UnitsConversion;
+                    flaw.RMD = flaw.ORMD * PxPVariable.UnitsConversion;
+                    flaw.Width = flaw.OWidth * PxPVariable.UnitsConversion;
+                }
+            }
+            gvFlaw.Refresh();
             PxPThreadStatus.IsOnUnitsChanged = true;
             PxPThreadEvent.Set();
         }
