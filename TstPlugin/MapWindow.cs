@@ -21,6 +21,8 @@ namespace PxP
     {
         #region MapWindow Variables
         private NCartesianChart nChartMap;
+        private double MapWidth = 0;
+        private double MapHeight = 0;
         #endregion
 
         #region Conturctor
@@ -118,11 +120,11 @@ namespace PxP
                     point.Labels.Add(f.FlawID);
                     point.Size = new NLength(3, NRelativeUnit.ParentPercentage);
                     point.BorderStyle.Width = new NLength(0, NGraphicsUnit.Millimeter);
-                    //NDataLabelStyle dataLabel = new NDataLabelStyle();
-                    //dataLabel.Format = "<label>";
-                    //point.DataLabelStyles[0] = dataLabel;
-                    //point.DataLabelStyle = dataLabel;
-                    point.DataLabelStyle.Visible = false;
+                    NDataLabelStyle dataLabel = new NDataLabelStyle();
+                    dataLabel.Format = f.FlawID.ToString();
+                    dataLabel.TextStyle.StringFormatStyle.HorzAlign = Nevron.HorzAlign.Center;
+                    point.DataLabelStyle = dataLabel;
+                    point.DataLabelStyle.Visible = false;
                     foreach (DataGridViewRow row in gvFlawClass.Rows)
                     {
                         DataGridViewCheckBoxCell col = (DataGridViewCheckBoxCell)row.Cells[2];
@@ -188,6 +190,7 @@ namespace PxP
                 {
                     btnPrevPiece.Enabled = true;
                 }
+                btnNextPiece.Enabled = false;
             }
         }
         public void ClearMap()
@@ -267,7 +270,7 @@ namespace PxP
             {
                 if (PxPVariable.PxPInfo != null)
                 {
-                    xLinearScale.CustomStep = PxPVariable.PxPInfo.Width / MapWindowVariable.MapCDSet;
+                    xLinearScale.CustomStep = MapWidth / MapWindowVariable.MapCDSet;
                 }
             }
             xLinearScale.CustomStep = Math.Round(xLinearScale.CustomStep, 2);
@@ -285,7 +288,7 @@ namespace PxP
             {
                 if (PxPVariable.PxPInfo != null)
                 {
-                    yLinearScale.CustomStep = PxPVariable.PxPInfo.Height / MapWindowVariable.MapMDSet;
+                    yLinearScale.CustomStep = MapHeight / MapWindowVariable.MapMDSet;
                 }
             }
             yLinearScale.CustomStep = Math.Round(yLinearScale.CustomStep, 2);
@@ -326,7 +329,7 @@ namespace PxP
                 {
                     //MessageBox.Show(hitTestResult.Series.Id.ToString());
                     series.FillStyle = new NColorFillStyle(Color.Red);
-                    //series.DataLabelStyle.Visible = true;
+                    series.DataLabelStyle.Visible = true;
                 }
             }
             else
@@ -341,8 +344,8 @@ namespace PxP
                             point.FillStyle = new NColorFillStyle(System.Drawing.ColorTranslator.FromHtml(row.Cells["Color"].Value.ToString()));
                         }
                     }
-                    
-                    //point.DataLabelStyle.Visible = false;
+
+                    point.DataLabelStyle.Visible = false;
                 }
             }
             nChart.Refresh();
@@ -417,15 +420,17 @@ namespace PxP
         {
             if (PxPVariable.PxPInfo != null)
             {
+                MapWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
+                MapHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
                 if (MapWindowVariable.BottomAxe == 0)
                 {
-                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
-                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, MapWidth), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, MapHeight), true, true);
                 }
                 else
                 {
-                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Height), true, true);
-                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPInfo.Width), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, MapHeight), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, MapWidth), true, true);
                 }
             }
             else

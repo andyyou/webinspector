@@ -397,7 +397,7 @@ namespace PxP
                 sfd.CreatePrompt = false;
                 sfd.OverwritePrompt = true;
                 sfd.AddExtension = true;
-                sfd.CheckFileExists = true;
+                sfd.CheckFileExists = false;
                 sfd.FileName = "Custom-Config-" + DateTime.Now.ToString("yyyy-MM-dd");
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {

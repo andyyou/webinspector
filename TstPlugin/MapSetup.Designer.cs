@@ -43,6 +43,8 @@
             this.cboxButtomAxe = new System.Windows.Forms.ComboBox();
             this.lbBottomAxe = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbSCCD = new System.Windows.Forms.Label();
+            this.lbSCMD = new System.Windows.Forms.Label();
             this.lbSCellCDUnit = new System.Windows.Forms.Label();
             this.lbSCellMDUnit = new System.Windows.Forms.Label();
             this.lbCountSizeCD = new System.Windows.Forms.Label();
@@ -69,8 +71,6 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.bsConfList = new System.Windows.Forms.BindingSource(this.components);
             this.bsFlawTypeName = new System.Windows.Forms.BindingSource(this.components);
-            this.lbSCMD = new System.Windows.Forms.Label();
-            this.lbSCCD = new System.Windows.Forms.Label();
             this.gbImgSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ndImgCols)).BeginInit();
@@ -182,6 +182,7 @@
             this.cbCDInverse.TabIndex = 9;
             this.cbCDInverse.Text = "CD Inverse";
             this.cbCDInverse.UseVisualStyleBackColor = true;
+            this.cbCDInverse.Visible = false;
             // 
             // cbMDInverse
             // 
@@ -192,6 +193,7 @@
             this.cbMDInverse.TabIndex = 8;
             this.cbMDInverse.Text = "MD Inverse";
             this.cbMDInverse.UseVisualStyleBackColor = true;
+            this.cbMDInverse.Visible = false;
             // 
             // cboxButtomAxe
             // 
@@ -234,6 +236,26 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(222, 144);
             this.panel1.TabIndex = 5;
+            // 
+            // lbSCCD
+            // 
+            this.lbSCCD.AutoSize = true;
+            this.lbSCCD.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbSCCD.Location = new System.Drawing.Point(179, 49);
+            this.lbSCCD.Name = "lbSCCD";
+            this.lbSCCD.Size = new System.Drawing.Size(23, 12);
+            this.lbSCCD.TabIndex = 13;
+            this.lbSCCD.Text = "mm";
+            // 
+            // lbSCMD
+            // 
+            this.lbSCMD.AutoSize = true;
+            this.lbSCMD.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lbSCMD.Location = new System.Drawing.Point(179, 22);
+            this.lbSCMD.Name = "lbSCMD";
+            this.lbSCMD.Size = new System.Drawing.Size(23, 12);
+            this.lbSCMD.TabIndex = 12;
+            this.lbSCMD.Text = "mm";
             // 
             // lbSCellCDUnit
             // 
@@ -478,26 +500,6 @@
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // lbSCMD
-            // 
-            this.lbSCMD.AutoSize = true;
-            this.lbSCMD.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.lbSCMD.Location = new System.Drawing.Point(179, 22);
-            this.lbSCMD.Name = "lbSCMD";
-            this.lbSCMD.Size = new System.Drawing.Size(23, 12);
-            this.lbSCMD.TabIndex = 12;
-            this.lbSCMD.Text = "mm";
-            // 
-            // lbSCCD
-            // 
-            this.lbSCCD.AutoSize = true;
-            this.lbSCCD.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.lbSCCD.Location = new System.Drawing.Point(179, 49);
-            this.lbSCCD.Name = "lbSCCD";
-            this.lbSCCD.Size = new System.Drawing.Size(23, 12);
-            this.lbSCCD.TabIndex = 13;
-            this.lbSCCD.Text = "mm";
             // 
             // MapSetup
             // 

@@ -131,6 +131,8 @@ namespace PxP
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
         internal static List<DoffGridColumns> DoffTypeGridSetup;    //紀錄左下角DataGrid欄位左右排序
         internal static Dictionary<int, bool> PieceResult = new Dictionary<int, bool>();          //紀錄每片玻璃的檢測結果
+        internal static double LastMapMDConvertion;                 //紀錄上一次MD單位變更的比例
+        internal static double LastMapCDConvertion;                 //紀錄上一次CD單位變更的比例
         public MapWindowVariable()
         {
             //FlawInfoExtend x = new FlawInfoExtend();
@@ -280,6 +282,8 @@ namespace PxP
                 MapWindowVariable.MDInver = int.Parse(MapVariable.Element("MDInver").Value);
                 MapWindowVariable.CDInver = int.Parse(MapVariable.Element("CDInver").Value);
                 MapWindowVariable.ShowFlag = int.Parse(MapVariable.Element("ShowFlag").Value);
+                MapWindowVariable.LastMapCDConvertion = double.Parse(MapVariable.Element("LastMapCDConvertion").Value);
+                MapWindowVariable.LastMapMDConvertion = double.Parse(MapVariable.Element("LastMapMDConvertion").Value);
                
                 PxPVariable.PageSize = PxPVariable.ImgRowsSet * PxPVariable.ImgColsSet;
             }
@@ -297,6 +301,8 @@ namespace PxP
                 MapWindowVariable.BottomAxe = 0;
                 MapWindowVariable.MDInver = 0;
                 MapWindowVariable.CDInver = 0;
+                MapWindowVariable.LastMapCDConvertion = 1.00;
+                MapWindowVariable.LastMapMDConvertion = 1.00;
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////

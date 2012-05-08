@@ -51,8 +51,6 @@ namespace PxP
         public int ImgPlaceHolderHeight;                  //右下角DataGrid內置放圖片容器寬高
         bool SortSwitch = false;
         bool IsFreeze = false;
-        double PxPInfo_OW;
-        double PxPInfo_OH;
         
         #endregion
         //////////////////////////////////////////////////////////////////////////
@@ -974,6 +972,7 @@ namespace PxP
             
             //Clear Some relative data
             MapWindowVariable.FlawPieces.Clear();
+            MapWindowVariable.CurrentPiece = 0;
             MapWindowVariable.MapWindowController.InitLabel();
             PxPVariable.CurrentCutPosition = 0;
             foreach (var ft in PxPVariable.FlawTypeName)
@@ -1362,8 +1361,6 @@ namespace PxP
             //MessageBox.Show("OnPxPConfig");
             //DebugTool.WriteLog("PxPTab.cs", "OnPxPConfig");
             PxPVariable.PxPInfo = info;
-            PxPInfo_OH = info.Height;
-            PxPInfo_OW = info.Width;
 
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
@@ -1451,10 +1448,30 @@ namespace PxP
                     flaw.Width = flaw.OWidth * ConverWidth;
                 }
             }
-            PxPVariable.PxPInfo.Width = PxPInfo_OW * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
-            PxPVariable.PxPInfo.Height = PxPInfo_OH * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
             MapWindowVariable.MapWindowController.SetMapAxis();
             gvFlaw.Refresh();
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            //自動換算MapSetup裡面的單位
+
+            MapWindowVariable.MapCDSet = MapWindowVariable.MapCDSet * (ConverCD / MapWindowVariable.LastMapCDConvertion);
+            MapWindowVariable.MapMDSet = MapWindowVariable.MapMDSet * (ConverMD / MapWindowVariable.LastMapMDConvertion);
+            //自動存檔config
+            string path = Path.GetDirectoryName(
+             Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
+            string FullFilePath = string.Format("{0}{1}", path, SystemVariable.ConfigFileName);
+            XDocument XDocConf = XDocument.Load(FullFilePath);
+            XElement xCDConvertion = XDocConf.Element("Config").Element("MapVariable").Element("LastMapCDConvertion");
+            xCDConvertion.Value = ConverCD.ToString();
+            XElement xMDConvertion = XDocConf.Element("Config").Element("MapVariable").Element("LastMapMDConvertion");
+            xMDConvertion.Value = ConverMD.ToString();
+            XElement xMD = XDocConf.Element("Config").Element("MapVariable").Element("MapMDSet");
+            xMD.Value = MapWindowVariable.MapCDSet.ToString();
+            XElement xCD = XDocConf.Element("Config").Element("MapVariable").Element("MapCDSet");
+            xCD.Value = MapWindowVariable.MapMDSet.ToString();
+            MapWindowVariable.LastMapCDConvertion = ConverCD;
+            MapWindowVariable.LastMapMDConvertion = ConverMD;
+            XDocConf.Save(FullFilePath);
             PxPThreadStatus.IsOnUnitsChanged = true;
             PxPThreadEvent.Set();
         }
