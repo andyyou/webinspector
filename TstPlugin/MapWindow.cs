@@ -220,6 +220,7 @@ namespace PxP
             }
             //Display
             gvFlawClass.Columns["Count"].Visible = false;
+            
          
         }
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)

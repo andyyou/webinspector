@@ -730,9 +730,12 @@ namespace PxP
                     f.OWidth =i.Width;
                     //特別處理Priority
                     int opv;
-                    f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
+                    if (PxPVariable.SeverityInfo.Count > 0)
+                        f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
+                    else
+                        f.Priority = 0;
                     //特別處理Image 因為讀取歷史資料
-                    SystemVariable.IsReadHistory = true;
+                    //SystemVariable.IsReadHistory = true;
                     if (SystemVariable.IsReadHistory)
                     {
                         bool blnShowImg = false;
@@ -854,7 +857,8 @@ namespace PxP
                         bsFlaw.DataSource = MapWindowVariable.FlawPiece;
                         break;
                     case e_EventID.CUT_SIGNAL:
-                        OnHistoryCut(eventInfo.MD);
+                        if(SystemVariable.IsReadHistory)
+                          OnHistoryCut(eventInfo.MD);
                         break;
                         
                     default: break;
@@ -902,19 +906,6 @@ namespace PxP
                     ft.DoffNum = 0;
                     ft.JobNum = 0 ;
                 }
-                //foreach (var fs in MapWindowVariable.FlawPieces)
-                //{
-                //    foreach (var f in fs)
-                //    {
-                //        foreach (var ft in PxPVariable.FlawTypeName)
-                //        {
-                //            if (ft.FlawType == f.FlawType)
-                //            {
-                //                ft.JobNum++;
-                //            }
-                //        }
-                //    }
-                //}
                 //統計FlawPiece裡面的FlawType 分類統計
                 for (int i = 0; i < MapWindowVariable.FlawPieces.Count(); i++)
                 {
@@ -980,8 +971,16 @@ namespace PxP
                 ft.DoffNum = 0;
                 ft.JobNum = 0;
             }
+            //完整處理完tmpList在丟到PxPVariable.FlawTypeName
             List<FlawTypeNameExtend> tmpList = new List<FlawTypeNameExtend>();
-            tmpList.AddRange(PxPVariable.FlawTypeName);
+            tmpList.AddRange(PxPVariable.FlawTypeName); // 一開始Conf會載入儲存Config中所有的設定到PxPVariable.FlawTypeName
+            //把flawTypes沒有的項目先從tmp移除
+            var DifferencesConfigList = PxPVariable.FlawTypeName.Where(x => !flawTypes.Any(x1 => x1.Name == x.Name && x1.FlawType == x.FlawType));
+            foreach (var r in DifferencesConfigList)
+            {
+                tmpList.Remove(r);
+            }
+            //差異比對 補上conf沒有 但是flawTypes有的 一樣的就跳過不處理
             var DifferencesList = flawTypes.Where(x => !tmpList.Any(x1 => x1.Name == x.Name && x1.FlawType == x.FlawType ));
             foreach (var i in DifferencesList)
             {
