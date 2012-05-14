@@ -857,8 +857,28 @@ namespace PxP
                         bsFlaw.DataSource = MapWindowVariable.FlawPiece;
                         break;
                     case e_EventID.CUT_SIGNAL:
-                        if(SystemVariable.IsReadHistory)
-                          OnHistoryCut(eventInfo.MD);
+                        if (SystemVariable.IsReadHistory)
+                        {
+                            OnHistoryCut(eventInfo.MD);
+                            MapWindowVariable.MapWindowController.SetMapInfoLabel();
+                        }
+                        break;
+                    case e_EventID.DOFF_PASSED :
+                        if (SystemVariable.IsReadHistory)
+                        {
+                            MapWindowVariable.PieceResult[PxPVariable.DoffNum] = true;
+                            PxPVariable.DoffNum++;
+                            PxPVariable.PassNum++ ;
+                        }
+                        break;
+                    case e_EventID.DOFF_FAILED:
+                        if (SystemVariable.IsReadHistory)
+                        {
+                            MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
+                            PxPVariable.DoffNum++;
+                            PxPVariable.FailNum++;
+                           
+                        }
                         break;
                         
                     default: break;
@@ -962,10 +982,16 @@ namespace PxP
             //PxPVariable.FlawTypeName = flawTypes;
             
             //Clear Some relative data
+            MapWindowVariable.Flaws.Clear();
+            MapWindowVariable.FlawPiece.Clear();
             MapWindowVariable.FlawPieces.Clear();
             MapWindowVariable.CurrentPiece = 0;
             MapWindowVariable.MapWindowController.InitLabel();
             PxPVariable.CurrentCutPosition = 0;
+            //開啟歷史資料時重新計算 P/F
+            PxPVariable.DoffNum = 0;
+            PxPVariable.FailNum = 0;
+            PxPVariable.PassNum = 0;
             foreach (var ft in PxPVariable.FlawTypeName)
             {
                 ft.DoffNum = 0;
@@ -1226,6 +1252,14 @@ namespace PxP
                     }
                 }
                 MapWindowVariable.MapWindowController.RefreshGvFlawClass();
+                //最後一次Cut因為沒有DoffResult 所以最後一片直接先算不合格
+                if (PxPVariable.CurrentCutPosition < Math.Round(md,2))
+                {
+                    MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
+                    PxPVariable.DoffNum++;
+                    PxPVariable.FailNum++;
+                }
+                MapWindowVariable.MapWindowController.SetMapInfoLabel();
             }
             SystemVariable.IsReadHistory = false;
             PxPThreadEvent.Set();
@@ -1387,7 +1421,11 @@ namespace PxP
             //MessageBox.Show("OnOpenHistory");
             //DebugTool.WriteLog("PxPTab.cs", "OnOpenHistory");
             MapWindowVariable.Flaws.Clear();
-
+            //開啟歷史資料時重新計算 P/F
+            PxPVariable.DoffNum = 0;
+            PxPVariable.FailNum = 0;
+            PxPVariable.PassNum = 0;
+            SystemVariable.IsReadHistory = true;
             PxPThreadStatus.IsOnOpenHistory = true;
             PxPThreadEvent.Set();
         }

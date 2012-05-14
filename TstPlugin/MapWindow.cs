@@ -180,7 +180,8 @@ namespace PxP
                         point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
                 }
             }
-            nChart.Refresh();
+
+            
             if (drawFlag)
             {
                 MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
@@ -191,7 +192,17 @@ namespace PxP
                     btnPrevPiece.Enabled = true;
                 }
                 btnNextPiece.Enabled = false;
+
             }
+            Color red = Color.FromArgb(255, 150, 150);
+            NGradientFillStyle WallFail = new NGradientFillStyle(red, red);
+            NGradientFillStyle WallPass = new NGradientFillStyle(Color.White, Color.White);
+            if (MapWindowVariable.PieceResult[MapWindowVariable.CurrentPiece - 1])
+                nChartMap.Wall(ChartWallType.Back).FillStyle = WallPass;
+            else
+                nChartMap.Wall(ChartWallType.Back).FillStyle = WallFail;
+
+            nChart.Refresh();
         }
         public void ClearMap()
         {
@@ -561,6 +572,7 @@ namespace PxP
                 btnNextPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
+
             DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             //2012-05-04 小心online時的不良影響 連動功能
             MapWindowThreadStatus.IsChangePiece = true;
@@ -594,6 +606,7 @@ namespace PxP
                 btnPrevPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
+
             DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
