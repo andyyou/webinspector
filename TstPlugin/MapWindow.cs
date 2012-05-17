@@ -21,8 +21,6 @@ namespace PxP
     {
         #region MapWindow Variables
         private NCartesianChart nChartMap;
-        private double MapWidth = 0;
-        private double MapHeight = 0;
         #endregion
 
         #region Conturctor
@@ -30,7 +28,6 @@ namespace PxP
         {
             
             //MessageBox.Show("MapWindow Conturctor");
-            DebugTool.WriteLog("PxPTab.cs", "MapWindow Contructor");
             InitializeComponent();
             SystemVariable.LoadConfig();
             InitNChart(ref nChart, out nChartMap);
@@ -211,7 +208,6 @@ namespace PxP
         }
         public void InitGvFlawClass()
         {
-            DebugTool.WriteLog("MapWindow.cs", "InitGvFlawClass");
 
             //IList<FlawTypeNameExtend> tmpFlawTypes = new List<FlawTypeNameExtend>();
             bsFlawType.DataSource = PxPVariable.FlawTypeName;
@@ -236,7 +232,6 @@ namespace PxP
         }
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)
         {
-            //DebugTool.WriteLog("MapWindow.cs", "SetGvFlawClass");
 
             bsFlawType.DataSource = flawTypes;
         }
@@ -282,7 +277,7 @@ namespace PxP
             {
                 if (PxPVariable.PxPInfo != null)
                 {
-                    xLinearScale.CustomStep = MapWidth / MapWindowVariable.MapCDSet;
+                    xLinearScale.CustomStep = PxPVariable.PxPWidth / MapWindowVariable.MapCDSet;
                 }
             }
             xLinearScale.CustomStep = Math.Round(xLinearScale.CustomStep, 2);
@@ -300,7 +295,7 @@ namespace PxP
             {
                 if (PxPVariable.PxPInfo != null)
                 {
-                    yLinearScale.CustomStep = MapHeight / MapWindowVariable.MapMDSet;
+                    yLinearScale.CustomStep = PxPVariable.PxPHeight / MapWindowVariable.MapMDSet;
                 }
             }
             yLinearScale.CustomStep = Math.Round(yLinearScale.CustomStep, 2);
@@ -432,17 +427,17 @@ namespace PxP
         {
             if (PxPVariable.PxPInfo != null)
             {
-                MapWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
-                MapHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+                PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
+                PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
                 if (MapWindowVariable.BottomAxe == 0)
                 {
-                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, MapWidth), true, true);
-                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, MapHeight), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPWidth), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPHeight), true, true);
                 }
                 else
                 {
-                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, MapHeight), true, true);
-                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, MapWidth), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPHeight), true, true);
+                    nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPWidth), true, true);
                 }
             }
             else

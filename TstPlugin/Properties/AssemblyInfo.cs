@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("TstPlugin")]
+[assembly: AssemblyTitle("PxPPlugin")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Home")]
-[assembly: AssemblyProduct("TstPlugin")]
-[assembly: AssemblyCopyright("Copyright © Home 2012")]
+[assembly: AssemblyCompany("Witriss Inspection Solutions")]
+[assembly: AssemblyProduct("PxPPlugin")]
+[assembly: AssemblyCopyright("Copyright © Witriss Inspection Solutions 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

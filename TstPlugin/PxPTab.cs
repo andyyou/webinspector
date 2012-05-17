@@ -860,6 +860,7 @@ namespace PxP
                         if (SystemVariable.IsReadHistory)
                         {
                             OnHistoryCut(eventInfo.MD);
+                            if (PxPThreadStatus.IsOnOnline)
                             MapWindowVariable.MapWindowController.SetMapInfoLabel();
                         }
                         break;
@@ -900,8 +901,7 @@ namespace PxP
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
-                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPInfo.Height && f.MD > PxPVariable.CurrentCutPosition)
-                    MapWindowVariable.FlawPiece.Add(f);
+                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)                    MapWindowVariable.FlawPiece.Add(f);
             }
             MapWindowVariable.Flaws.Clear();
 
@@ -911,6 +911,13 @@ namespace PxP
                 subPiece.Add(f);
             }
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
+            //先處理統計不使用Pieces 改用SubPiece
+            foreach (var ft in PxPVariable.FlawTypeName)
+            {
+                ft.DoffNum = 0;
+            }
+            
+            ////////////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
 
             if (PxPThreadStatus.IsOnOnline)
@@ -920,48 +927,60 @@ namespace PxP
                 //MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) {  return f2.Width.CompareTo(f1.Width); });
                 bsFlaw.ResetBindings(false);
                 bsFlaw.ResumeBinding();
+
                 //Update left datagridview of flawtype
-                foreach (var ft in PxPVariable.FlawTypeName)
+                foreach (var f in subPiece)
                 {
-                    ft.DoffNum = 0;
-                    ft.JobNum = 0 ;
-                }
-                //統計FlawPiece裡面的FlawType 分類統計
-                for (int i = 0; i < MapWindowVariable.FlawPieces.Count(); i++)
-                {
-                    List<FlawInfoAddPriority> fs = MapWindowVariable.FlawPieces[i];
-                    foreach (var f in fs)
+
+                    foreach (var ft in PxPVariable.FlawTypeName)
                     {
-                        if (i < MapWindowVariable.FlawPieces.Count() - 1)
+                        if (ft.FlawType == f.FlawType)
                         {
-                            foreach (var ft in PxPVariable.FlawTypeName)
+                            if (ft.OfflineJobNum > 0)
                             {
-                                if (ft.FlawType == f.FlawType)
-                                {
-                                    ft.JobNum++;
-                                }
-
+                                ft.JobNum += ft.OfflineJobNum;
+                                ft.OfflineJobNum = 0;
                             }
-                        }
-                        else
-                        {
-                            foreach (var ft in PxPVariable.FlawTypeName)
+                            if (ft.OfflineDoffNum > 0)
                             {
-                                if (ft.FlawType == f.FlawType)
-                                {
-                                    ft.JobNum++;
-                                    ft.DoffNum++;
-                                }
-
+                                ft.DoffNum += ft.OfflineDoffNum;
+                                ft.OfflineDoffNum = 0;
                             }
+                            ft.JobNum++;
+                            ft.DoffNum++;
                         }
                     }
+
                 }
 
+                ///////////
+                int count = MapWindowVariable.FlawPieces.Count;
+                if (count > PxPVariable.PieceLimit)
+                {
+                    for (int i = 0; i < count - PxPVariable.PieceLimit; i++)
+                        MapWindowVariable.FlawPieces[i] = null;
+                }
+                ///////////
                 MapWindowVariable.MapWindowController.RefreshGvFlawClass();
                 PxPThreadStatus.IsOnCut = true;
                 PxPThreadEvent.Set();
             }
+            else
+            {
+                //Update left datagridview of flawtype in offline
+                foreach (var f in subPiece)
+                {
+                    foreach (var ft in PxPVariable.FlawTypeName)
+                    {
+                        if (ft.FlawType == f.FlawType)
+                        {
+                            ft.OfflineDoffNum++;
+                            ft.OfflineJobNum++;
+                        }
+                    }
+                }
+            }
+          
         }
 
 
@@ -1253,7 +1272,7 @@ namespace PxP
                 }
                 MapWindowVariable.MapWindowController.RefreshGvFlawClass();
                 //最後一次Cut因為沒有DoffResult 所以最後一片直接先算不合格
-                if (PxPVariable.CurrentCutPosition < Math.Round(md,2))
+                if (PxPVariable.CurrentCutPosition < (Math.Round(md, 2) * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString())))
                 {
                     MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
                     PxPVariable.DoffNum++;
@@ -1336,7 +1355,7 @@ namespace PxP
                 if (MapWindowVariable.CurrentPiece > 0)
                 {
                     //PxPVariable.FreezPiece = MapWindowVariable.CurrentPiece;
-                    PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+                    //PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                     MapWindowVariable.MapWindowController.SetPieceTotalLabel();
 
                     //bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
@@ -1376,6 +1395,7 @@ namespace PxP
 
                 PxPVariable.DoffNum = doffNumber;
                 PxPThreadStatus.IsOnDoffResult = true;
+                if (PxPThreadStatus.IsOnOnline)
                 MapWindowVariable.MapWindowController.SetMapInfoLabel();
                 PxPThreadEvent.Set();
             }
@@ -1394,7 +1414,8 @@ namespace PxP
             //MessageBox.Show("OnPxPConfig");
             //DebugTool.WriteLog("PxPTab.cs", "OnPxPConfig");
             PxPVariable.PxPInfo = info;
-
+            PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
+            PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
         }
@@ -1804,7 +1825,6 @@ namespace PxP
         public void ProcessOnOnline()
         {
             MessageBox.Show("ProcessOnOnline");
-            DebugTool.WriteLog("PxPTab.cs", "ProcessOnOnline");
             PxPThreadStatus.IsOnOnline = false;
         }*/
 

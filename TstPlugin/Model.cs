@@ -76,6 +76,8 @@ namespace PxP
         internal static IList<ILaneInfo> LaneInfo = new List<ILaneInfo>();
         internal static List<FlawLegend> FlawLegend = new List<FlawLegend>();
         internal static IPxPInfo PxPInfo;
+        internal static double PxPHeight = 0;
+        internal static double PxPWidth = 0;
         internal static string UnitsXMLPath;
         internal static IJobInfo JobInfo;                                                    //工單資訊
         internal static int JobKey;
@@ -252,7 +254,8 @@ namespace PxP
                 }
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////
-
+                XElement XLimit = XSysConf.Element("SystemConfig").Element("Limit");
+                PxPVariable.PieceLimit = int.TryParse(XLimit.Value, out PxPVariable.PieceLimit) ? PxPVariable.PieceLimit : 20;
             }
             catch (Exception ex)
             {
@@ -393,6 +396,8 @@ namespace PxP
         public string Shape { set; get; }
         public int JobNum { set; get; }
         public int DoffNum { set; get; }
+        public int OfflineJobNum { set; get; }
+        public int OfflineDoffNum { set; get; }
     }
     public class Pair
     {

@@ -383,9 +383,9 @@
             // 
             this.lbPageCurrent.BackColor = System.Drawing.Color.Transparent;
             this.lbPageCurrent.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPageCurrent.Location = new System.Drawing.Point(263, 608);
+            this.lbPageCurrent.Location = new System.Drawing.Point(233, 610);
             this.lbPageCurrent.Name = "lbPageCurrent";
-            this.lbPageCurrent.Size = new System.Drawing.Size(52, 23);
+            this.lbPageCurrent.Size = new System.Drawing.Size(82, 23);
             this.lbPageCurrent.TabIndex = 12;
             this.lbPageCurrent.Text = "--";
             this.lbPageCurrent.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -394,9 +394,9 @@
             // 
             this.lbPageTotal.BackColor = System.Drawing.Color.Transparent;
             this.lbPageTotal.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPageTotal.Location = new System.Drawing.Point(335, 608);
+            this.lbPageTotal.Location = new System.Drawing.Point(335, 610);
             this.lbPageTotal.Name = "lbPageTotal";
-            this.lbPageTotal.Size = new System.Drawing.Size(52, 23);
+            this.lbPageTotal.Size = new System.Drawing.Size(82, 23);
             this.lbPageTotal.TabIndex = 11;
             this.lbPageTotal.Text = "--";
             this.lbPageTotal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -416,7 +416,7 @@
             // 
             this.btnNextPiece.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnNextPiece.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnNextPiece.Location = new System.Drawing.Point(406, 603);
+            this.btnNextPiece.Location = new System.Drawing.Point(444, 606);
             this.btnNextPiece.Name = "btnNextPiece";
             this.btnNextPiece.Size = new System.Drawing.Size(30, 30);
             this.btnNextPiece.TabIndex = 9;
@@ -428,7 +428,7 @@
             // 
             this.btnPrevPiece.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnPrevPiece.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnPrevPiece.Location = new System.Drawing.Point(214, 603);
+            this.btnPrevPiece.Location = new System.Drawing.Point(177, 606);
             this.btnPrevPiece.Name = "btnPrevPiece";
             this.btnPrevPiece.Size = new System.Drawing.Size(30, 30);
             this.btnPrevPiece.TabIndex = 8;
