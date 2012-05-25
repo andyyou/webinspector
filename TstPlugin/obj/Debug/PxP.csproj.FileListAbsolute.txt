@@ -14,3 +14,4 @@ C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.SingleFlawControl.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.DrawIconTest.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.FlawForm.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.MapSetup.resources
+C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.GradeSetup.resources

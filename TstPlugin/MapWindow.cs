@@ -656,6 +656,17 @@ namespace PxP
             }
         }
 
+        private void lbTotalScore_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGradeSetting_Click(object sender, EventArgs e)
+        {
+            GradeSetup gs = new GradeSetup();
+            gs.ShowDialog();
+        }
+
        
 
        
