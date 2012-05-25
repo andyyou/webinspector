@@ -35,6 +35,14 @@ namespace PxP
             SetFilterRadioButtons();
             btnPrevPiece.Enabled = false;
             btnNextPiece.Enabled = false;
+
+            //Get grade config list
+            ///////////////////////////////////////////////////////////////////////////////////////
+            //組態檔繫結
+            bsGradConfigList.DataSource = GetGradeConfList();
+            cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
+            //cboxGradeConfigFile.SelectedItem = SystemVariable.ConfigFileName.ToString().Substring(0, SystemVariable.ConfigFileName.ToString().LastIndexOf("."));
+            ///////////////////////////////////////////////////////////////////////////////////////
         }
         ~MapWindow()
         {
@@ -92,7 +100,22 @@ namespace PxP
             SetMapProperty();
             
         }
-        
+        //取得Folder底下所有XML清單
+        List<string> GetGradeConfList()
+        {
+
+            List<string> ConfList = new List<string>();
+            string ConfPath = Path.GetDirectoryName(
+               Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/grade/";
+            DirectoryInfo di = new DirectoryInfo(ConfPath);
+            FileInfo[] rgFiles = di.GetFiles("*.xml");
+
+            foreach (FileInfo fi in rgFiles)
+            {
+                ConfList.Add(fi.Name.ToString().Substring(0, fi.Name.ToString().LastIndexOf(".")));
+            }
+            return ConfList;
+        }
         #endregion
 
         #region Inherit Interface

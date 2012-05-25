@@ -97,7 +97,6 @@
             this.tabGradeSetup.SelectedIndex = 0;
             this.tabGradeSetup.Size = new System.Drawing.Size(527, 451);
             this.tabGradeSetup.TabIndex = 0;
-            this.tabGradeSetup.SelectedIndexChanged += new System.EventHandler(this.tabGradeSetup_SelectedIndexChanged);
             // 
             // tpROI
             // 
@@ -273,7 +272,6 @@
             this.gvRows.RowTemplate.Height = 24;
             this.gvRows.Size = new System.Drawing.Size(240, 200);
             this.gvRows.TabIndex = 7;
-            this.gvRows.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvRows_CellContentClick);
             // 
             // tabGradeSetting
             // 
@@ -298,7 +296,6 @@
             this.tpPoint.TabIndex = 0;
             this.tpPoint.Text = "Point";
             this.tpPoint.UseVisualStyleBackColor = true;
-            this.tpPoint.Click += new System.EventHandler(this.tabPage1_Click);
             // 
             // tpGradeLevel
             // 
@@ -311,7 +308,6 @@
             this.tpGradeLevel.TabIndex = 1;
             this.tpGradeLevel.Text = "Grade";
             this.tpGradeLevel.UseVisualStyleBackColor = true;
-            this.tpGradeLevel.Click += new System.EventHandler(this.tpGradeLevel_Click);
             // 
             // tpPassOrFail
             // 
@@ -418,7 +414,6 @@
             this.gvGrade.RowTemplate.Height = 24;
             this.gvGrade.Size = new System.Drawing.Size(425, 268);
             this.gvGrade.TabIndex = 2;
-            this.gvGrade.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvGrade_CellContentClick);
             // 
             // lbSubPieceOfGrade
             // 

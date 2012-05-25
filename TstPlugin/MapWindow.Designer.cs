@@ -67,10 +67,12 @@
             this.lbGradeConfig = new System.Windows.Forms.Label();
             this.lbTotalScore = new System.Windows.Forms.Label();
             this.lbTotalScoreValue = new System.Windows.Forms.Label();
+            this.bsGradConfigList = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.gvFlawClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlawType)).BeginInit();
             this.tlpMapInfo.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsGradConfigList)).BeginInit();
             this.SuspendLayout();
             // 
             // nChart
@@ -453,6 +455,7 @@
             // 
             // cboxGradeConfigFile
             // 
+            this.cboxGradeConfigFile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxGradeConfigFile.FormattingEnabled = true;
             this.cboxGradeConfigFile.Location = new System.Drawing.Point(132, 157);
             this.cboxGradeConfigFile.Name = "cboxGradeConfigFile";
@@ -522,6 +525,7 @@
             this.tlpMapInfo.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsGradConfigList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -566,6 +570,7 @@
         private System.Windows.Forms.Label lbGradeConfig;
         private System.Windows.Forms.Label lbTotalScore;
         private System.Windows.Forms.Label lbTotalScoreValue;
+        private System.Windows.Forms.BindingSource bsGradConfigList;
 
     }
 }
