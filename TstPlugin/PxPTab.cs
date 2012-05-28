@@ -87,6 +87,7 @@ namespace PxP
 
             SystemVariable.LoadSystemConfig();
             SystemVariable.LoadConfig();
+            SystemVariable.LoadGradeConfig();
 
             InitTableLayout(tlpDoffGrid);
             DefineDataGridView(gvFlaw);
