@@ -88,7 +88,7 @@ namespace PxP
             SystemVariable.LoadSystemConfig();
             SystemVariable.LoadConfig();
             SystemVariable.LoadGradeConfig();
-
+            
             InitTableLayout(tlpDoffGrid);
             DefineDataGridView(gvFlaw);
            
@@ -1008,6 +1008,9 @@ namespace PxP
             MapWindowVariable.CurrentPiece = 0;
             MapWindowVariable.MapWindowController.InitLabel();
             PxPVariable.CurrentCutPosition = 0;
+            //Reload Grade config useing mcs value
+            SystemVariable.LoadGradeConfig();
+
             //開啟歷史資料時重新計算 P/F
             PxPVariable.DoffNum = 0;
             PxPVariable.FailNum = 0;

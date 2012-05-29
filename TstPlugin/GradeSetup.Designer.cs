@@ -28,61 +28,74 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabGradeSetup = new System.Windows.Forms.TabControl();
             this.tpROI = new System.Windows.Forms.TabPage();
+            this.panelCreateGrid = new System.Windows.Forms.Panel();
+            this.gvRows = new System.Windows.Forms.DataGridView();
+            this.gvColumns = new System.Windows.Forms.DataGridView();
+            this.btnCreateGrid = new System.Windows.Forms.Button();
+            this.lbX = new System.Windows.Forms.Label();
+            this.lbRows = new System.Windows.Forms.Label();
+            this.lbColumns = new System.Windows.Forms.Label();
+            this.tboxColumns = new System.Windows.Forms.TextBox();
+            this.tboxRows = new System.Windows.Forms.TextBox();
+            this.gbROIItem = new System.Windows.Forms.GroupBox();
+            this.rbSymmetrical = new System.Windows.Forms.RadioButton();
+            this.rbNoRoi = new System.Windows.Forms.RadioButton();
             this.tpGradeGroup = new System.Windows.Forms.TabPage();
+            this.tabGradeSetting = new System.Windows.Forms.TabControl();
+            this.tpPoint = new System.Windows.Forms.TabPage();
+            this.gbPointSetting = new System.Windows.Forms.GroupBox();
+            this.gvPoint = new System.Windows.Forms.DataGridView();
+            this.lbSubPieceOfPoint = new System.Windows.Forms.Label();
+            this.cboxSubPieceOfPoint = new System.Windows.Forms.ComboBox();
+            this.cboxEnablePTS = new System.Windows.Forms.CheckBox();
+            this.tpGradeLevel = new System.Windows.Forms.TabPage();
+            this.cboxEnableGrade = new System.Windows.Forms.CheckBox();
+            this.gbGradeSetting = new System.Windows.Forms.GroupBox();
+            this.gvGrade = new System.Windows.Forms.DataGridView();
+            this.lbSubPieceOfGrade = new System.Windows.Forms.Label();
+            this.cboxSubPieceOfGrade = new System.Windows.Forms.ComboBox();
+            this.tpPassOrFail = new System.Windows.Forms.TabPage();
+            this.lbScore = new System.Windows.Forms.Label();
+            this.tboxFilterScore = new System.Windows.Forms.TextBox();
+            this.cboxEnablePFS = new System.Windows.Forms.CheckBox();
             this.cboxGradeConfigFile = new System.Windows.Forms.ComboBox();
             this.lbGradeConfig = new System.Windows.Forms.Label();
             this.btnSaveGradeConfigFile = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.gbROIItem = new System.Windows.Forms.GroupBox();
-            this.rbNoRoi = new System.Windows.Forms.RadioButton();
-            this.rbSymmetrical = new System.Windows.Forms.RadioButton();
-            this.panelCreateGrid = new System.Windows.Forms.Panel();
-            this.tboxRows = new System.Windows.Forms.TextBox();
-            this.tboxColumns = new System.Windows.Forms.TextBox();
-            this.lbColumns = new System.Windows.Forms.Label();
-            this.lbRows = new System.Windows.Forms.Label();
-            this.lbX = new System.Windows.Forms.Label();
-            this.btnCreateGrid = new System.Windows.Forms.Button();
-            this.gvColumns = new System.Windows.Forms.DataGridView();
-            this.gvRows = new System.Windows.Forms.DataGridView();
-            this.tabGradeSetting = new System.Windows.Forms.TabControl();
-            this.tpPoint = new System.Windows.Forms.TabPage();
-            this.tpGradeLevel = new System.Windows.Forms.TabPage();
-            this.tpPassOrFail = new System.Windows.Forms.TabPage();
-            this.cboxEnablePTS = new System.Windows.Forms.CheckBox();
-            this.gbPointSetting = new System.Windows.Forms.GroupBox();
-            this.cboxSubPieceOfPoint = new System.Windows.Forms.ComboBox();
-            this.lbSubPieceOfPoint = new System.Windows.Forms.Label();
-            this.gvPoint = new System.Windows.Forms.DataGridView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.cboxEnableGrade = new System.Windows.Forms.CheckBox();
-            this.gvGrade = new System.Windows.Forms.DataGridView();
-            this.lbSubPieceOfGrade = new System.Windows.Forms.Label();
-            this.gbGradeSetting = new System.Windows.Forms.GroupBox();
-            this.cboxSubPieceOfGrade = new System.Windows.Forms.ComboBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.tboxFilterScore = new System.Windows.Forms.TextBox();
-            this.lbScore = new System.Windows.Forms.Label();
+            this.bsGradConfigList = new System.Windows.Forms.BindingSource(this.components);
+            this.bsColumns = new System.Windows.Forms.BindingSource(this.components);
+            this.bsRows = new System.Windows.Forms.BindingSource(this.components);
+            this.bsRoiList = new System.Windows.Forms.BindingSource(this.components);
+            this.bsPointSubPiece = new System.Windows.Forms.BindingSource(this.components);
+            this.bsMarkSubPiece = new System.Windows.Forms.BindingSource(this.components);
             this.tabGradeSetup.SuspendLayout();
             this.tpROI.SuspendLayout();
-            this.tpGradeGroup.SuspendLayout();
-            this.gbROIItem.SuspendLayout();
             this.panelCreateGrid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gvColumns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvRows)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gvColumns)).BeginInit();
+            this.gbROIItem.SuspendLayout();
+            this.tpGradeGroup.SuspendLayout();
             this.tabGradeSetting.SuspendLayout();
             this.tpPoint.SuspendLayout();
-            this.tpGradeLevel.SuspendLayout();
-            this.tpPassOrFail.SuspendLayout();
             this.gbPointSetting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvPoint)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gvGrade)).BeginInit();
+            this.tpGradeLevel.SuspendLayout();
             this.gbGradeSetting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gvGrade)).BeginInit();
+            this.tpPassOrFail.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsGradConfigList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsColumns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsRows)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsRoiList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPointSubPiece)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsMarkSubPiece)).BeginInit();
             this.SuspendLayout();
             // 
             // tabGradeSetup
@@ -111,6 +124,122 @@
             this.tpROI.TabIndex = 0;
             this.tpROI.Text = "ROI Setting";
             // 
+            // panelCreateGrid
+            // 
+            this.panelCreateGrid.Controls.Add(this.gvRows);
+            this.panelCreateGrid.Controls.Add(this.gvColumns);
+            this.panelCreateGrid.Controls.Add(this.btnCreateGrid);
+            this.panelCreateGrid.Controls.Add(this.lbX);
+            this.panelCreateGrid.Controls.Add(this.lbRows);
+            this.panelCreateGrid.Controls.Add(this.lbColumns);
+            this.panelCreateGrid.Controls.Add(this.tboxColumns);
+            this.panelCreateGrid.Controls.Add(this.tboxRows);
+            this.panelCreateGrid.Location = new System.Drawing.Point(8, 113);
+            this.panelCreateGrid.Name = "panelCreateGrid";
+            this.panelCreateGrid.Size = new System.Drawing.Size(504, 305);
+            this.panelCreateGrid.TabIndex = 1;
+            // 
+            // gvRows
+            // 
+            this.gvRows.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvRows.Location = new System.Drawing.Point(256, 71);
+            this.gvRows.Name = "gvRows";
+            this.gvRows.RowTemplate.Height = 24;
+            this.gvRows.Size = new System.Drawing.Size(240, 200);
+            this.gvRows.TabIndex = 7;
+            // 
+            // gvColumns
+            // 
+            this.gvColumns.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvColumns.Location = new System.Drawing.Point(6, 71);
+            this.gvColumns.Name = "gvColumns";
+            this.gvColumns.RowTemplate.Height = 24;
+            this.gvColumns.Size = new System.Drawing.Size(240, 200);
+            this.gvColumns.TabIndex = 6;
+            // 
+            // btnCreateGrid
+            // 
+            this.btnCreateGrid.Location = new System.Drawing.Point(245, 26);
+            this.btnCreateGrid.Name = "btnCreateGrid";
+            this.btnCreateGrid.Size = new System.Drawing.Size(75, 23);
+            this.btnCreateGrid.TabIndex = 5;
+            this.btnCreateGrid.Text = "Create";
+            this.btnCreateGrid.UseVisualStyleBackColor = true;
+            // 
+            // lbX
+            // 
+            this.lbX.AutoSize = true;
+            this.lbX.Location = new System.Drawing.Point(112, 32);
+            this.lbX.Name = "lbX";
+            this.lbX.Size = new System.Drawing.Size(13, 12);
+            this.lbX.TabIndex = 4;
+            this.lbX.Text = "X";
+            // 
+            // lbRows
+            // 
+            this.lbRows.AutoSize = true;
+            this.lbRows.Location = new System.Drawing.Point(130, 8);
+            this.lbRows.Name = "lbRows";
+            this.lbRows.Size = new System.Drawing.Size(31, 12);
+            this.lbRows.TabIndex = 3;
+            this.lbRows.Text = "Rows";
+            // 
+            // lbColumns
+            // 
+            this.lbColumns.AutoSize = true;
+            this.lbColumns.Location = new System.Drawing.Point(5, 8);
+            this.lbColumns.Name = "lbColumns";
+            this.lbColumns.Size = new System.Drawing.Size(47, 12);
+            this.lbColumns.TabIndex = 2;
+            this.lbColumns.Text = "Columns";
+            // 
+            // tboxColumns
+            // 
+            this.tboxColumns.Location = new System.Drawing.Point(5, 27);
+            this.tboxColumns.Name = "tboxColumns";
+            this.tboxColumns.Size = new System.Drawing.Size(100, 22);
+            this.tboxColumns.TabIndex = 1;
+            // 
+            // tboxRows
+            // 
+            this.tboxRows.Location = new System.Drawing.Point(130, 27);
+            this.tboxRows.Name = "tboxRows";
+            this.tboxRows.Size = new System.Drawing.Size(100, 22);
+            this.tboxRows.TabIndex = 0;
+            // 
+            // gbROIItem
+            // 
+            this.gbROIItem.Controls.Add(this.rbSymmetrical);
+            this.gbROIItem.Controls.Add(this.rbNoRoi);
+            this.gbROIItem.Location = new System.Drawing.Point(6, 7);
+            this.gbROIItem.Name = "gbROIItem";
+            this.gbROIItem.Size = new System.Drawing.Size(506, 100);
+            this.gbROIItem.TabIndex = 0;
+            this.gbROIItem.TabStop = false;
+            this.gbROIItem.Text = "ROI Settings";
+            // 
+            // rbSymmetrical
+            // 
+            this.rbSymmetrical.AutoSize = true;
+            this.rbSymmetrical.Location = new System.Drawing.Point(7, 45);
+            this.rbSymmetrical.Name = "rbSymmetrical";
+            this.rbSymmetrical.Size = new System.Drawing.Size(81, 16);
+            this.rbSymmetrical.TabIndex = 1;
+            this.rbSymmetrical.TabStop = true;
+            this.rbSymmetrical.Text = "Symmetrical";
+            this.rbSymmetrical.UseVisualStyleBackColor = true;
+            // 
+            // rbNoRoi
+            // 
+            this.rbNoRoi.AutoSize = true;
+            this.rbNoRoi.Location = new System.Drawing.Point(7, 22);
+            this.rbNoRoi.Name = "rbNoRoi";
+            this.rbNoRoi.Size = new System.Drawing.Size(60, 16);
+            this.rbNoRoi.TabIndex = 0;
+            this.rbNoRoi.TabStop = true;
+            this.rbNoRoi.Text = "No ROI";
+            this.rbNoRoi.UseVisualStyleBackColor = true;
+            // 
             // tpGradeGroup
             // 
             this.tpGradeGroup.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -121,6 +250,182 @@
             this.tpGradeGroup.Size = new System.Drawing.Size(519, 422);
             this.tpGradeGroup.TabIndex = 1;
             this.tpGradeGroup.Text = "Grade Setting";
+            // 
+            // tabGradeSetting
+            // 
+            this.tabGradeSetting.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.tabGradeSetting.Controls.Add(this.tpPoint);
+            this.tabGradeSetting.Controls.Add(this.tpGradeLevel);
+            this.tabGradeSetting.Controls.Add(this.tpPassOrFail);
+            this.tabGradeSetting.Location = new System.Drawing.Point(8, 9);
+            this.tabGradeSetting.Name = "tabGradeSetting";
+            this.tabGradeSetting.SelectedIndex = 0;
+            this.tabGradeSetting.Size = new System.Drawing.Size(505, 410);
+            this.tabGradeSetting.TabIndex = 0;
+            // 
+            // tpPoint
+            // 
+            this.tpPoint.Controls.Add(this.gbPointSetting);
+            this.tpPoint.Controls.Add(this.cboxEnablePTS);
+            this.tpPoint.Location = new System.Drawing.Point(4, 25);
+            this.tpPoint.Name = "tpPoint";
+            this.tpPoint.Padding = new System.Windows.Forms.Padding(3);
+            this.tpPoint.Size = new System.Drawing.Size(497, 381);
+            this.tpPoint.TabIndex = 0;
+            this.tpPoint.Text = "Point";
+            this.tpPoint.UseVisualStyleBackColor = true;
+            // 
+            // gbPointSetting
+            // 
+            this.gbPointSetting.Controls.Add(this.gvPoint);
+            this.gbPointSetting.Controls.Add(this.lbSubPieceOfPoint);
+            this.gbPointSetting.Controls.Add(this.cboxSubPieceOfPoint);
+            this.gbPointSetting.Location = new System.Drawing.Point(13, 36);
+            this.gbPointSetting.Name = "gbPointSetting";
+            this.gbPointSetting.Size = new System.Drawing.Size(472, 340);
+            this.gbPointSetting.TabIndex = 1;
+            this.gbPointSetting.TabStop = false;
+            this.gbPointSetting.Text = "Point setting";
+            // 
+            // gvPoint
+            // 
+            this.gvPoint.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvPoint.Location = new System.Drawing.Point(23, 51);
+            this.gvPoint.Name = "gvPoint";
+            this.gvPoint.RowTemplate.Height = 24;
+            this.gvPoint.Size = new System.Drawing.Size(425, 268);
+            this.gvPoint.TabIndex = 2;
+            // 
+            // lbSubPieceOfPoint
+            // 
+            this.lbSubPieceOfPoint.AutoSize = true;
+            this.lbSubPieceOfPoint.Location = new System.Drawing.Point(22, 24);
+            this.lbSubPieceOfPoint.Name = "lbSubPieceOfPoint";
+            this.lbSubPieceOfPoint.Size = new System.Drawing.Size(47, 12);
+            this.lbSubPieceOfPoint.TabIndex = 1;
+            this.lbSubPieceOfPoint.Text = "SubPiece";
+            // 
+            // cboxSubPieceOfPoint
+            // 
+            this.cboxSubPieceOfPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxSubPieceOfPoint.FormattingEnabled = true;
+            this.cboxSubPieceOfPoint.Location = new System.Drawing.Point(76, 21);
+            this.cboxSubPieceOfPoint.Name = "cboxSubPieceOfPoint";
+            this.cboxSubPieceOfPoint.Size = new System.Drawing.Size(121, 20);
+            this.cboxSubPieceOfPoint.TabIndex = 0;
+            this.cboxSubPieceOfPoint.SelectedIndexChanged += new System.EventHandler(this.cboxSubPieceOfPoint_SelectedIndexChanged);
+            // 
+            // cboxEnablePTS
+            // 
+            this.cboxEnablePTS.AutoSize = true;
+            this.cboxEnablePTS.Location = new System.Drawing.Point(13, 15);
+            this.cboxEnablePTS.Name = "cboxEnablePTS";
+            this.cboxEnablePTS.Size = new System.Drawing.Size(87, 16);
+            this.cboxEnablePTS.TabIndex = 0;
+            this.cboxEnablePTS.Text = "Enable Points";
+            this.cboxEnablePTS.UseVisualStyleBackColor = true;
+            // 
+            // tpGradeLevel
+            // 
+            this.tpGradeLevel.Controls.Add(this.cboxEnableGrade);
+            this.tpGradeLevel.Controls.Add(this.gbGradeSetting);
+            this.tpGradeLevel.Location = new System.Drawing.Point(4, 25);
+            this.tpGradeLevel.Name = "tpGradeLevel";
+            this.tpGradeLevel.Padding = new System.Windows.Forms.Padding(3);
+            this.tpGradeLevel.Size = new System.Drawing.Size(497, 381);
+            this.tpGradeLevel.TabIndex = 1;
+            this.tpGradeLevel.Text = "Grade";
+            this.tpGradeLevel.UseVisualStyleBackColor = true;
+            // 
+            // cboxEnableGrade
+            // 
+            this.cboxEnableGrade.AutoSize = true;
+            this.cboxEnableGrade.Location = new System.Drawing.Point(13, 15);
+            this.cboxEnableGrade.Name = "cboxEnableGrade";
+            this.cboxEnableGrade.Size = new System.Drawing.Size(87, 16);
+            this.cboxEnableGrade.TabIndex = 2;
+            this.cboxEnableGrade.Text = "Enable Grade";
+            this.cboxEnableGrade.UseVisualStyleBackColor = true;
+            // 
+            // gbGradeSetting
+            // 
+            this.gbGradeSetting.Controls.Add(this.gvGrade);
+            this.gbGradeSetting.Controls.Add(this.lbSubPieceOfGrade);
+            this.gbGradeSetting.Controls.Add(this.cboxSubPieceOfGrade);
+            this.gbGradeSetting.Location = new System.Drawing.Point(13, 36);
+            this.gbGradeSetting.Name = "gbGradeSetting";
+            this.gbGradeSetting.Size = new System.Drawing.Size(472, 340);
+            this.gbGradeSetting.TabIndex = 3;
+            this.gbGradeSetting.TabStop = false;
+            this.gbGradeSetting.Text = "Grade setting";
+            // 
+            // gvGrade
+            // 
+            this.gvGrade.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvGrade.Location = new System.Drawing.Point(23, 51);
+            this.gvGrade.Name = "gvGrade";
+            this.gvGrade.RowTemplate.Height = 24;
+            this.gvGrade.Size = new System.Drawing.Size(425, 268);
+            this.gvGrade.TabIndex = 2;
+            this.gvGrade.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvGrade_CellEndEdit);
+            // 
+            // lbSubPieceOfGrade
+            // 
+            this.lbSubPieceOfGrade.AutoSize = true;
+            this.lbSubPieceOfGrade.Location = new System.Drawing.Point(22, 24);
+            this.lbSubPieceOfGrade.Name = "lbSubPieceOfGrade";
+            this.lbSubPieceOfGrade.Size = new System.Drawing.Size(47, 12);
+            this.lbSubPieceOfGrade.TabIndex = 1;
+            this.lbSubPieceOfGrade.Text = "SubPiece";
+            // 
+            // cboxSubPieceOfGrade
+            // 
+            this.cboxSubPieceOfGrade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxSubPieceOfGrade.FormattingEnabled = true;
+            this.cboxSubPieceOfGrade.Location = new System.Drawing.Point(76, 21);
+            this.cboxSubPieceOfGrade.Name = "cboxSubPieceOfGrade";
+            this.cboxSubPieceOfGrade.Size = new System.Drawing.Size(121, 20);
+            this.cboxSubPieceOfGrade.TabIndex = 0;
+            this.cboxSubPieceOfGrade.SelectedIndexChanged += new System.EventHandler(this.cboxSubPieceOfGrade_SelectedIndexChanged);
+            // 
+            // tpPassOrFail
+            // 
+            this.tpPassOrFail.Controls.Add(this.lbScore);
+            this.tpPassOrFail.Controls.Add(this.tboxFilterScore);
+            this.tpPassOrFail.Controls.Add(this.cboxEnablePFS);
+            this.tpPassOrFail.Location = new System.Drawing.Point(4, 25);
+            this.tpPassOrFail.Name = "tpPassOrFail";
+            this.tpPassOrFail.Padding = new System.Windows.Forms.Padding(3);
+            this.tpPassOrFail.Size = new System.Drawing.Size(497, 381);
+            this.tpPassOrFail.TabIndex = 2;
+            this.tpPassOrFail.Text = "Pass / Fail";
+            this.tpPassOrFail.UseVisualStyleBackColor = true;
+            // 
+            // lbScore
+            // 
+            this.lbScore.AutoSize = true;
+            this.lbScore.Location = new System.Drawing.Point(13, 46);
+            this.lbScore.Name = "lbScore";
+            this.lbScore.Size = new System.Drawing.Size(31, 12);
+            this.lbScore.TabIndex = 2;
+            this.lbScore.Text = "Score";
+            // 
+            // tboxFilterScore
+            // 
+            this.tboxFilterScore.Location = new System.Drawing.Point(50, 41);
+            this.tboxFilterScore.Name = "tboxFilterScore";
+            this.tboxFilterScore.Size = new System.Drawing.Size(100, 22);
+            this.tboxFilterScore.TabIndex = 1;
+            // 
+            // cboxEnablePFS
+            // 
+            this.cboxEnablePFS.AutoSize = true;
+            this.cboxEnablePFS.Location = new System.Drawing.Point(13, 15);
+            this.cboxEnablePFS.Name = "cboxEnablePFS";
+            this.cboxEnablePFS.Size = new System.Drawing.Size(169, 16);
+            this.cboxEnablePFS.TabIndex = 0;
+            this.cboxEnablePFS.Text = "Enable Pass Or Fail Filter Score";
+            this.cboxEnablePFS.UseVisualStyleBackColor = true;
             // 
             // cboxGradeConfigFile
             // 
@@ -147,6 +452,7 @@
             this.btnSaveGradeConfigFile.TabIndex = 3;
             this.btnSaveGradeConfigFile.Text = "Save";
             this.btnSaveGradeConfigFile.UseVisualStyleBackColor = true;
+            this.btnSaveGradeConfigFile.Click += new System.EventHandler(this.btnSaveGradeConfigFile_Click);
             // 
             // btnCancel
             // 
@@ -156,219 +462,7 @@
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // gbROIItem
-            // 
-            this.gbROIItem.Controls.Add(this.rbSymmetrical);
-            this.gbROIItem.Controls.Add(this.rbNoRoi);
-            this.gbROIItem.Location = new System.Drawing.Point(6, 7);
-            this.gbROIItem.Name = "gbROIItem";
-            this.gbROIItem.Size = new System.Drawing.Size(506, 100);
-            this.gbROIItem.TabIndex = 0;
-            this.gbROIItem.TabStop = false;
-            this.gbROIItem.Text = "ROI Settings";
-            // 
-            // rbNoRoi
-            // 
-            this.rbNoRoi.AutoSize = true;
-            this.rbNoRoi.Location = new System.Drawing.Point(7, 22);
-            this.rbNoRoi.Name = "rbNoRoi";
-            this.rbNoRoi.Size = new System.Drawing.Size(60, 16);
-            this.rbNoRoi.TabIndex = 0;
-            this.rbNoRoi.TabStop = true;
-            this.rbNoRoi.Text = "No ROI";
-            this.rbNoRoi.UseVisualStyleBackColor = true;
-            // 
-            // rbSymmetrical
-            // 
-            this.rbSymmetrical.AutoSize = true;
-            this.rbSymmetrical.Location = new System.Drawing.Point(7, 45);
-            this.rbSymmetrical.Name = "rbSymmetrical";
-            this.rbSymmetrical.Size = new System.Drawing.Size(81, 16);
-            this.rbSymmetrical.TabIndex = 1;
-            this.rbSymmetrical.TabStop = true;
-            this.rbSymmetrical.Text = "Symmetrical";
-            this.rbSymmetrical.UseVisualStyleBackColor = true;
-            // 
-            // panelCreateGrid
-            // 
-            this.panelCreateGrid.Controls.Add(this.gvRows);
-            this.panelCreateGrid.Controls.Add(this.gvColumns);
-            this.panelCreateGrid.Controls.Add(this.btnCreateGrid);
-            this.panelCreateGrid.Controls.Add(this.lbX);
-            this.panelCreateGrid.Controls.Add(this.lbRows);
-            this.panelCreateGrid.Controls.Add(this.lbColumns);
-            this.panelCreateGrid.Controls.Add(this.tboxColumns);
-            this.panelCreateGrid.Controls.Add(this.tboxRows);
-            this.panelCreateGrid.Location = new System.Drawing.Point(8, 113);
-            this.panelCreateGrid.Name = "panelCreateGrid";
-            this.panelCreateGrid.Size = new System.Drawing.Size(504, 305);
-            this.panelCreateGrid.TabIndex = 1;
-            // 
-            // tboxRows
-            // 
-            this.tboxRows.Location = new System.Drawing.Point(130, 27);
-            this.tboxRows.Name = "tboxRows";
-            this.tboxRows.Size = new System.Drawing.Size(100, 22);
-            this.tboxRows.TabIndex = 0;
-            // 
-            // tboxColumns
-            // 
-            this.tboxColumns.Location = new System.Drawing.Point(5, 27);
-            this.tboxColumns.Name = "tboxColumns";
-            this.tboxColumns.Size = new System.Drawing.Size(100, 22);
-            this.tboxColumns.TabIndex = 1;
-            // 
-            // lbColumns
-            // 
-            this.lbColumns.AutoSize = true;
-            this.lbColumns.Location = new System.Drawing.Point(5, 8);
-            this.lbColumns.Name = "lbColumns";
-            this.lbColumns.Size = new System.Drawing.Size(47, 12);
-            this.lbColumns.TabIndex = 2;
-            this.lbColumns.Text = "Columns";
-            // 
-            // lbRows
-            // 
-            this.lbRows.AutoSize = true;
-            this.lbRows.Location = new System.Drawing.Point(130, 8);
-            this.lbRows.Name = "lbRows";
-            this.lbRows.Size = new System.Drawing.Size(31, 12);
-            this.lbRows.TabIndex = 3;
-            this.lbRows.Text = "Rows";
-            // 
-            // lbX
-            // 
-            this.lbX.AutoSize = true;
-            this.lbX.Location = new System.Drawing.Point(112, 32);
-            this.lbX.Name = "lbX";
-            this.lbX.Size = new System.Drawing.Size(13, 12);
-            this.lbX.TabIndex = 4;
-            this.lbX.Text = "X";
-            // 
-            // btnCreateGrid
-            // 
-            this.btnCreateGrid.Location = new System.Drawing.Point(245, 26);
-            this.btnCreateGrid.Name = "btnCreateGrid";
-            this.btnCreateGrid.Size = new System.Drawing.Size(75, 23);
-            this.btnCreateGrid.TabIndex = 5;
-            this.btnCreateGrid.Text = "Create";
-            this.btnCreateGrid.UseVisualStyleBackColor = true;
-            // 
-            // gvColumns
-            // 
-            this.gvColumns.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvColumns.Location = new System.Drawing.Point(6, 71);
-            this.gvColumns.Name = "gvColumns";
-            this.gvColumns.RowTemplate.Height = 24;
-            this.gvColumns.Size = new System.Drawing.Size(240, 200);
-            this.gvColumns.TabIndex = 6;
-            // 
-            // gvRows
-            // 
-            this.gvRows.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvRows.Location = new System.Drawing.Point(256, 71);
-            this.gvRows.Name = "gvRows";
-            this.gvRows.RowTemplate.Height = 24;
-            this.gvRows.Size = new System.Drawing.Size(240, 200);
-            this.gvRows.TabIndex = 7;
-            // 
-            // tabGradeSetting
-            // 
-            this.tabGradeSetting.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabGradeSetting.Controls.Add(this.tpPoint);
-            this.tabGradeSetting.Controls.Add(this.tpGradeLevel);
-            this.tabGradeSetting.Controls.Add(this.tpPassOrFail);
-            this.tabGradeSetting.Location = new System.Drawing.Point(8, 9);
-            this.tabGradeSetting.Name = "tabGradeSetting";
-            this.tabGradeSetting.SelectedIndex = 0;
-            this.tabGradeSetting.Size = new System.Drawing.Size(505, 410);
-            this.tabGradeSetting.TabIndex = 0;
-            // 
-            // tpPoint
-            // 
-            this.tpPoint.Controls.Add(this.gbPointSetting);
-            this.tpPoint.Controls.Add(this.cboxEnablePTS);
-            this.tpPoint.Location = new System.Drawing.Point(4, 25);
-            this.tpPoint.Name = "tpPoint";
-            this.tpPoint.Padding = new System.Windows.Forms.Padding(3);
-            this.tpPoint.Size = new System.Drawing.Size(497, 381);
-            this.tpPoint.TabIndex = 0;
-            this.tpPoint.Text = "Point";
-            this.tpPoint.UseVisualStyleBackColor = true;
-            // 
-            // tpGradeLevel
-            // 
-            this.tpGradeLevel.Controls.Add(this.cboxEnableGrade);
-            this.tpGradeLevel.Controls.Add(this.gbGradeSetting);
-            this.tpGradeLevel.Location = new System.Drawing.Point(4, 25);
-            this.tpGradeLevel.Name = "tpGradeLevel";
-            this.tpGradeLevel.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGradeLevel.Size = new System.Drawing.Size(497, 381);
-            this.tpGradeLevel.TabIndex = 1;
-            this.tpGradeLevel.Text = "Grade";
-            this.tpGradeLevel.UseVisualStyleBackColor = true;
-            // 
-            // tpPassOrFail
-            // 
-            this.tpPassOrFail.Controls.Add(this.lbScore);
-            this.tpPassOrFail.Controls.Add(this.tboxFilterScore);
-            this.tpPassOrFail.Controls.Add(this.checkBox1);
-            this.tpPassOrFail.Location = new System.Drawing.Point(4, 25);
-            this.tpPassOrFail.Name = "tpPassOrFail";
-            this.tpPassOrFail.Padding = new System.Windows.Forms.Padding(3);
-            this.tpPassOrFail.Size = new System.Drawing.Size(497, 381);
-            this.tpPassOrFail.TabIndex = 2;
-            this.tpPassOrFail.Text = "Pass / Fail";
-            this.tpPassOrFail.UseVisualStyleBackColor = true;
-            // 
-            // cboxEnablePTS
-            // 
-            this.cboxEnablePTS.AutoSize = true;
-            this.cboxEnablePTS.Location = new System.Drawing.Point(13, 15);
-            this.cboxEnablePTS.Name = "cboxEnablePTS";
-            this.cboxEnablePTS.Size = new System.Drawing.Size(87, 16);
-            this.cboxEnablePTS.TabIndex = 0;
-            this.cboxEnablePTS.Text = "Enable Points";
-            this.cboxEnablePTS.UseVisualStyleBackColor = true;
-            // 
-            // gbPointSetting
-            // 
-            this.gbPointSetting.Controls.Add(this.gvPoint);
-            this.gbPointSetting.Controls.Add(this.lbSubPieceOfPoint);
-            this.gbPointSetting.Controls.Add(this.cboxSubPieceOfPoint);
-            this.gbPointSetting.Location = new System.Drawing.Point(13, 36);
-            this.gbPointSetting.Name = "gbPointSetting";
-            this.gbPointSetting.Size = new System.Drawing.Size(472, 340);
-            this.gbPointSetting.TabIndex = 1;
-            this.gbPointSetting.TabStop = false;
-            this.gbPointSetting.Text = "Point setting";
-            // 
-            // cboxSubPieceOfPoint
-            // 
-            this.cboxSubPieceOfPoint.FormattingEnabled = true;
-            this.cboxSubPieceOfPoint.Location = new System.Drawing.Point(76, 21);
-            this.cboxSubPieceOfPoint.Name = "cboxSubPieceOfPoint";
-            this.cboxSubPieceOfPoint.Size = new System.Drawing.Size(121, 20);
-            this.cboxSubPieceOfPoint.TabIndex = 0;
-            // 
-            // lbSubPieceOfPoint
-            // 
-            this.lbSubPieceOfPoint.AutoSize = true;
-            this.lbSubPieceOfPoint.Location = new System.Drawing.Point(22, 24);
-            this.lbSubPieceOfPoint.Name = "lbSubPieceOfPoint";
-            this.lbSubPieceOfPoint.Size = new System.Drawing.Size(47, 12);
-            this.lbSubPieceOfPoint.TabIndex = 1;
-            this.lbSubPieceOfPoint.Text = "SubPiece";
-            // 
-            // gvPoint
-            // 
-            this.gvPoint.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvPoint.Location = new System.Drawing.Point(23, 51);
-            this.gvPoint.Name = "gvPoint";
-            this.gvPoint.RowTemplate.Height = 24;
-            this.gvPoint.Size = new System.Drawing.Size(425, 268);
-            this.gvPoint.TabIndex = 2;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // dataGridView1
             // 
@@ -396,80 +490,6 @@
             this.comboBox2.Size = new System.Drawing.Size(121, 20);
             this.comboBox2.TabIndex = 0;
             // 
-            // cboxEnableGrade
-            // 
-            this.cboxEnableGrade.AutoSize = true;
-            this.cboxEnableGrade.Location = new System.Drawing.Point(13, 15);
-            this.cboxEnableGrade.Name = "cboxEnableGrade";
-            this.cboxEnableGrade.Size = new System.Drawing.Size(87, 16);
-            this.cboxEnableGrade.TabIndex = 2;
-            this.cboxEnableGrade.Text = "Enable Grade";
-            this.cboxEnableGrade.UseVisualStyleBackColor = true;
-            // 
-            // gvGrade
-            // 
-            this.gvGrade.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvGrade.Location = new System.Drawing.Point(23, 51);
-            this.gvGrade.Name = "gvGrade";
-            this.gvGrade.RowTemplate.Height = 24;
-            this.gvGrade.Size = new System.Drawing.Size(425, 268);
-            this.gvGrade.TabIndex = 2;
-            // 
-            // lbSubPieceOfGrade
-            // 
-            this.lbSubPieceOfGrade.AutoSize = true;
-            this.lbSubPieceOfGrade.Location = new System.Drawing.Point(22, 24);
-            this.lbSubPieceOfGrade.Name = "lbSubPieceOfGrade";
-            this.lbSubPieceOfGrade.Size = new System.Drawing.Size(47, 12);
-            this.lbSubPieceOfGrade.TabIndex = 1;
-            this.lbSubPieceOfGrade.Text = "SubPiece";
-            // 
-            // gbGradeSetting
-            // 
-            this.gbGradeSetting.Controls.Add(this.gvGrade);
-            this.gbGradeSetting.Controls.Add(this.lbSubPieceOfGrade);
-            this.gbGradeSetting.Controls.Add(this.cboxSubPieceOfGrade);
-            this.gbGradeSetting.Location = new System.Drawing.Point(13, 36);
-            this.gbGradeSetting.Name = "gbGradeSetting";
-            this.gbGradeSetting.Size = new System.Drawing.Size(472, 340);
-            this.gbGradeSetting.TabIndex = 3;
-            this.gbGradeSetting.TabStop = false;
-            this.gbGradeSetting.Text = "Grade setting";
-            // 
-            // cboxSubPieceOfGrade
-            // 
-            this.cboxSubPieceOfGrade.FormattingEnabled = true;
-            this.cboxSubPieceOfGrade.Location = new System.Drawing.Point(76, 21);
-            this.cboxSubPieceOfGrade.Name = "cboxSubPieceOfGrade";
-            this.cboxSubPieceOfGrade.Size = new System.Drawing.Size(121, 20);
-            this.cboxSubPieceOfGrade.TabIndex = 0;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(13, 15);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(169, 16);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Enable Pass Or Fail Filter Score";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // tboxFilterScore
-            // 
-            this.tboxFilterScore.Location = new System.Drawing.Point(50, 41);
-            this.tboxFilterScore.Name = "tboxFilterScore";
-            this.tboxFilterScore.Size = new System.Drawing.Size(100, 22);
-            this.tboxFilterScore.TabIndex = 1;
-            // 
-            // lbScore
-            // 
-            this.lbScore.AutoSize = true;
-            this.lbScore.Location = new System.Drawing.Point(13, 46);
-            this.lbScore.Name = "lbScore";
-            this.lbScore.Size = new System.Drawing.Size(31, 12);
-            this.lbScore.TabIndex = 2;
-            this.lbScore.Text = "Score";
-            // 
             // GradeSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -485,27 +505,33 @@
             this.Text = "GradeSetup";
             this.tabGradeSetup.ResumeLayout(false);
             this.tpROI.ResumeLayout(false);
-            this.tpGradeGroup.ResumeLayout(false);
-            this.gbROIItem.ResumeLayout(false);
-            this.gbROIItem.PerformLayout();
             this.panelCreateGrid.ResumeLayout(false);
             this.panelCreateGrid.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gvColumns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvRows)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gvColumns)).EndInit();
+            this.gbROIItem.ResumeLayout(false);
+            this.gbROIItem.PerformLayout();
+            this.tpGradeGroup.ResumeLayout(false);
             this.tabGradeSetting.ResumeLayout(false);
             this.tpPoint.ResumeLayout(false);
             this.tpPoint.PerformLayout();
-            this.tpGradeLevel.ResumeLayout(false);
-            this.tpGradeLevel.PerformLayout();
-            this.tpPassOrFail.ResumeLayout(false);
-            this.tpPassOrFail.PerformLayout();
             this.gbPointSetting.ResumeLayout(false);
             this.gbPointSetting.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvPoint)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gvGrade)).EndInit();
+            this.tpGradeLevel.ResumeLayout(false);
+            this.tpGradeLevel.PerformLayout();
             this.gbGradeSetting.ResumeLayout(false);
             this.gbGradeSetting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gvGrade)).EndInit();
+            this.tpPassOrFail.ResumeLayout(false);
+            this.tpPassOrFail.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsGradConfigList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsColumns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsRows)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsRoiList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPointSubPiece)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsMarkSubPiece)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -549,8 +575,14 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cboxEnablePFS;
         private System.Windows.Forms.Label lbScore;
         private System.Windows.Forms.TextBox tboxFilterScore;
+        private System.Windows.Forms.BindingSource bsGradConfigList;
+        private System.Windows.Forms.BindingSource bsColumns;
+        private System.Windows.Forms.BindingSource bsRows;
+        private System.Windows.Forms.BindingSource bsRoiList;
+        private System.Windows.Forms.BindingSource bsPointSubPiece;
+        private System.Windows.Forms.BindingSource bsMarkSubPiece;
     }
 }

@@ -86,7 +86,20 @@
     <Compile Include="MapSetup.Designer.cs">
       <DependentUpon>MapSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model.cs" />
+    <Compile Include="Model\DoffGridColumns.cs" />
+    <Compile Include="Model\Extend.cs" />
+    <Compile Include="Model\FlawInfoAddPriority.cs" />
+    <Compile Include="Model\FlawTypeNameExtend.cs" />
+    <Compile Include="Model\GradeVariable.cs" />
+    <Compile Include="Model\MapWindowThreadStatus.cs" />
+    <Compile Include="Model\MapWindowVariable.cs" />
+    <Compile Include="Model\MarkGrade.cs" />
+    <Compile Include="Model\Pair.cs" />
+    <Compile Include="Model\PointGrade.cs" />
+    <Compile Include="Model\PxPThreadStatus.cs" />
+    <Compile Include="Model\PxPVariable.cs" />
+    <Compile Include="Model\RoiGrade.cs" />
+    <Compile Include="Model\SystemVariable.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
