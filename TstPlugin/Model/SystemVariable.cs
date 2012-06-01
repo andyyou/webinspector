@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using WRPlugIn;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace PxP
 {
@@ -101,6 +102,7 @@ namespace PxP
             XDocument XD2 = XDocument.Load(FullFilePath);
             return XD2;
         }
+       
         //載入/sys_conf/sys.xml  ==> 根據有定義語系資料再變更一次參數
         internal static void LoadSystemConfig()
         {
@@ -278,10 +280,10 @@ namespace PxP
             //載入 Grade setting > Point xml default value
             try
             {
-                XElement XPointEnable = XGrade.Element("GradeConfig").Element("Grade").Element("Point").Element("Enable");
+                XElement XPointEnable = XGrade.Element("GradeConfig").Element("Grade").Element("PointGrade").Element("Enable");
                 GradeVariable.IsPointEnable = (int.Parse(XPointEnable.Value) == 1) ? true : false;
 
-                IEnumerable<XElement> XPointSubPieces = XGrade.Element("GradeConfig").Element("Grade").Element("Point").Elements("SubPiece");
+                IEnumerable<XElement> XPointSubPieces = XGrade.Element("GradeConfig").Element("Grade").Element("PointGrade").Elements("SubPiece");
                 GradeVariable.PointSubPieces.Clear();
                 
                 //1. 先加入一筆ALL的SubPiece 指全部使用相同設定
@@ -360,9 +362,29 @@ namespace PxP
                 MarkSubPiece allsame = new MarkSubPiece();
                 allsame.Name = "ALL";
                 allsame.Grades = new List<MarkGrade>();
-                MarkGrade tmpMG = new MarkGrade();
-                tmpMG.GradeName = Chr(65).ToString();
-                allsame.Grades.Add(tmpMG);
+                foreach (var i in XMarkGradeSubPieces)
+                {
+                    int asc = 65;
+                    Regex rgx = new Regex("^[A-Z]*$");
+                    if (i.Attribute("Name").Value == allsame.Name)
+                    {
+                        foreach (var j in i.Elements("GradeRow"))
+                        {
+                            MarkGrade tmp = new MarkGrade();
+                            tmp.GradeName = rgx.IsMatch(j.Attribute("Id").Value.ToString()) ? j.Attribute("Id").Value : Chr(asc).ToString();
+                            asc++;
+                            tmp.Score = int.Parse(j.Value);
+                            allsame.Grades.Add(tmp);
+                        }
+                        
+                    }
+                }
+                if (allsame.Grades.Count <= 0)
+                {
+                    MarkGrade tmpMG = new MarkGrade();
+                    tmpMG.GradeName = Chr(65).ToString();
+                    allsame.Grades.Add(tmpMG);
+                }
                 GradeVariable.MarkGradeSubPieces.Add(allsame);
 
                 //2. 用Rows和Columns造出所有欄位再去xml補資料
@@ -373,31 +395,37 @@ namespace PxP
                         MarkSubPiece tmpMarkSubPiece = new MarkSubPiece();
                         tmpMarkSubPiece.Name = "ROI-" + r.Name + c.Name;
                         tmpMarkSubPiece.Grades = new List<MarkGrade>();
-                        MarkGrade tmg = new MarkGrade();
-                        tmg.GradeName = Chr(65).ToString();
-                        tmpMarkSubPiece.Grades.Add(tmg);
+                        foreach (var i in XMarkGradeSubPieces)
+                        {
+                            if (i.Attribute("Name").Value == tmpMarkSubPiece.Name)
+                            {
+                                //3. 補上XML有記錄的資料
+                                int asc = 65;
+                                Regex rgx = new Regex("^[A-Z]*$");
+                                foreach (var j in i.Elements("GradeRow"))
+                                {
+                                    MarkGrade tmp = new MarkGrade();
+
+                                    tmp.GradeName = rgx.IsMatch(j.Attribute("Id").Value.ToString()) ? j.Attribute("Id").Value : Chr(asc).ToString();
+                                    asc++;
+                                    tmp.Score = int.Parse(j.Value);
+                                    tmpMarkSubPiece.Grades.Add(tmp);
+                                }
+                                //4. 如果沒有新增一筆A
+                                if (tmpMarkSubPiece.Grades.Count <= 0)
+                                {
+                                    MarkGrade tmg = new MarkGrade();
+                                    tmg.GradeName = Chr(65).ToString();
+                                    tmpMarkSubPiece.Grades.Add(tmg);
+                                }
+
+                            }
+                        }
+                        
                         GradeVariable.MarkGradeSubPieces.Add(tmpMarkSubPiece);
                     }
                 }
-                //3. 補上XML有記錄的資料到GradeVariable.PointSubPieses
-                //foreach (var xsp in XPointSubPieces)
-                //{
-                //    foreach (var gsp in GradeVariable.PointSubPieses)
-                //    {
-                //        if (gsp.Name == xsp.Attribute("Name").Value)
-                //        {
-                //            foreach (var g in gsp.Grades)
-                //            {
-                //                foreach (var ft in xsp.Elements("FlawType"))
-                //                {
-                //                    if (g.ClassId == int.Parse(ft.Attribute("Id").Value))
-                //                        g.Score = int.Parse(ft.Value);
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
+               
             }
             catch (Exception ex)
             {

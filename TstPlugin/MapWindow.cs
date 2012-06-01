@@ -657,8 +657,6 @@ namespace PxP
                 e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(e.Value.ToString());
 
         }
-        #endregion
-
         private void gvFlawClass_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             foreach (DataGridViewRow row in gvFlawClass.Rows)
@@ -689,6 +687,15 @@ namespace PxP
             GradeSetup gs = new GradeSetup();
             gs.ShowDialog();
         }
+
+        private void cboxGradeConfigFile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SystemVariable.GradeConfigFileName = cboxGradeConfigFile.SelectedValue + ".xml";
+            SystemVariable.LoadGradeConfig();
+        }
+        #endregion
+
+       
 
        
 

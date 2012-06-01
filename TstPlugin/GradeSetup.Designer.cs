@@ -165,6 +165,7 @@
             this.btnCreateGrid.TabIndex = 5;
             this.btnCreateGrid.Text = "Create";
             this.btnCreateGrid.UseVisualStyleBackColor = true;
+            this.btnCreateGrid.Click += new System.EventHandler(this.btnCreateGrid_Click);
             // 
             // lbX
             // 
@@ -239,6 +240,7 @@
             this.rbNoRoi.TabStop = true;
             this.rbNoRoi.Text = "No ROI";
             this.rbNoRoi.UseVisualStyleBackColor = true;
+            this.rbNoRoi.CheckedChanged += new System.EventHandler(this.rbNoRoi_CheckedChanged);
             // 
             // tpGradeGroup
             // 
@@ -324,6 +326,7 @@
             this.cboxEnablePTS.TabIndex = 0;
             this.cboxEnablePTS.Text = "Enable Points";
             this.cboxEnablePTS.UseVisualStyleBackColor = true;
+            this.cboxEnablePTS.CheckedChanged += new System.EventHandler(this.cboxEnablePTS_CheckedChanged);
             // 
             // tpGradeLevel
             // 
@@ -346,6 +349,7 @@
             this.cboxEnableGrade.TabIndex = 2;
             this.cboxEnableGrade.Text = "Enable Grade";
             this.cboxEnableGrade.UseVisualStyleBackColor = true;
+            this.cboxEnableGrade.CheckedChanged += new System.EventHandler(this.cboxEnableGrade_CheckedChanged);
             // 
             // gbGradeSetting
             // 
@@ -367,7 +371,10 @@
             this.gvGrade.RowTemplate.Height = 24;
             this.gvGrade.Size = new System.Drawing.Size(425, 268);
             this.gvGrade.TabIndex = 2;
+            this.gvGrade.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gvGrade_MouseDown);
             this.gvGrade.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvGrade_CellEndEdit);
+            this.gvGrade.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gvGrade_DataError);
+            this.gvGrade.KeyUp += new System.Windows.Forms.KeyEventHandler(this.gvGrade_KeyUp);
             // 
             // lbSubPieceOfGrade
             // 
@@ -426,6 +433,7 @@
             this.cboxEnablePFS.TabIndex = 0;
             this.cboxEnablePFS.Text = "Enable Pass Or Fail Filter Score";
             this.cboxEnablePFS.UseVisualStyleBackColor = true;
+            this.cboxEnablePFS.CheckedChanged += new System.EventHandler(this.cboxEnablePFS_CheckedChanged);
             // 
             // cboxGradeConfigFile
             // 
@@ -460,7 +468,7 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Text = "Close";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
