@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config>
+  <PxPVariable></PxPVariable>
+  <MapVariable>
+    <ImgRowsSet>3</ImgRowsSet>
+    <ImgColsSet>4</ImgColsSet>
+    <MapProportion>0</MapProportion>
+    <!--0->1:1, 2->1:1, 2->2:1, 3->4:3, 4->3:4,  5->16:9-->
+    <ShowGridSet>1</ShowGridSet>
+    <!--顯示格線-->
+    <MapGridSet>1</MapGridSet>
+    <!--選擇使用的Grid間隔依據 0: EachCellSize , 1: EachCellCount-->
+    <MapMDSet>4</MapMDSet>
+    <MapCDSet>4</MapCDSet>
+    <SeriesSet>1</SeriesSet>
+    <!--紀錄選用的紀錄方式-->
+    <BottomAxe>0</BottomAxe>
+    <!--紀錄MD或CD為Bottom Axes 0:CD, 1:MD-->
+    <MDInver>0</MDInver>
+    <!--紀錄是否反轉座標軸-->
+    <CDInver>0</CDInver>
+    <ShowFlag>0</ShowFlag>
+    <!--紀錄顯示項目 0:All, 1:Pass, 2:Fail-->
+    <LastMapCDConvertion>1000</LastMapCDConvertion>
+    <LastMapMDConvertion>1000</LastMapMDConvertion>
+    <!--紀錄上一次單位比例-->
+    <FlawTypeName>
+      <FlawType>0</FlawType>
+      <Name>Not Classified</Name>
+      <Color>#FF0000</Color>
+      <Shape>Cone</Shape>
+      <Display>1</Display>
+    </FlawTypeName>
+    <FlawTypeName>
+      <FlawType>1</FlawType>
+      <Name>小黑點</Name>
+      <Color>#0000FF</Color>
+      <Shape>Cone</Shape>
+      <Display>1</Display>
+    </FlawTypeName>
+    <FlawTypeName>
+      <FlawType>2</FlawType>
+      <Name>中黑點</Name>
+      <Color>#009300</Color>
+      <Shape>Cone</Shape>
+      <Display>1</Display>
+    </FlawTypeName>
+    <FlawTypeName>
+      <FlawType>3</FlawType>
+      <Name>大黑點</Name>
+      <Color>#800080</Color>
+      <Shape>Cone</Shape>
+      <Display>1</Display>
+    </FlawTypeName>
+  </MapVariable>
+  <SystemVariable>
+    <Language>en</Language>
+    <!--en, zh, de, ko-->
+  </SystemVariable>
+</Config>

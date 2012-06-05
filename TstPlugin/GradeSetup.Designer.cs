@@ -32,6 +32,8 @@
             this.tabGradeSetup = new System.Windows.Forms.TabControl();
             this.tpROI = new System.Windows.Forms.TabPage();
             this.panelCreateGrid = new System.Windows.Forms.Panel();
+            this.lbShowGvRow = new System.Windows.Forms.Label();
+            this.lbShowGvColumn = new System.Windows.Forms.Label();
             this.gvRows = new System.Windows.Forms.DataGridView();
             this.gvColumns = new System.Windows.Forms.DataGridView();
             this.btnCreateGrid = new System.Windows.Forms.Button();
@@ -74,8 +76,6 @@
             this.bsRoiList = new System.Windows.Forms.BindingSource(this.components);
             this.bsPointSubPiece = new System.Windows.Forms.BindingSource(this.components);
             this.bsMarkSubPiece = new System.Windows.Forms.BindingSource(this.components);
-            this.lbShowGvColumn = new System.Windows.Forms.Label();
-            this.lbShowGvRow = new System.Windows.Forms.Label();
             this.tabGradeSetup.SuspendLayout();
             this.tpROI.SuspendLayout();
             this.panelCreateGrid.SuspendLayout();
@@ -142,6 +142,24 @@
             this.panelCreateGrid.Name = "panelCreateGrid";
             this.panelCreateGrid.Size = new System.Drawing.Size(504, 305);
             this.panelCreateGrid.TabIndex = 1;
+            // 
+            // lbShowGvRow
+            // 
+            this.lbShowGvRow.AutoSize = true;
+            this.lbShowGvRow.Location = new System.Drawing.Point(256, 61);
+            this.lbShowGvRow.Name = "lbShowGvRow";
+            this.lbShowGvRow.Size = new System.Drawing.Size(31, 12);
+            this.lbShowGvRow.TabIndex = 9;
+            this.lbShowGvRow.Text = "Rows";
+            // 
+            // lbShowGvColumn
+            // 
+            this.lbShowGvColumn.AutoSize = true;
+            this.lbShowGvColumn.Location = new System.Drawing.Point(6, 61);
+            this.lbShowGvColumn.Name = "lbShowGvColumn";
+            this.lbShowGvColumn.Size = new System.Drawing.Size(47, 12);
+            this.lbShowGvColumn.TabIndex = 8;
+            this.lbShowGvColumn.Text = "Columns";
             // 
             // gvRows
             // 
@@ -301,6 +319,7 @@
             this.gvPoint.RowTemplate.Height = 24;
             this.gvPoint.Size = new System.Drawing.Size(425, 268);
             this.gvPoint.TabIndex = 2;
+            this.gvPoint.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gvPoint_DataError);
             // 
             // lbSubPieceOfPoint
             // 
@@ -501,24 +520,6 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 20);
             this.comboBox2.TabIndex = 0;
-            // 
-            // lbShowGvColumn
-            // 
-            this.lbShowGvColumn.AutoSize = true;
-            this.lbShowGvColumn.Location = new System.Drawing.Point(6, 61);
-            this.lbShowGvColumn.Name = "lbShowGvColumn";
-            this.lbShowGvColumn.Size = new System.Drawing.Size(47, 12);
-            this.lbShowGvColumn.TabIndex = 8;
-            this.lbShowGvColumn.Text = "Columns";
-            // 
-            // lbShowGvRow
-            // 
-            this.lbShowGvRow.AutoSize = true;
-            this.lbShowGvRow.Location = new System.Drawing.Point(256, 61);
-            this.lbShowGvRow.Name = "lbShowGvRow";
-            this.lbShowGvRow.Size = new System.Drawing.Size(31, 12);
-            this.lbShowGvRow.TabIndex = 9;
-            this.lbShowGvRow.Text = "Rows";
             // 
             // GradeSetup
             // 

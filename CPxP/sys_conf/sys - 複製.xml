@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SystemConfig>
+	<ConfFile>setup</ConfFile><!--設定檔來源-->
+
+  <DoffGrid>
+      <Column Name="Priority">
+        <Size>100</Size>
+        <Index>0</Index>
+      </Column>
+      <Column Name="FlawID">
+        <Size>100</Size>
+        <Index>1</Index>
+      </Column>
+      <Column Name="FlawClass">
+        <Size>100</Size>
+        <Index>2</Index>
+      </Column>
+      <Column Name="MD">
+        <Size>100</Size>
+        <Index>3</Index>
+      </Column>
+      <Column Name="CD">
+        <Size>100</Size>
+        <Index>4</Index>
+      </Column>
+      <Column Name="Area">
+        <Size>100</Size>
+        <Index>5</Index>
+      </Column>
+      <Column Name="Width">
+        <Size>100</Size>
+        <Index>6</Index>
+      </Column>
+      <Column Name="Length">
+        <Size>100</Size>
+        <Index>7</Index>
+      </Column>
+      <OrderBy>
+        <Index>0</Index>
+      </OrderBy>
+  </DoffGrid>
+</SystemConfig>

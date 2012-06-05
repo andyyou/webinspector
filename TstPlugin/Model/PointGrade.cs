@@ -12,6 +12,7 @@ namespace PxP
         public string ClassName { set; get; }
         public int Score { set; get; }
     }
+    //2012/06/04
     //SubPiece 切出來的棺材 一格  ROI-11 ROI-12
     public class PointSubPiece
     {

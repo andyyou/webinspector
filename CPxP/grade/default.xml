@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<GradeConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Roi>
+    <RoiMode>1</RoiMode>
+    <RoiColumns>2</RoiColumns>
+    <RoiRows>2</RoiRows>
+    <Column Name="1">
+      <Start>10</Start>
+      <End>90</End>
+    </Column>
+    <Column Name="2">
+      <Start>110</Start>
+      <End>200</End>
+    </Column>
+    <Row Name="1">
+      <Start>10</Start>
+      <End>1490</End>
+    </Row>
+    <Row Name="2">
+      <Start>1510</Start>
+      <End>2990</End>
+    </Row>
+  </Roi>
+  <Grade>
+    <PointGrade>
+      <Enable>1</Enable>
+      <SubPiece Name="ALL">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-11">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-12">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-21">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-22">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+    </PointGrade>
+    <MarkGrade>
+      <Enable>1</Enable>
+      <SubPiece Name="ALL">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-11">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-12">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-21">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-22">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+    </MarkGrade>
+    <PassFail>
+      <Enable>1</Enable>
+      <Score>1000000</Score>
+    </PassFail>
+  </Grade>
+</GradeConfig>

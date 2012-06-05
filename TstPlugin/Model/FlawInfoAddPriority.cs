@@ -23,6 +23,7 @@ namespace PxP
         public int Priority { get; set; }
         public double RMD { get; set; }
         public double RCD { get; set; }
+        public double PointScore { get; set; }
         //Keep origin value
         public string OArea { set; get; }
         public double OCD { set; get; }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Language>
+	<PxPTab>
+		<DoffGrid>
+			<Column Name="Priority">Priority</Column>
+			<Column Name="FlawID">FlawID</Column>
+			<Column Name="FlawClass">FlawClass</Column>
+			<Column Name="MD">MD</Column>
+			<Column Name="CD">CD</Column>
+			<Column Name="Area">Area</Column>
+			<Column Name="Width">Width</Column>
+			<Column Name="Length">Length</Column>
+		</DoffGrid>
+	</PxPTab>
+	
+	<MapWindow>
+		<DoffSettingGrid>
+			<Column Name="Display">Display</Column>
+			<Column Name="FlawType">FlawType</Column>
+			<Column Name="Name">Name</Column>
+			<Column Name="Color">Color</Column>
+			<Column Name="Shape">Shape</Column>
+			<Column Name="Count">Count</Column>
+			<Column Name="DoffNum">DoffNum</Column>
+			<Column Name="JobNum">JobNum</Column>
+		</DoffSettingGrid>
+		
+		<Object>
+			<Button Name="btnMapSetup">Map Setting</Button>
+			<RadioButton Name="rbPass">Pass</RadioButton>
+			<RadioButton Name="rbFail">Fail</RadioButton>
+			<RadioButton Name="rbAll">All</RadioButton>
+		</Object>
+	</MapWindow>
+	<MapSetup>
+		
+	</MapSetup>
+</Language>

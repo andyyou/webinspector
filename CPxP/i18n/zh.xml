@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Language>
+	<PxPTab>
+		<DoffGrid>
+			<Column Name="Priority">優先權</Column>
+			<Column Name="FlawID">標號</Column>
+			<Column Name="FlawClass">缺陷分類</Column>
+			<Column Name="MD">縱向位置</Column>
+			<Column Name="CD">橫向位置</Column>
+			<Column Name="Area">面積</Column>
+			<Column Name="Width">寬度</Column>
+			<Column Name="Length">長度</Column>
+		</DoffGrid>
+	</PxPTab>
+	
+	<MapWindow>
+		<DoffSettingGrid>
+			<Column Name="Display">顯示</Column>
+			<Column Name="FlawType">類型編號</Column>
+			<Column Name="Name">名稱</Column>
+			<Column Name="Color">顏色</Column>
+			<Column Name="Shape">形狀</Column>
+			<Column Name="Count">統計</Column>
+			<Column Name="DoffNum">缺陷數量</Column>
+			<Column Name="JobNum">工單數量</Column>
+		</DoffSettingGrid>
+		
+		<Object>
+			<Button Name="btnMapSetup">Map設定</Button>
+			<RadioButton Name="rbPass">通過</RadioButton>
+			<RadioButton Name="rbFail">不通過</RadioButton>
+			<RadioButton Name="rbAll">全部</RadioButton>
+		
+		</Object>
+	</MapWindow>
+	<MapSetup>
+		
+	</MapSetup>
+</Language>

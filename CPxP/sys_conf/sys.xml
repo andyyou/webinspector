@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SystemConfig>
+  <ConfFile>setup</ConfFile>
+  <GradeConfigFile>default</GradeConfigFile>
+  <!--設定檔來源-->
+  <DoffGrid>
+    <Column Name="Priority">
+      <Size>100</Size>
+      <Index>0</Index>
+    </Column>
+    <Column Name="FlawID">
+      <Size>100</Size>
+      <Index>1</Index>
+    </Column>
+    <Column Name="FlawClass">
+      <Size>100</Size>
+      <Index>5</Index>
+    </Column>
+    <Column Name="MD">
+      <Size>100</Size>
+      <Index>4</Index>
+    </Column>
+    <Column Name="CD">
+      <Size>100</Size>
+      <Index>3</Index>
+    </Column>
+    <Column Name="Area">
+      <Size>100</Size>
+      <Index>2</Index>
+    </Column>
+    <Column Name="Width">
+      <Size>100</Size>
+      <Index>11</Index>
+    </Column>
+    <Column Name="Length">
+      <Size>100</Size>
+      <Index>10</Index>
+    </Column>
+    <OrderBy Name="Column">FlawID</OrderBy>
+  </DoffGrid>
+  <!--左邊Map Grid 欄位設定-->
+  <DoffTypeGrid>
+    <Column Name="Display">
+      <Size>100</Size>
+      <Index>0</Index>
+    </Column>
+    <Column Name="FlawType">
+      <Size>100</Size>
+      <Index>1</Index>
+    </Column>
+    <Column Name="Name">
+      <Size>100</Size>
+      <Index>2</Index>
+    </Column>
+    <Column Name="Color">
+      <Size>100</Size>
+      <Index>4</Index>
+    </Column>
+    <Column Name="Shape">
+      <Size>100</Size>
+      <Index>3</Index>
+    </Column>
+    <Column Name="Count">
+      <Size>100</Size>
+      <Index>7</Index>
+    </Column>
+    <Column Name="DoffNum">
+      <Size>100</Size>
+      <Index>5</Index>
+    </Column>
+    <Column Name="JobNum">
+      <Size>100</Size>
+      <Index>6</Index>
+    </Column>
+  </DoffTypeGrid>
+  <Limit>20</Limit>
+</SystemConfig>

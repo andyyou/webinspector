@@ -513,6 +513,12 @@ namespace PxP
             tboxFilterScore.Enabled = cboxEnablePFS.Checked;
         }
 
+        private void gvPoint_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+            e.Cancel = false;
+        }
+
       
 
 

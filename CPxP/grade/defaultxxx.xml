@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<GradeConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Roi>
+    <RoiMode>1</RoiMode>
+    <RoiColumns>3</RoiColumns>
+    <RoiRows>3</RoiRows>
+    <Column Name="1">
+      <Start>5</Start>
+      <End>20</End>
+    </Column>
+    <Column Name="2">
+      <Start>30</Start>
+      <End>40</End>
+    </Column>
+    <Column Name="3">
+      <Start>50</Start>
+      <End>60</End>
+    </Column>
+    <Row Name="1">
+      <Start>10</Start>
+      <End>20</End>
+    </Row>
+    <Row Name="2">
+      <Start>30</Start>
+      <End>40</End>
+    </Row>
+    <Row Name="3">
+      <Start>50</Start>
+      <End>60</End>
+    </Row>
+  </Roi>
+  <Grade>
+    <PointGrade>
+      <Enable>0</Enable>
+      <SubPiece Name="ALL">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">21</FlawType>
+        <FlawType Id="2">100</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-11">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">5</FlawType>
+        <FlawType Id="2">3</FlawType>
+        <FlawType Id="3">1</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-12">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">5</FlawType>
+        <FlawType Id="2">3</FlawType>
+        <FlawType Id="3">1</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-13">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-21">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">5</FlawType>
+        <FlawType Id="2">3</FlawType>
+        <FlawType Id="3">1</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-22">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-23">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-31">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-32">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+      <SubPiece Name="ROI-33">
+        <FlawType Id="0">0</FlawType>
+        <FlawType Id="1">0</FlawType>
+        <FlawType Id="2">0</FlawType>
+        <FlawType Id="3">0</FlawType>
+      </SubPiece>
+    </PointGrade>
+    <MarkGrade>
+      <Enable>1</Enable>
+      <SubPiece Name="ALL">
+        <GradeRow Id="A">10</GradeRow>
+        <GradeRow Id="B">100</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-11">
+        <GradeRow Id="A">1</GradeRow>
+        <GradeRow Id="B">2</GradeRow>
+        <GradeRow Id="C">3</GradeRow>
+        <GradeRow Id="D">0</GradeRow>
+        <GradeRow Id="E">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-12">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-13">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-21">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-22">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-23">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-31">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-32">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+      <SubPiece Name="ROI-33">
+        <GradeRow Id="A">0</GradeRow>
+      </SubPiece>
+    </MarkGrade>
+    <PassFail>
+      <Enable>0</Enable>
+      <Score>2000</Score>
+    </PassFail>
+  </Grade>
+</GradeConfig>
