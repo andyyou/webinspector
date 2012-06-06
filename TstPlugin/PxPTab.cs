@@ -87,7 +87,8 @@ namespace PxP
 
             SystemVariable.LoadSystemConfig();
             SystemVariable.LoadConfig();
-
+            SystemVariable.LoadGradeConfig();
+            
             InitTableLayout(tlpDoffGrid);
             DefineDataGridView(gvFlaw);
            
@@ -495,8 +496,19 @@ namespace PxP
             }
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
             ///////////////////////////////////////////////////////////////////////
-
-           
+            //處理分數缺點分類
+            MapWindowVariable.PieceResult[PxPVariable.DoffNum] = GetPassOfPiece(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
+            
+            if (MapWindowVariable.PieceResult[PxPVariable.DoffNum])
+            {
+                PxPVariable.DoffNum++;
+                PxPVariable.PassNum++;
+            }
+            else
+            {
+                PxPVariable.DoffNum++;
+                PxPVariable.FailNum++;
+            }
             //////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = MD;
             gvFlaw.DataSource = bsFlaw;
@@ -586,7 +598,26 @@ namespace PxP
             Job.SetOffline();
             PxPThreadStatus.IsOnOnline = false;
         }
-        
+        //計算piece的分數
+        public double CountPieceScore(List<FlawInfoAddPriority> list)
+        {
+            double tmp = 0;
+            foreach (var i in list)
+            {
+                tmp += i.PointScore;
+            }
+            return tmp;
+        }
+        //判斷piece是Pass or Fail
+        public bool GetPassOfPiece(List<FlawInfoAddPriority> list)
+        {
+            double score = CountPieceScore(list);
+
+            if (score >= GradeVariable.PassOrFileScore)
+                return false;
+            else
+                return true;
+        }
         #endregion
 
         #region Inherit Interface
@@ -734,6 +765,40 @@ namespace PxP
                         f.Priority = PxPVariable.SeverityInfo[0].Flaws.TryGetValue(f.FlawType, out opv) ? opv : 0;
                     else
                         f.Priority = 0;
+
+                    // get point score   //2012/06/04
+                    // 如果沒設定的話分數取用0
+                    if (!GradeVariable.IsPointEnable)
+                    {
+                        f.PointScore = 0;
+                    }
+                    else  //如果有設定的話按照位置去給定分數
+                    {
+                        foreach (var r in GradeVariable.RoiRowsGrid)
+                        {
+                            foreach (var c in GradeVariable.RoiColumnsGrid)
+                            {
+                                foreach (var p in GradeVariable.PointSubPieces)
+                                {
+                                    if (p.Name == string.Format("ROI-{0}{1}", r.Name, c.Name))
+                                    {
+                                        if (f.RMD >= r.Start && f.RMD <= r.End && f.RCD >= c.Start && f.RCD <= c.End)
+                                        {
+                                            foreach (var g in p.Grades)
+                                            {
+                                                if (f.FlawType == g.ClassId)
+                                                {
+                                                    f.PointScore = g.Score;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //foreach(var i in GradeVariable.)
                     //特別處理Image 因為讀取歷史資料
                     //SystemVariable.IsReadHistory = true;
                     if (SystemVariable.IsReadHistory)
@@ -751,7 +816,6 @@ namespace PxP
                             SqlDataReader sd = cmd.ExecuteReader();
                             sd.Read();
                             byte[] images = (Byte[])sd["iImage"];
-                            //byte[] newImages = images.Skip(8).ToArray();
                             //////////////////////////////////////////////////////////////////////////////////
                             intW = images[0] + images[1] * 256;
                             intH = images[4] + images[5] * 256;
@@ -766,24 +830,7 @@ namespace PxP
                             {
                                 blnShowImg = true;
                             }
-                            //ms = new MemoryStream(newImages);
-                            //ms.Seek(0, SeekOrigin.Begin);
-                            //Bitmap newBitmap = new Bitmap(ms);
-                            //ms.Dispose();
                             Bitmap bmpShowImg = new Bitmap(intW, intH);
-                            /*if (blnShowImg)
-                            {
-                                int intPixel = 8;
-                                for (int intY = 0; intY <= intH - 1; intY++)
-                                {
-                                    for (int intX = 0; intX <= intW - 1; intX++)
-                                    {
-                                        bmpShowImg.SetPixel(intX, intY, Color.FromArgb(images[intPixel], images[intPixel], images[intPixel]));
-                                        intPixel++;
-                                    }
-                                }
-                            }*/
-
                             ///////
                             if (blnShowImg)
                             {
@@ -793,11 +840,6 @@ namespace PxP
 
                             IImageInfo tmpImg = new ImageInfo(bmpShowImg, 0);
                             f.Images.Add(tmpImg);
-
-                            //f.Images[0].Image = bmpShowImg;
-                            //f.Images = (System.Collections.Generic.IList<IImageInfo>)sd["iImage"];
-
-
                         }
                     }
                     else
@@ -860,27 +902,34 @@ namespace PxP
                         if (SystemVariable.IsReadHistory)
                         {
                             OnHistoryCut(eventInfo.MD);
-                            if (PxPThreadStatus.IsOnOnline)
+                            //if (PxPThreadStatus.IsOnOnline)
                             MapWindowVariable.MapWindowController.SetMapInfoLabel();
+
+                            //MapWindowVariable.PieceResult[PxPVariable.DoffNum] = GetPassOfPiece(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
+                           
+                            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]));
+                            MapWindowVariable.CurrentPiece++;
                         }
                         break;
-                    case e_EventID.DOFF_PASSED :
-                        if (SystemVariable.IsReadHistory)
-                        {
-                            MapWindowVariable.PieceResult[PxPVariable.DoffNum] = true;
-                            PxPVariable.DoffNum++;
-                            PxPVariable.PassNum++ ;
-                        }
-                        break;
-                    case e_EventID.DOFF_FAILED:
-                        if (SystemVariable.IsReadHistory)
-                        {
-                            MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
-                            PxPVariable.DoffNum++;
-                            PxPVariable.FailNum++;
-                           
-                        }
-                        break;
+                        
+                    //case e_EventID.DOFF_PASSED :
+                    //    if (SystemVariable.IsReadHistory)
+                    //    {
+                    //        MapWindowVariable.PieceResult[PxPVariable.DoffNum] = true;
+                    //        PxPVariable.DoffNum++;
+                    //        PxPVariable.PassNum++ ;
+                    //    }
+                    //    break;
+                    //case e_EventID.DOFF_FAILED:
+                    //    if (SystemVariable.IsReadHistory)
+                    //    {
+                    //        MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
+                    //        PxPVariable.DoffNum++;
+                    //        PxPVariable.FailNum++;
+                           
+
+                    //    }
+                    //    break;
                         
                     default: break;
                         
@@ -901,7 +950,8 @@ namespace PxP
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
-                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)                    MapWindowVariable.FlawPiece.Add(f);
+                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)
+                    MapWindowVariable.FlawPiece.Add(f);
             }
             MapWindowVariable.Flaws.Clear();
 
@@ -916,7 +966,10 @@ namespace PxP
             {
                 ft.DoffNum = 0;
             }
-            
+            //2012/06/04
+            //處理Pass Fail 分數並設定到Mapwindow
+            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(subPiece));
+
             ////////////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
 
@@ -927,11 +980,11 @@ namespace PxP
                 //MapWindowVariable.FlawPiece.Sort(delegate(FlawInfoAddPriority f1, FlawInfoAddPriority f2) {  return f2.Width.CompareTo(f1.Width); });
                 bsFlaw.ResetBindings(false);
                 bsFlaw.ResumeBinding();
-
+                
                 //Update left datagridview of flawtype
                 foreach (var f in subPiece)
                 {
-
+                    
                     foreach (var ft in PxPVariable.FlawTypeName)
                     {
                         if (ft.FlawType == f.FlawType)
@@ -950,6 +1003,8 @@ namespace PxP
                             ft.DoffNum++;
                         }
                     }
+                    //////////
+
 
                 }
 
@@ -1007,6 +1062,9 @@ namespace PxP
             MapWindowVariable.CurrentPiece = 0;
             MapWindowVariable.MapWindowController.InitLabel();
             PxPVariable.CurrentCutPosition = 0;
+            //Reload Grade config useing mcs value
+            SystemVariable.LoadGradeConfig();
+
             //開啟歷史資料時重新計算 P/F
             PxPVariable.DoffNum = 0;
             PxPVariable.FailNum = 0;
@@ -1111,6 +1169,7 @@ namespace PxP
             MapWindowVariable.MapWindowController.SetJobInfo();
             MapWindowVariable.MapWindowController.SetMapAxis();
             MapWindowVariable.MapWindowController.bsFlawType.ResetBindings(false);
+            MapWindowVariable.MapWindowController.InitSubPiece();
             PxPThreadEvent.Set();
         }
         #endregion
@@ -1279,6 +1338,7 @@ namespace PxP
                     PxPVariable.FailNum++;
                 }
                 MapWindowVariable.MapWindowController.SetMapInfoLabel();
+                MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]));
             }
             SystemVariable.IsReadHistory = false;
             PxPThreadEvent.Set();
@@ -1387,8 +1447,15 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnDoffResult");
             try
             {
-                MapWindowVariable.PieceResult.Add(doffNumber, pass);
-                if (pass)
+                //MapWindowVariable.PieceResult.Add(doffNumber, pass);
+                //if (pass)
+                //    PxPVariable.PassNum++;
+                //else
+                //    PxPVariable.FailNum++;
+
+                //2012/06/04 判斷Pass Fail 機制改成由分數機制判斷 
+                MapWindowVariable.PieceResult.Add(doffNumber, GetPassOfPiece(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]));
+                if (GetPassOfPiece(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]))
                     PxPVariable.PassNum++;
                 else
                     PxPVariable.FailNum++;
@@ -1397,12 +1464,15 @@ namespace PxP
                 PxPThreadStatus.IsOnDoffResult = true;
                 if (PxPThreadStatus.IsOnOnline)
                 MapWindowVariable.MapWindowController.SetMapInfoLabel();
+                //2012/06/04
+                MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]));
                 PxPThreadEvent.Set();
             }
             catch (Exception ex)
             {
                 MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.GeneralError, "OnDoffResult() Error!" + ex.Message, null, 0);
-            }
+            }
+
         }
 
         #endregion
@@ -1415,7 +1485,8 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnPxPConfig");
             PxPVariable.PxPInfo = info;
             PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
-            PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+            PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
         }
@@ -1506,7 +1577,8 @@ namespace PxP
                     flaw.Width = flaw.OWidth * ConverWidth;
                 }
             }
-            MapWindowVariable.MapWindowController.SetMapAxis();
+            MapWindowVariable.MapWindowController.SetMapAxis();
+
             gvFlaw.Refresh();
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////

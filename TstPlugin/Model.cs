@@ -135,6 +135,17 @@ namespace PxP
         internal static Dictionary<int, bool> PieceResult = new Dictionary<int, bool>();          //紀錄每片玻璃的檢測結果
         internal static double LastMapMDConvertion;                 //紀錄上一次MD單位變更的比例
         internal static double LastMapCDConvertion;                 //紀錄上一次CD單位變更的比例
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Grade 全域變數
+        /// </summary>
+        internal static int RoiMode;  //0 => No ROI, 1 => Symmetrical 
+        internal static int RoiGradeColumns;  //Page of GradeSetup.cs 設定欄位數
+        internal static int RoiGradeRows;    //Page of GradeSetup.cs 設定列數
+        internal static List<RoiGrade> RoiColumnsGrid = new List<RoiGrade>();
+        internal static List<RoiGrade> RoiRowsGrid = new List<RoiGrade>();
         public MapWindowVariable()
         {
             //FlawInfoExtend x = new FlawInfoExtend();
@@ -144,6 +155,7 @@ namespace PxP
     public class SystemVariable
     {
         internal static string ConfigFileName ;                     //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
+        internal static string GradeConfigFileName;                 //儲存等級評分定義XML路徑 (預設\CPxP\grade\default.xml)
         internal static e_Language Language = e_Language.English;   //預設為英語
         internal static string FlawLock = "FlawLock";               //OnFlaws & OnCut 鎖定
         internal static bool IsReadHistory = false;                 //判斷是否讀取歷史紀錄
@@ -215,6 +227,15 @@ namespace PxP
             XDocument XD2 = XDocument.Load(FullFilePath);
             return XD2;
         }
+        //取得grade conf 參數檔
+        internal static XDocument GetGradeConfXDoc()
+        {
+            string path = Path.GetDirectoryName(
+             Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\grade\\";
+            string FullFilePath = string.Format("{0}{1}", path, SystemVariable.GradeConfigFileName);
+            XDocument XD2 = XDocument.Load(FullFilePath);
+            return XD2;
+        }
         //載入/sys_conf/sys.xml  ==> 根據有定義語系資料再變更一次參數
         internal static void LoadSystemConfig()
         {
@@ -232,6 +253,9 @@ namespace PxP
                 XElement XConfFile = XSysConf.Element("SystemConfig").Element("ConfFile"); //儲存Conf檔名到SystemVariable變數
                 IEnumerable<XElement> XDoffGrid = XSysConf.Element("SystemConfig").Element("DoffGrid").Elements("Column"); //自動儲存右上方GridView的排序和欄位Size
                 SystemVariable.ConfigFileName = XConfFile.Value + ".xml";
+                //儲存GradeConfig到全域變數
+                XElement XGradeConfFile = XSysConf.Element("SystemConfig").Element("GradeConfigFile"); //儲存GradeConf檔名到SystemVariable變數
+                SystemVariable.GradeConfigFileName = XGradeConfFile.Value + ".xml"; ;
                 PxPVariable.DoffGridSetup.Clear();
                 foreach (XElement el in XDoffGrid)
                 {
@@ -331,9 +355,65 @@ namespace PxP
                 System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail :  MapDoffTypeGrid \n" + ex.Message);
             }
         }
+        //載入Grade的xml 內容到全域變數
+        internal static void LoadGradeConfig()
+        {
+            XDocument XGrade = GetGradeConfXDoc();
+            //載入Roi模式, 
+            XElement XRoiMode = XGrade.Element("GradeConfig").Element("Roi").Element("RoiMode");
+            XElement XRoiColumns = XGrade.Element("GradeConfig").Element("Roi").Element("RoiColumns");
+            XElement XRoiRows = XGrade.Element("GradeConfig").Element("Roi").Element("RoiRows");
+
+            try
+            {
+                MapWindowVariable.RoiMode = int.TryParse(XRoiMode.Value, out MapWindowVariable.RoiMode) ? MapWindowVariable.RoiMode : 0;
+                MapWindowVariable.RoiGradeColumns = int.TryParse(XRoiColumns.Value, out MapWindowVariable.RoiGradeColumns) ? MapWindowVariable.RoiGradeColumns : 0;
+                MapWindowVariable.RoiGradeRows = int.TryParse(XRoiRows.Value, out MapWindowVariable.RoiGradeRows) ? MapWindowVariable.RoiGradeRows : 0;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Initialize Load Grade Config Fail :  \n" + ex.Message);
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////
+
+
+            //載入Roi 欄位start end 座標資料
+            try
+            {
+                IEnumerable<XElement> XColumns = XGrade.Element("GradeConfig").Element("Roi").Elements("Column");
+                MapWindowVariable.RoiColumnsGrid.Clear();
+                foreach (var c in XColumns)
+                {
+                    RoiGrade tmpRoiColumn = new RoiGrade();
+                    tmpRoiColumn.Name = c.Attribute("Name").Value;
+                    tmpRoiColumn.Start = double.Parse(c.Element("Start").Value);
+                    tmpRoiColumn.End = double.Parse(c.Element("End").Value);
+                    MapWindowVariable.RoiColumnsGrid.Add(tmpRoiColumn);
+                }
+
+                IEnumerable<XElement> XRows = XGrade.Element("GradeConfig").Element("Roi").Elements("Row");
+                MapWindowVariable.RoiRowsGrid.Clear();
+                foreach (var r in XRows)
+                {
+                    RoiGrade tmpRoiRow = new RoiGrade();
+                    tmpRoiRow.Name = r.Attribute("Name").Value;
+                    tmpRoiRow.Start = double.Parse(r.Element("Start").Value);
+                    tmpRoiRow.End = double.Parse(r.Element("End").Value);
+                    MapWindowVariable.RoiRowsGrid.Add(tmpRoiRow);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Setting global roi variable errors : " + ex.Message);
+            }
+
+
+        }
         #endregion
     }
 
+    #region Other Model
     public class DoffGridColumns
     {
         public int Index { set; get; }
@@ -383,7 +463,6 @@ namespace PxP
         
 
     }
-
     public class FlawTypeNameExtend
     {
         public string Name { set; get; }
@@ -413,7 +492,15 @@ namespace PxP
     }
     
     public class ConfFile { public string Name { get; set; } }
-
+    //等級設定model
+    public class RoiGrade
+    {
+        public string Name{set;get;}
+        public double Start { set; get; }
+        public double End { set; get; }
+    }
+  
+    #endregion
     // 三角形, 倒三角形, 正方形, 圓形, 十字, 叉叉, 星號
     //public enum Shape { Triangle, Ellipse, Square, Cone, Cross, LineDiagonalCross, Star };
     public enum Shape {
