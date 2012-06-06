@@ -74,13 +74,34 @@
     <Compile Include="FlawForm.Designer.cs">
       <DependentUpon>FlawForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GradeSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GradeSetup.Designer.cs">
+      <DependentUpon>GradeSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="MapSetup.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MapSetup.Designer.cs">
       <DependentUpon>MapSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model.cs" />
+    <Compile Include="Model\DoffGridColumns.cs" />
+    <Compile Include="Model\Extend.cs" />
+    <Compile Include="Model\FlawInfoAddPriority.cs" />
+    <Compile Include="Model\FlawTypeNameExtend.cs" />
+    <Compile Include="Model\GradeConfig.cs" />
+    <Compile Include="Model\GradeVariable.cs" />
+    <Compile Include="Model\MapWindowThreadStatus.cs" />
+    <Compile Include="Model\MapWindowVariable.cs" />
+    <Compile Include="Model\MarkGrade.cs" />
+    <Compile Include="Model\Pair.cs" />
+    <Compile Include="Model\PointGrade.cs" />
+    <Compile Include="Model\PxPThreadStatus.cs" />
+    <Compile Include="Model\PxPVariable.cs" />
+    <Compile Include="Model\RoiGrade.cs" />
+    <Compile Include="Model\SerializationUtil.cs" />
+    <Compile Include="Model\SystemVariable.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -163,6 +184,9 @@
     <None Include="Resources\Zoom Out.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GradeSetup.resx">
+      <DependentUpon>GradeSetup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Hand.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -174,6 +198,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files\Web Ranger\Plugins"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files (x86)\Web Ranger\Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

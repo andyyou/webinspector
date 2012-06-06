@@ -8,7 +8,7 @@ namespace PxP
 {
     public class DebugTool
     {
-        const string path = @"c:\Project\PxPLifeCycle.txt";
+        const string path = @"c:\temp\PxPLifeCycle.txt";
         public static StreamWriter sw = new StreamWriter(path);
         public static int i = 1;
         public DebugTool()
