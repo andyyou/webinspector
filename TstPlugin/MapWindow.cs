@@ -132,9 +132,9 @@ namespace PxP
             double score = CountPieceScore(list);
 
             if (score >= GradeVariable.PassOrFileScore)
-                return true;
-            else
                 return false;
+            else
+                return true;
 
 
         }
@@ -573,6 +573,8 @@ namespace PxP
         public void InitSubPiece()
         {
             // Draw horizontal line
+            nChartMap.Axis(StandardAxis.PrimaryX).ConstLines.Clear();
+            nChartMap.Axis(StandardAxis.PrimaryY).ConstLines.Clear();
             for (int i = 0; i < GradeVariable.RoiRowsGrid.Count; i++)
             {
                 for (int j = 0; j < GradeVariable.RoiColumnsGrid.Count; j++)

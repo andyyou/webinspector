@@ -101,6 +101,7 @@
     <Compile Include="Model\PxPVariable.cs" />
     <Compile Include="Model\RoiGrade.cs" />
     <Compile Include="Model\SerializationUtil.cs" />
+    <Compile Include="Model\SplitePiece.cs" />
     <Compile Include="Model\SystemVariable.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -395,6 +395,7 @@
             this.gvGrade.Size = new System.Drawing.Size(425, 268);
             this.gvGrade.TabIndex = 2;
             this.gvGrade.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gvGrade_MouseDown);
+            this.gvGrade.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.gvGrade_CellValidating);
             this.gvGrade.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvGrade_CellEndEdit);
             this.gvGrade.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gvGrade_DataError);
             this.gvGrade.KeyUp += new System.Windows.Forms.KeyEventHandler(this.gvGrade_KeyUp);

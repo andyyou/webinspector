@@ -509,6 +509,8 @@ namespace PxP
                 PxPVariable.FailNum++;
             }
             //////////////////////////////////////////////////////////////////////
+            DealSplitePieces(subPiece);
+            //////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = MD;
             gvFlaw.DataSource = bsFlaw;
             bsFlaw.ResetBindings(false);
@@ -613,9 +615,64 @@ namespace PxP
             double score = CountPieceScore(list);
 
             if (score >= GradeVariable.PassOrFileScore)
-                return true;
-            else
                 return false;
+            else
+                return true;
+        }
+        //處理大片裡面切割的小片評分機制
+        public void DealSplitePieces(List<FlawInfoAddPriority> piece)
+        {
+            SplitePieces tmpSplitePieces = new SplitePieces();
+            tmpSplitePieces.Pieces = new List<SplitePiece>();
+            foreach (var r in GradeVariable.RoiRowsGrid)
+            {
+                foreach (var c in GradeVariable.RoiColumnsGrid)
+                {
+                    SplitePiece tmpsp = new SplitePiece();
+                    tmpsp.Name = string.Format("ROI-{0}{1}", r.Name, c.Name);
+                    tmpsp.Socre = 0;
+                    foreach (var s in piece)
+                    {
+                        if (s.SubPieceName == string.Format("ROI-{0}{1}", r.Name, c.Name))
+                        {
+                            tmpsp.Socre += s.PointScore;
+                        }
+                    }
+                    if (GradeVariable.IsMarkGradeEnable)
+                    {
+                        foreach (var m in GradeVariable.MarkGradeSubPieces)
+                        {
+                            int tmpPrevScore = -1;
+                            foreach (var g in m.Grades)
+                            {
+                                if (m.Name == tmpsp.Name)
+                                {
+                                    if (tmpsp.Socre <= g.Score && tmpsp.Socre > tmpPrevScore)
+                                    {
+                                        tmpsp.GradeLevel = g.GradeName;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        tmpsp.GradeLevel = "F";
+                                        tmpPrevScore = g.Score;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        tmpsp.Socre = 0;
+                        tmpsp.GradeLevel = "N";
+                    }
+                    tmpSplitePieces.Pieces.Add(tmpsp);
+                }
+
+            }
+            GradeVariable.SplitePiecesContainer.Add(tmpSplitePieces);
+           
         }
         #endregion
 
@@ -788,7 +845,7 @@ namespace PxP
                                                 if (f.FlawType == g.ClassId)
                                                 {
                                                     f.PointScore = g.Score;
-                                                        
+                                                    f.SubPieceName = p.Name;
                                                 }
                                             }
                                         }
@@ -965,9 +1022,12 @@ namespace PxP
                 ft.DoffNum = 0;
             }
             //2012/06/04
+           
             //處理Pass Fail 分數並設定到Mapwindow
             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(subPiece));
 
+            DealSplitePieces(subPiece);
+          
             ////////////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
 

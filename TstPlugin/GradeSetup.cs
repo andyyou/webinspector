@@ -337,9 +337,10 @@ namespace PxP
                     if (m.Name == cboxSubPieceOfGrade.Text)
                     {
                         MarkGrade tmp = new MarkGrade();
-                        if (e.RowIndex < 26)
+                        if (e.RowIndex < 4)
                         {
                             tmp.GradeName = Chr(e.RowIndex + 66).ToString();
+                            tmp.Score = Convert.ToInt32(gvGrade.Rows[e.RowIndex].Cells[1].Value) + 1;
                             m.Grades.Add(tmp);
                         }
                         bsMarkSubPiece.DataSource = m.Grades;
@@ -517,6 +518,18 @@ namespace PxP
         {
             e.ThrowException = false;
             e.Cancel = false;
+        }
+
+        private void gvGrade_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (gvGrade.Rows.Count > 1 && gvGrade.Columns[e.ColumnIndex].Name == "Score" && e.RowIndex > 0)
+            {
+                if (Convert.ToInt32(e.FormattedValue) <= Convert.ToInt32(gvGrade.Rows[e.RowIndex - 1].Cells[1].Value))
+                {
+                    MessageBox.Show("Test");
+                    e.Cancel = true;
+                }
+            }
         }
 
       
