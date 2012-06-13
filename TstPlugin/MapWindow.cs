@@ -272,7 +272,8 @@ namespace PxP
             }
             //Display
             gvFlawClass.Columns["Count"].Visible = false;
-            
+            gvFlawClass.Columns["OfflineDoffNum"].Visible = false;
+            gvFlawClass.Columns["OfflineJobNum"].Visible = false;
          
         }
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)

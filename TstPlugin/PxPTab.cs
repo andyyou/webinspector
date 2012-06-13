@@ -175,6 +175,9 @@ namespace PxP
             Dgv.Columns["OLength"].Visible = false;
             Dgv.Columns["OMD"].Visible = false;
             Dgv.Columns["OWidth"].Visible = false;
+            Dgv.Columns["SubPieceName"].Visible = false;
+            Dgv.Columns["PointScore"].Visible = false;
+            
         }       
         //更新頁面,該換圖或Map調整,語系變更,全域變數變更時更新物件資料
         public void PageRefresh()
@@ -494,7 +497,9 @@ namespace PxP
             {
                 subPiece.Add(f);
             }
+            subPiece = CalcFlawScore(subPiece); // 計算個缺陷點分數及歸屬子片
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
+            MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count - 1;
             ///////////////////////////////////////////////////////////////////////
             //處理分數缺點分類
             MapWindowVariable.PieceResult[PxPVariable.DoffNum] = GetPassOfPiece(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
@@ -674,6 +679,47 @@ namespace PxP
             GradeVariable.SplitePiecesContainer.Add(tmpSplitePieces);
            
         }
+        // 計算個缺陷點分數及歸屬子片
+        public List<FlawInfoAddPriority> CalcFlawScore(List<FlawInfoAddPriority> SubPiece)
+        {
+            foreach (var f in SubPiece)
+            {
+                // get point score   //2012/06/04
+                // 如果沒設定的話分數取用0
+                if (!GradeVariable.IsPointEnable)
+                {
+                    f.PointScore = 0;
+                }
+                else  //如果有設定的話按照位置去給定分數
+                {
+                    foreach (var r in GradeVariable.RoiRowsGrid)
+                    {
+                        foreach (var c in GradeVariable.RoiColumnsGrid)
+                        {
+                            foreach (var p in GradeVariable.PointSubPieces)
+                            {
+                                if (p.Name == string.Format("ROI-{0}{1}", r.Name, c.Name))
+                                {
+                                    if (((f.RMD >= r.Start && f.RMD <= r.End) && (f.CD >= c.Start && f.CD <= c.End) && (MapWindowVariable.BottomAxe == 0)) ||
+                                        ((f.CD >= r.Start && f.CD <= r.End) && (f.RMD >= c.Start && f.RMD <= c.End) && (MapWindowVariable.BottomAxe == 1)))
+                                    {
+                                        foreach (var g in p.Grades)
+                                        {
+                                            if (f.FlawType == g.ClassId)
+                                            {
+                                                f.PointScore = g.Score;
+                                                f.SubPieceName = p.Name;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return SubPiece;
+        }
         #endregion
 
         #region Inherit Interface
@@ -822,40 +868,7 @@ namespace PxP
                     else
                         f.Priority = 0;
 
-                    // get point score   //2012/06/04
-                    // 如果沒設定的話分數取用0
-                    if (!GradeVariable.IsPointEnable)
-                    {
-                        f.PointScore = 0;
-                    }
-                    else  //如果有設定的話按照位置去給定分數
-                    {
-                        foreach (var r in GradeVariable.RoiRowsGrid)
-                        {
-                            foreach (var c in GradeVariable.RoiColumnsGrid)
-                            {
-                                foreach (var p in GradeVariable.PointSubPieces)
-                                {
-                                    if (p.Name == string.Format("ROI-{0}{1}", r.Name, c.Name))
-                                    {
-                                        if (f.RMD >= r.Start && f.RMD <= r.End && f.RCD >= c.Start && f.RCD <= c.End)
-                                        {
-                                            foreach (var g in p.Grades)
-                                            {
-                                                if (f.FlawType == g.ClassId)
-                                                {
-                                                    f.PointScore = g.Score;
-                                                    f.SubPieceName = p.Name;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
 
-                    //foreach(var i in GradeVariable.)
                     //特別處理Image 因為讀取歷史資料
                     //SystemVariable.IsReadHistory = true;
                     if (SystemVariable.IsReadHistory)
@@ -1015,6 +1028,7 @@ namespace PxP
             {
                 subPiece.Add(f);
             }
+            subPiece = CalcFlawScore(subPiece); // 計算個缺陷點分數及歸屬子片
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
             //先處理統計不使用Pieces 改用SubPiece
             foreach (var ft in PxPVariable.FlawTypeName)
