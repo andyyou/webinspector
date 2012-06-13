@@ -14,3 +14,19 @@ C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.SingleFlawControl.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.DrawIconTest.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.FlawForm.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.MapSetup.resources
+C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.GradeSetup.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\ResolveAssemblyReference.cache
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.DrawIconTest.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.FlawForm.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.MapSetup.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.Properties.Resources.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.MapWindow.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.PxPTab.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.SingleFlawControl.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.GradeSetup.resources
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.csproj.GenerateResource.Cache
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.dll.licenses
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.dll
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\obj\Debug\PxP.pdb
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\bin\Debug\PxP.dll
+D:\Workspace\Visual Studio 2008\Projects\webinspector\PxPPlugin\bin\Debug\PxP.pdb

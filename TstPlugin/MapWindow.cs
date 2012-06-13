@@ -35,6 +35,14 @@ namespace PxP
             SetFilterRadioButtons();
             btnPrevPiece.Enabled = false;
             btnNextPiece.Enabled = false;
+
+            //Get grade config list
+            ///////////////////////////////////////////////////////////////////////////////////////
+            //組態檔繫結
+            bsGradConfigList.DataSource = GetGradeConfList();
+            cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
+            cboxGradeConfigFile.SelectedItem = SystemVariable.ConfigFileName.ToString().Substring(0, SystemVariable.GradeConfigFileName.ToString().LastIndexOf("."));
+            ///////////////////////////////////////////////////////////////////////////////////////
         }
         ~MapWindow()
         {
@@ -92,7 +100,44 @@ namespace PxP
             SetMapProperty();
             
         }
-        
+        //取得Folder底下所有XML清單
+        List<string> GetGradeConfList()
+        {
+
+            List<string> ConfList = new List<string>();
+            string ConfPath = Path.GetDirectoryName(
+               Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/grade/";
+            DirectoryInfo di = new DirectoryInfo(ConfPath);
+            FileInfo[] rgFiles = di.GetFiles("*.xml");
+
+            foreach (FileInfo fi in rgFiles)
+            {
+                ConfList.Add(fi.Name.ToString().Substring(0, fi.Name.ToString().LastIndexOf(".")));
+            }
+            return ConfList;
+        }
+        //計算piece的分數
+        public double CountPieceScore(List<FlawInfoAddPriority> list)
+        {
+            double tmp = 0;
+            foreach (var i in list)
+            {
+                tmp += i.PointScore;
+            }
+            return tmp;
+        }
+        //判斷piece是Pass or Fail
+        public bool GetPassOfPiece(List<FlawInfoAddPriority> list)
+        {
+            double score = CountPieceScore(list);
+
+            if (score >= GradeVariable.PassOrFileScore)
+                return false;
+            else
+                return true;
+
+
+        }
         #endregion
 
         #region Inherit Interface
@@ -121,7 +166,8 @@ namespace PxP
                     dataLabel.Format = f.FlawID.ToString();
                     dataLabel.TextStyle.StringFormatStyle.HorzAlign = Nevron.HorzAlign.Center;
                     point.DataLabelStyle = dataLabel;
-                    point.DataLabelStyle.Visible = false;
+                    point.DataLabelStyle.Visible = false;
+
                     foreach (DataGridViewRow row in gvFlawClass.Rows)
                     {
                         DataGridViewCheckBoxCell col = (DataGridViewCheckBoxCell)row.Cells[2];
@@ -174,7 +220,8 @@ namespace PxP
                     if (MapWindowVariable.BottomAxe == 0)
                         point.AddDataPoint(new NDataPoint(f.CD, f.RMD));
                     else
-                        point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
+                        point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
+
                 }
             }
 
@@ -219,7 +266,8 @@ namespace PxP
                 if (column.ColumnName == "Display")
                     gvFlawClass.Columns[column.ColumnName].ReadOnly = false;
                 else
-                    gvFlawClass.Columns[column.ColumnName].ReadOnly = true;
+                    gvFlawClass.Columns[column.ColumnName].ReadOnly = true;
+
                 gvFlawClass.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
                 gvFlawClass.Columns[column.ColumnName].HeaderText = column.HeaderText;
                 gvFlawClass.Columns[column.ColumnName].DisplayIndex = column.Index;
@@ -308,7 +356,8 @@ namespace PxP
             }
             xAxis.UpdateScale();
             yAxis.UpdateScale();
-        }
+        }
+
         public void OnChartMouseDoubleClick(object sender, MouseEventArgs e)
         {
             MapWindowThreadStatus.UpdateChange = true;
@@ -356,7 +405,8 @@ namespace PxP
                 }
             }
             nChart.Refresh();
-        }        public void SetJobInfo()
+        }
+        public void SetJobInfo()
         {
             lbOrderNumberValue.Text = PxPVariable.JobInfo.OrderNumber;
             lbJobIDValue.Text = PxPVariable.JobInfo.JobID;
@@ -428,7 +478,8 @@ namespace PxP
             if (PxPVariable.PxPInfo != null)
             {
                 PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
-                PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+                PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+
                 if (MapWindowVariable.BottomAxe == 0)
                 {
                     nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPWidth), true, true);
@@ -467,10 +518,16 @@ namespace PxP
             lbOperator.Text =  terms.OperatorName;
             lbOrderNumber.Text =  terms.OrderNumber;
         }
+        //2012/06/04
+        public void SetTotalScoreLabel(double score)
+        {
+            lbTotalScoreValue.Text = score.ToString();
+        }
         public void SetPieceTotalLabel()
         {
             lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
-        }
+        }
+
         public void CountFlawPieceDoffNum()
         {
             foreach (var c in PxPVariable.FlawTypeName)
@@ -517,7 +574,105 @@ namespace PxP
         {
             lbPageCurrent.Text = "--";
             lbPageTotal.Text = "--";
-        }
+            lbTotalScoreValue.Text = "--";
+        }
+
+        public void InitSubPiece()
+        {
+            // Draw horizontal line
+            nChartMap.Axis(StandardAxis.PrimaryX).ConstLines.Clear();
+            nChartMap.Axis(StandardAxis.PrimaryY).ConstLines.Clear();
+
+            for (int i = 0; i < GradeVariable.RoiRowsGrid.Count; i++)
+            {
+                for (int j = 0; j < GradeVariable.RoiColumnsGrid.Count; j++)
+                {
+                    // Draw horizontal start line
+                    NAxisConstLine cl = nChartMap.Axis(StandardAxis.PrimaryY).ConstLines.Add();
+                    cl.StrokeStyle.Color = Color.FromArgb(80, Color.Blue);
+                    cl.StrokeStyle.Width = new NLength(1.5f);
+                    //cl.FillStyle = new NColorFillStyle(new NArgbColor(12, Color.SteelBlue));
+                    cl.Value = GradeVariable.RoiRowsGrid[i].Start;
+                }
+                for (int j = 0; j < GradeVariable.RoiColumnsGrid.Count; j++)
+                {
+                    // Draw horizontal end line
+                    NAxisConstLine cl = nChartMap.Axis(StandardAxis.PrimaryY).ConstLines.Add();
+                    cl.StrokeStyle.Color = Color.FromArgb(80, Color.Blue);
+                    cl.StrokeStyle.Width = new NLength(1.5f);
+                    cl.Value = GradeVariable.RoiRowsGrid[i].End;
+                }
+            }
+
+            for (int i = 0, j = 0; i < GradeVariable.RoiRowsGrid.Count * 2 * GradeVariable.RoiColumnsGrid.Count; i++, j++)
+            {
+                DrawSubPieceHorizontal(i, GradeVariable.RoiColumnsGrid[j].Start, GradeVariable.RoiColumnsGrid[j].End);
+                if (j == (GradeVariable.RoiColumnsGrid.Count - 1))
+                    j = -1;
+            }
+
+            //******************************************************************//
+            // Draw vertical line
+            for (int i = 0; i < GradeVariable.RoiColumnsGrid.Count; i++)
+            {
+                for (int j = 0; j < GradeVariable.RoiRowsGrid.Count; j++)
+                {
+                    // Draw vertical start line
+                    NAxisConstLine cl = nChartMap.Axis(StandardAxis.PrimaryX).ConstLines.Add();
+                    cl.StrokeStyle.Color = Color.FromArgb(80, Color.Blue);
+                    cl.StrokeStyle.Width = new NLength(1.5f);
+                    //cl.FillStyle = new NColorFillStyle(new NArgbColor(125, Color.SteelBlue));
+                    cl.Value = GradeVariable.RoiColumnsGrid[i].Start;
+                }
+                for (int j = 0; j < GradeVariable.RoiRowsGrid.Count; j++)
+                {
+                    // Draw vertical end line
+                    NAxisConstLine cl = nChartMap.Axis(StandardAxis.PrimaryX).ConstLines.Add();
+                    cl.StrokeStyle.Color = Color.FromArgb(80, Color.Blue);
+                    cl.StrokeStyle.Width = new NLength(1.5f);
+                    cl.Value = GradeVariable.RoiColumnsGrid[i].End;
+                }
+            }
+
+            for (int i = 0, j = 0; i < GradeVariable.RoiRowsGrid.Count * 2 * GradeVariable.RoiColumnsGrid.Count; i++, j++)
+            {
+                DrawSubPieceVertical(i, GradeVariable.RoiRowsGrid[j].Start, GradeVariable.RoiRowsGrid[j].End);
+                if (j == (GradeVariable.RoiRowsGrid.Count - 1))
+                    j = -1;
+            }
+        }
+        private void DrawSubPieceHorizontal(int idx, double begin, double end)
+        {
+            NAxisConstLine cl = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryY).ConstLines[idx];
+            NAxis referenceAxis = nChartMap.Axis(StandardAxis.PrimaryX);
+            cl.ReferenceRanges.Add(new NReferenceAxisRange(referenceAxis, begin, end));
+        }
+
+        private void DrawSubPieceVertical(int idx, double begin, double end)
+        {
+            NAxisConstLine cl = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryX).ConstLines[idx];
+            NAxis referenceAxis = nChartMap.Axis(StandardAxis.PrimaryY);
+            cl.ReferenceRanges.Add(new NReferenceAxisRange(referenceAxis, begin, end));
+        }
+
+        public void SubPieceFail(int SubPieceNumber)
+        {
+            int top = 0, bottom = 0, left = 0, right = 0;
+
+            bottom = (SubPieceNumber / GradeVariable.RoiColumnsGrid.Count) * (GradeVariable.RoiColumnsGrid.Count * 2) + (SubPieceNumber % GradeVariable.RoiColumnsGrid.Count);
+            top = bottom + GradeVariable.RoiColumnsGrid.Count;
+            left = (SubPieceNumber / GradeVariable.RoiColumnsGrid.Count) + (SubPieceNumber % GradeVariable.RoiColumnsGrid.Count * 2 * GradeVariable.RoiRowsGrid.Count);
+            right = left + GradeVariable.RoiRowsGrid.Count;
+
+            NAxisConstLine clFail = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryY).ConstLines[top];
+            clFail.StrokeStyle.Color = Color.Red;
+            clFail = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryY).ConstLines[bottom];
+            clFail.StrokeStyle.Color = Color.Red;
+            clFail = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryX).ConstLines[left];
+            clFail.StrokeStyle.Color = Color.Red;
+            clFail = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryX).ConstLines[right];
+            clFail.StrokeStyle.Color = Color.Red;
+        }
         #endregion
 
         #region Action Events
@@ -540,7 +695,8 @@ namespace PxP
         {
             MapWindowThreadStatus.UpdateChange = true;
             PxPTab.MapThreadEvent.Set();
-            PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+            PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+
         }
         private void btnPrevPiece_Click(object sender, EventArgs e)
         {
@@ -567,13 +723,13 @@ namespace PxP
                 btnNextPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-
+            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece -1 ]));
+
             DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             //2012-05-04 小心online時的不良影響 連動功能
             MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
         }
-
         private void btnNextPiece_Click(object sender, EventArgs e)
         {
             if (PxPThreadStatus.IsOnOnline)
@@ -601,6 +757,7 @@ namespace PxP
                 btnPrevPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
+            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1]));
 
             DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             MapWindowThreadStatus.IsChangePiece = true;
@@ -624,7 +781,6 @@ namespace PxP
                 }
             }
         }
-
         private void gvFlawClass_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
 
@@ -634,8 +790,6 @@ namespace PxP
                 e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(e.Value.ToString());
 
         }
-        #endregion
-
         private void gvFlawClass_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             foreach (DataGridViewRow row in gvFlawClass.Rows)
@@ -655,6 +809,26 @@ namespace PxP
                 }
             }
         }
+
+        private void lbTotalScore_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGradeSetting_Click(object sender, EventArgs e)
+        {
+            GradeSetup gs = new GradeSetup();
+            gs.ShowDialog();
+        }
+
+        private void cboxGradeConfigFile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SystemVariable.GradeConfigFileName = cboxGradeConfigFile.SelectedValue + ".xml";
+            SystemVariable.LoadGradeConfig();
+        }
+        #endregion
+
+       
 
        
 
