@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Program Files\Web Ranger\Web Inspector\WebInspector.exe</StartProgram>
-    <StartWorkingDirectory>C:\Program Files\Web Ranger\Plugins\</StartWorkingDirectory>
+    <StartProgram>C:\Program Files (x86)\Web Ranger\Web Inspector\WebInspector.exe</StartProgram>
+    <StartWorkingDirectory>C:\Program Files (x86)\Web Ranger\Plugins\</StartWorkingDirectory>
   </PropertyGroup>
 </Project>
