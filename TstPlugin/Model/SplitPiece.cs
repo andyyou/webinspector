@@ -5,19 +5,19 @@ using System.Text;
 
 namespace PxP
 {
-    public class SplitePieces
+    public class SplitPieces
     {
         internal int Id { set; get; }
-        internal List<SplitePiece> Pieces { set; get; }
+        internal List<SplitPiece> Pieces { set; get; }
     }
 
-    public class SplitePiece
+    public class SplitPiece
     {
         internal string Name{set; get;}
         internal string GradeLevel{set; get;}
         internal double Socre{set; get;}
         internal string Note { set; get; }
-        public SplitePiece()
+        public SplitPiece()
         {
             this.Socre = 0;
         }

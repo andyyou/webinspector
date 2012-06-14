@@ -511,7 +511,7 @@ namespace PxP
                 PxPVariable.FailNum++;
             }
             //////////////////////////////////////////////////////////////////////
-            DealSplitePieces(subPiece);
+            DealSplitPieces(subPiece);
             //////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = MD;
             gvFlaw.DataSource = bsFlaw;
@@ -622,15 +622,15 @@ namespace PxP
                 return true;
         }
         //處理大片裡面切割的小片評分機制
-        public void DealSplitePieces(List<FlawInfoAddPriority> piece)
+        public void DealSplitPieces(List<FlawInfoAddPriority> piece)
         {
-            SplitePieces tmpSplitePieces = new SplitePieces();
-            tmpSplitePieces.Pieces = new List<SplitePiece>();
+            SplitPieces tmpSplitPieces = new SplitPieces();
+            tmpSplitPieces.Pieces = new List<SplitPiece>();
             foreach (var r in GradeVariable.RoiRowsGrid)
             {
                 foreach (var c in GradeVariable.RoiColumnsGrid)
                 {
-                    SplitePiece tmpsp = new SplitePiece();
+                    SplitPiece tmpsp = new SplitPiece();
                     tmpsp.Name = string.Format("ROI-{0}{1}", r.Name, c.Name);
                     tmpsp.Socre = 0;
                     foreach (var s in piece)
@@ -669,12 +669,11 @@ namespace PxP
                         tmpsp.Socre = 0;
                         tmpsp.GradeLevel = "N";
                     }
-                    tmpSplitePieces.Pieces.Add(tmpsp);
+                    tmpSplitPieces.Pieces.Add(tmpsp);
                 }
 
             }
-            GradeVariable.SplitePiecesContainer.Add(tmpSplitePieces);
-           
+            GradeVariable.SplitPiecesContainer.Add(tmpSplitPieces);
         }
         // 計算個缺陷點分數及歸屬子片
         public List<FlawInfoAddPriority> CalcFlawScore(List<FlawInfoAddPriority> SubPiece)
@@ -1039,7 +1038,7 @@ namespace PxP
             //處理Pass Fail 分數並設定到Mapwindow
             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(subPiece));
 
-            DealSplitePieces(subPiece);
+            DealSplitPieces(subPiece);
           
             ////////////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
@@ -1949,7 +1948,8 @@ namespace PxP
             //MessageBox.Show("ProcessOnCut");
             //DebugTool.WriteLog("PxPTab.cs", "ProcessOnCut");
 
-            MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece, true);
+            //MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPiece, true);
+            MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, true);
             //處理右下角圖片
             DrawTablePictures(MapWindowVariable.FlawPieces,MapWindowVariable.CurrentPiece,1);
             //MapWindowVariable.CurrentPiece++;
@@ -2119,7 +2119,8 @@ namespace PxP
                 PxPVariable.FlawGridViewOrderColumn = NewColumn.Name;
                 SortGridViewByColumn(PxPVariable.FlawGridViewOrderColumn);
                 DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
-                MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
+                //MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
+                MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, false);
             }
                 /*
             // Offical Way

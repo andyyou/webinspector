@@ -41,7 +41,7 @@ namespace PxP
         internal static int PassOrFileScore;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
-        internal static List<SplitePieces> SplitePiecesContainer = new List<SplitePieces>();
+        internal static List<SplitPieces> SplitPiecesContainer = new List<SplitPieces>();
 
     }
 }

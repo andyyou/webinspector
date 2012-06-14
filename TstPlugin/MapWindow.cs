@@ -147,9 +147,13 @@ namespace PxP
         #endregion
 
         #region Method
-        public void DrawPieceFlaw(List<FlawInfoAddPriority> flawPiece, bool drawFlag)
+        public void DrawPieceFlaw(/*List<FlawInfoAddPriority> flawPiece*/int pieceNum, bool drawFlag)
         {
+            List<FlawInfoAddPriority> flawPiece = MapWindowVariable.FlawPieces[pieceNum];
+
             nChartMap.Series.Clear();
+            //TODO: Markup SubPiece
+            SubPieceMarkup(pieceNum);
 
             if (flawPiece.Count > 0)
             {
@@ -381,7 +385,8 @@ namespace PxP
             if (hitTestResult.ChartElement == ChartElement.DataPoint)
             {
                 NSeries series = hitTestResult.Series as NSeries;
-                if (series != null)
+                //UNDONE: Modify OnChartMouseMove
+                if (series != null && series.Name != "Markup")
                 {
                     //MessageBox.Show(hitTestResult.Series.Id.ToString());
                     series.FillStyle = new NColorFillStyle(Color.Red);
@@ -655,7 +660,7 @@ namespace PxP
             cl.ReferenceRanges.Add(new NReferenceAxisRange(referenceAxis, begin, end));
         }
 
-        public void SubPieceFail(int SubPieceNumber)
+        private void SubPieceFail(int SubPieceNumber)
         {
             int top = 0, bottom = 0, left = 0, right = 0;
 
@@ -672,6 +677,49 @@ namespace PxP
             clFail.StrokeStyle.Color = Color.Red;
             clFail = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryX).ConstLines[right];
             clFail.StrokeStyle.Color = Color.Red;
+        }
+
+        private void SubPieceMarkup(int pieceNum)
+        {
+            // UNDONE: SubPieceMarkup()
+            SplitPieces SubPieces = GradeVariable.SplitPiecesContainer[pieceNum];
+
+            foreach (var r in GradeVariable.RoiRowsGrid)
+            {
+                foreach (var c in GradeVariable.RoiColumnsGrid)
+                {
+                    foreach (var s in SubPieces.Pieces)
+                    {
+                        if (s.Name == string.Format("ROI-{0}{1}", r.Name, c.Name))
+                        {
+                            NPointSeries labels = new NPointSeries();
+
+                            labels.Name = "Markup";
+                            labels.UseXValues = true;
+                            labels.MarkerStyle.Visible = false;
+                            labels.DataLabelStyle.Format = "<label>";
+                            labels.BorderStyle.Width = new NLength(0);
+                            labels.FillStyle.SetTransparencyPercent(100);
+
+                            labels.DataLabelStyle.TextStyle.FontStyle = new NFontStyle("Consolas", new NLength(12, NGraphicsUnit.Point), FontStyle.Bold);
+                            labels.DataLabelStyle.TextStyle.FillStyle = new NColorFillStyle(Color.Blue);
+                            labels.DataLabelStyle.TextStyle.BackplaneStyle.Visible = false;
+                            labels.DataLabelStyle.TextStyle.Orientation = 0;
+                            labels.DataLabelStyle.TextStyle.StringFormatStyle.HorzAlign = Nevron.HorzAlign.Left;
+                            labels.DataLabelStyle.TextStyle.StringFormatStyle.VertAlign = Nevron.VertAlign.Top;
+                            labels.DataLabelStyle.ArrowLength = new NLength(0);
+
+                            labels.Values.Add((r.End - (r.End - r.Start) * 0.15));
+                            labels.XValues.Add((c.Start + (c.End - c.Start) * 0.05));
+
+                            //labels.Labels.Add(string.Format("ROI-{0}{1} X = {2}, Y = {3}\nNewX = {4}, NewY = {5}", r.Name, c.Name, c.Start, r.End, (c.Start * 1.1), (r.End * 0.9)));
+                            labels.Labels.Add(string.Format("{0} - {1}", s.Name, s.GradeLevel));
+
+                            nChartMap.Series.Add(labels);
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
@@ -725,7 +773,8 @@ namespace PxP
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece -1 ]));
 
-            DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
+            //DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
+            DrawPieceFlaw(PieceNum - 1, false);
             //2012-05-04 小心online時的不良影響 連動功能
             MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
@@ -738,7 +787,6 @@ namespace PxP
                 MapWindowThreadStatus.UpdateChange = true;
                 PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
-               
             }
            
             
@@ -759,7 +807,8 @@ namespace PxP
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1]));
 
-            DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
+            //DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
+            DrawPieceFlaw(PieceNum - 1, false);
             MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
         }
@@ -800,7 +849,11 @@ namespace PxP
                     {
                         if (MapWindowVariable.FlawPieces.Count > 0)
                             if (Convert.ToBoolean(row.Cells["Display"].EditedFormattedValue))
-                                DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
+                            {
+                                //DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
+                                DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, false);
+                            }
+
                     }
                 }
                 catch (Exception ex)
@@ -808,11 +861,6 @@ namespace PxP
                     MessageBox.Show(ex.Message);
                 }
             }
-        }
-
-        private void lbTotalScore_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnGradeSetting_Click(object sender, EventArgs e)
