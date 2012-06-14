@@ -644,6 +644,7 @@ namespace PxP
                             tmpsp.Socre += s.PointScore;
                         }
                     }
+                   
                     if (GradeVariable.IsMarkGradeEnable)
                     {
                         foreach (var m in GradeVariable.MarkGradeSubPieces)
@@ -1361,6 +1362,7 @@ namespace PxP
         }
 
         #endregion
+
 
         #region IOnJobStopped 成員
 

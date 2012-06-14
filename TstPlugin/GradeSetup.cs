@@ -251,6 +251,7 @@ namespace PxP
             gc.Grade.PointGrade = new PxP.Config.PointGrade();
             gc.Grade.PointGrade.Enable = cboxEnablePTS.Checked ? "1" : "0";
             gc.Grade.PointGrade.SubPiece = new SubPiece[TmpPointSubPieces.Count];
+
             for (var i = 0; i < TmpPointSubPieces.Count; i++)
             {
                 gc.Grade.PointGrade.SubPiece[i] = new SubPiece();
@@ -259,6 +260,11 @@ namespace PxP
                 for (var j = 0; j < ((PointSubPiece)TmpPointSubPieces[i]).Grades.Count; j++)
                 {
                     gc.Grade.PointGrade.SubPiece[i].Items[j] = new PxP.Config.FlawType();
+                    if (cboxAllSameOfPoint.Checked)
+                    {
+                        ((PointSubPiece)TmpPointSubPieces[i]).Grades[j].Score = ((PointSubPiece)TmpPointSubPieces[0]).Grades[j].Score;
+                    }
+
                     ((PxP.Config.FlawType)gc.Grade.PointGrade.SubPiece[i].Items[j]).Id = ((PointSubPiece)TmpPointSubPieces[i]).Grades[j].ClassId.ToString();
                     ((PxP.Config.FlawType)gc.Grade.PointGrade.SubPiece[i].Items[j]).Value = ((PointSubPiece)TmpPointSubPieces[i]).Grades[j].Score.ToString();
                 }
@@ -273,10 +279,27 @@ namespace PxP
             {
                 gc.Grade.MarkGrade.SubPiece[i] = new SubPiece();
                 gc.Grade.MarkGrade.SubPiece[i].Name = ((MarkSubPiece)TmpMarkSubPieces[i]).Name.ToString();
-                gc.Grade.MarkGrade.SubPiece[i].Items = new object[((MarkSubPiece)TmpMarkSubPieces[i]).Grades.Count];
-                for (var j = 0; j < ((MarkSubPiece)TmpMarkSubPieces[i]).Grades.Count; j++)
+                
+                if (cboxAllSameOfGrade.Checked)
+                {
+                    gc.Grade.MarkGrade.SubPiece[i].Items = new object[((MarkSubPiece)TmpMarkSubPieces[0]).Grades.Count];
+                }
+                else
+                {
+                    gc.Grade.MarkGrade.SubPiece[i].Items = new object[((MarkSubPiece)TmpMarkSubPieces[i]).Grades.Count];
+                }
+
+                for (var j = 0; j < gc.Grade.MarkGrade.SubPiece[i].Items.Count(); j++)
                 {
                     gc.Grade.MarkGrade.SubPiece[i].Items[j] = new GradeRow();
+                    if (cboxAllSameOfGrade.Checked)
+                    {
+                        //UNDONE: object unll bug.
+                        if ((TmpMarkSubPieces[i]).Grades[j].Equals(null))
+                           ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j] = new MarkGrade();
+                        ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].GradeName = ((MarkSubPiece)TmpMarkSubPieces[0]).Grades[j].GradeName;
+                        ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].Score = ((MarkSubPiece)TmpMarkSubPieces[0]).Grades[j].Score;
+                    }
                     ((GradeRow)gc.Grade.MarkGrade.SubPiece[i].Items[j]).Id = ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].GradeName.ToString();
                     ((GradeRow)gc.Grade.MarkGrade.SubPiece[i].Items[j]).Value = ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].Score.ToString();
                 }

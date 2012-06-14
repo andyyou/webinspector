@@ -76,6 +76,8 @@
             this.bsRoiList = new System.Windows.Forms.BindingSource(this.components);
             this.bsPointSubPiece = new System.Windows.Forms.BindingSource(this.components);
             this.bsMarkSubPiece = new System.Windows.Forms.BindingSource(this.components);
+            this.cboxAllSameOfPoint = new System.Windows.Forms.CheckBox();
+            this.cboxAllSameOfGrade = new System.Windows.Forms.CheckBox();
             this.tabGradeSetup.SuspendLayout();
             this.tpROI.SuspendLayout();
             this.panelCreateGrid.SuspendLayout();
@@ -301,6 +303,7 @@
             // 
             // gbPointSetting
             // 
+            this.gbPointSetting.Controls.Add(this.cboxAllSameOfPoint);
             this.gbPointSetting.Controls.Add(this.gvPoint);
             this.gbPointSetting.Controls.Add(this.lbSubPieceOfPoint);
             this.gbPointSetting.Controls.Add(this.cboxSubPieceOfPoint);
@@ -376,6 +379,7 @@
             // 
             // gbGradeSetting
             // 
+            this.gbGradeSetting.Controls.Add(this.cboxAllSameOfGrade);
             this.gbGradeSetting.Controls.Add(this.gvGrade);
             this.gbGradeSetting.Controls.Add(this.lbSubPieceOfGrade);
             this.gbGradeSetting.Controls.Add(this.cboxSubPieceOfGrade);
@@ -522,6 +526,26 @@
             this.comboBox2.Size = new System.Drawing.Size(121, 20);
             this.comboBox2.TabIndex = 0;
             // 
+            // cboxAllSameOfPoint
+            // 
+            this.cboxAllSameOfPoint.AutoSize = true;
+            this.cboxAllSameOfPoint.Location = new System.Drawing.Point(204, 23);
+            this.cboxAllSameOfPoint.Name = "cboxAllSameOfPoint";
+            this.cboxAllSameOfPoint.Size = new System.Drawing.Size(153, 16);
+            this.cboxAllSameOfPoint.TabIndex = 3;
+            this.cboxAllSameOfPoint.Text = "Same value from [ALL] tag";
+            this.cboxAllSameOfPoint.UseVisualStyleBackColor = true;
+            // 
+            // cboxAllSameOfGrade
+            // 
+            this.cboxAllSameOfGrade.AutoSize = true;
+            this.cboxAllSameOfGrade.Location = new System.Drawing.Point(204, 24);
+            this.cboxAllSameOfGrade.Name = "cboxAllSameOfGrade";
+            this.cboxAllSameOfGrade.Size = new System.Drawing.Size(153, 16);
+            this.cboxAllSameOfGrade.TabIndex = 3;
+            this.cboxAllSameOfGrade.Text = "Same value from [ALL] tag";
+            this.cboxAllSameOfGrade.UseVisualStyleBackColor = true;
+            // 
             // GradeSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -618,5 +642,7 @@
         private System.Windows.Forms.BindingSource bsMarkSubPiece;
         private System.Windows.Forms.Label lbShowGvRow;
         private System.Windows.Forms.Label lbShowGvColumn;
+        private System.Windows.Forms.CheckBox cboxAllSameOfPoint;
+        private System.Windows.Forms.CheckBox cboxAllSameOfGrade;
     }
 }
