@@ -340,7 +340,7 @@ namespace PxP
                         if (e.RowIndex < 4)
                         {
                             tmp.GradeName = Chr(e.RowIndex + 66).ToString();
-                            tmp.Score = Convert.ToInt32(gvGrade.Rows[e.RowIndex].Cells[1].Value) + 1;
+                            tmp.Score = Convert.ToInt32(gvGrade.Rows[e.RowIndex].Cells[1].Value) + 1;
                             m.Grades.Add(tmp);
                         }
                         bsMarkSubPiece.DataSource = m.Grades;
@@ -529,7 +529,7 @@ namespace PxP
                     MessageBox.Show("Test");
                     e.Cancel = true;
                 }
-            }
+            }
         }
 
       

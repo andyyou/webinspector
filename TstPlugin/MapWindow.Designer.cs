@@ -483,7 +483,6 @@
             this.lbTotalScore.Size = new System.Drawing.Size(73, 14);
             this.lbTotalScore.TabIndex = 16;
             this.lbTotalScore.Text = "TotalScore";
-            this.lbTotalScore.Click += new System.EventHandler(this.lbTotalScore_Click);
             // 
             // lbTotalScoreValue
             // 
