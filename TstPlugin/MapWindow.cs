@@ -152,7 +152,6 @@ namespace PxP
             List<FlawInfoAddPriority> flawPiece = MapWindowVariable.FlawPieces[pieceNum];
 
             nChartMap.Series.Clear();
-            //TODO: Markup SubPiece
             SubPieceMarkup(pieceNum);
 
             if (flawPiece.Count > 0)
@@ -385,7 +384,6 @@ namespace PxP
             if (hitTestResult.ChartElement == ChartElement.DataPoint)
             {
                 NSeries series = hitTestResult.Series as NSeries;
-                //UNDONE: Modify OnChartMouseMove
                 if (series != null && series.Name != "Markup")
                 {
                     //MessageBox.Show(hitTestResult.Series.Id.ToString());
@@ -681,7 +679,6 @@ namespace PxP
 
         private void SubPieceMarkup(int pieceNum)
         {
-            // UNDONE: SubPieceMarkup()
             SplitPieces SubPieces = GradeVariable.SplitPiecesContainer[pieceNum];
 
             foreach (var r in GradeVariable.RoiRowsGrid)
