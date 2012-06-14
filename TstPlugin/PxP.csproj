@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -101,7 +101,7 @@
     <Compile Include="Model\PxPVariable.cs" />
     <Compile Include="Model\RoiGrade.cs" />
     <Compile Include="Model\SerializationUtil.cs" />
-    <Compile Include="Model\SplitePiece.cs" />
+    <Compile Include="Model\SplitPiece.cs" />
     <Compile Include="Model\SystemVariable.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -199,6 +199,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files\Web Ranger\Plugins"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files (x86)\Web Ranger\Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

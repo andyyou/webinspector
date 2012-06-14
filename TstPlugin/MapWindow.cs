@@ -370,7 +370,7 @@ namespace PxP
             if (hitTestResult.ChartElement == ChartElement.DataPoint)
             {
                 NSeries series = hitTestResult.Series as NSeries;
-                if (series != null)
+                if (series != null && series.Name != "Markup")
                 {
                     FlawForm FlawFormController = new FlawForm(
                         Convert.ToInt32(series.Name) - MapWindowVariable.FlawPieces[Convert.ToInt32(lbPageCurrent.Text) - 1][0].FlawID
@@ -711,8 +711,7 @@ namespace PxP
                             labels.Values.Add((r.End - (r.End - r.Start) * 0.15));
                             labels.XValues.Add((c.Start + (c.End - c.Start) * 0.05));
 
-                            //labels.Labels.Add(string.Format("ROI-{0}{1} X = {2}, Y = {3}\nNewX = {4}, NewY = {5}", r.Name, c.Name, c.Start, r.End, (c.Start * 1.1), (r.End * 0.9)));
-                            labels.Labels.Add(string.Format("{0} - {1}", s.Name, s.GradeLevel));
+                            labels.Labels.Add(string.Format("{0} - {1}({2})", s.Name, s.Score, s.GradeLevel));
 
                             nChartMap.Series.Add(labels);
                         }

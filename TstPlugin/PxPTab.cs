@@ -636,12 +636,15 @@ namespace PxP
 
                     SplitPiece tmpsp = new SplitPiece();
                     tmpsp.Name = string.Format("ROI-{0}{1}", r.Name, c.Name);
-                    tmpsp.Socre = 0;
-                    foreach (var s in piece)
+                    tmpsp.Score = 0;
+                    if (GradeVariable.IsPointEnable)
                     {
-                        if (s.SubPieceName == string.Format("ROI-{0}{1}", r.Name, c.Name))
+                        foreach (var s in piece)
                         {
-                            tmpsp.Socre += s.PointScore;
+                            if (s.SubPieceName == string.Format("ROI-{0}{1}", r.Name, c.Name))
+                            {
+                                tmpsp.Score += s.PointScore;
+                            }
                         }
                     }
                    
@@ -654,7 +657,7 @@ namespace PxP
                             {
                                 if (m.Name == tmpsp.Name)
                                 {
-                                    if (tmpsp.Socre <= g.Score && tmpsp.Socre > tmpPrevScore)
+                                    if (tmpsp.Score <= g.Score && tmpsp.Score > tmpPrevScore)
                                     {
                                         tmpsp.GradeLevel = g.GradeName;
                                         break;
@@ -671,8 +674,7 @@ namespace PxP
                     }
                     else
                     {
-                        tmpsp.Socre = 0;
-                        tmpsp.GradeLevel = "N";
+                        tmpsp.GradeLevel = "None";
                     }
 
                     tmpSplitPieces.Pieces.Add(tmpsp);
@@ -1136,6 +1138,7 @@ namespace PxP
             MapWindowVariable.Flaws.Clear();
             MapWindowVariable.FlawPiece.Clear();
             MapWindowVariable.FlawPieces.Clear();
+            GradeVariable.SplitPiecesContainer.Clear();
             MapWindowVariable.CurrentPiece = 0;
             MapWindowVariable.MapWindowController.InitLabel();
             PxPVariable.CurrentCutPosition = 0;

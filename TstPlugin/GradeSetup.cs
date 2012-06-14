@@ -531,6 +531,9 @@ namespace PxP
         private void cboxEnableGrade_CheckedChanged(object sender, EventArgs e)
         {
             gbGradeSetting.Enabled = cboxEnableGrade.Checked;
+            cboxEnablePTS.Enabled = !gbGradeSetting.Enabled;
+            if (gbGradeSetting.Enabled)
+                cboxEnablePTS.Checked = true;
         }
 
         private void cboxEnablePFS_CheckedChanged(object sender, EventArgs e)
