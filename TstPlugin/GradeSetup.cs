@@ -282,7 +282,7 @@ namespace PxP
                 
                 if (cboxAllSameOfGrade.Checked)
                 {
-                    gc.Grade.MarkGrade.SubPiece[i].Items = new object[((MarkSubPiece)TmpMarkSubPieces[0]).Grades.Count];
+                        gc.Grade.MarkGrade.SubPiece[i].Items = new object[((MarkSubPiece)TmpMarkSubPieces[0]).Grades.Count];
                 }
                 else
                 {
@@ -294,11 +294,12 @@ namespace PxP
                     gc.Grade.MarkGrade.SubPiece[i].Items[j] = new GradeRow();
                     if (cboxAllSameOfGrade.Checked)
                     {
-                        //UNDONE: object unll bug.
-                        if ((TmpMarkSubPieces[i]).Grades[j].Equals(null))
-                           ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j] = new MarkGrade();
-                        ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].GradeName = ((MarkSubPiece)TmpMarkSubPieces[0]).Grades[j].GradeName;
-                        ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].Score = ((MarkSubPiece)TmpMarkSubPieces[0]).Grades[j].Score;
+                        if (TmpMarkSubPieces[i].Grades.Count != ((MarkSubPiece)TmpMarkSubPieces[0]).Grades.Count)
+                        {
+                            ((MarkSubPiece)TmpMarkSubPieces[i]).Grades = new List<MarkGrade>(((MarkSubPiece)TmpMarkSubPieces[0]).Grades.Count);
+                            ((MarkSubPiece)TmpMarkSubPieces[i]).Grades = ((MarkSubPiece)TmpMarkSubPieces[0]).Grades;
+                        }
+
                     }
                     ((GradeRow)gc.Grade.MarkGrade.SubPiece[i].Items[j]).Id = ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].GradeName.ToString();
                     ((GradeRow)gc.Grade.MarkGrade.SubPiece[i].Items[j]).Value = ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].Score.ToString();
@@ -554,12 +555,6 @@ namespace PxP
                 }
             }
         }
-
-      
-
-
-       
-
        
     }
 }

@@ -49,6 +49,7 @@
             this.tabGradeSetting = new System.Windows.Forms.TabControl();
             this.tpPoint = new System.Windows.Forms.TabPage();
             this.gbPointSetting = new System.Windows.Forms.GroupBox();
+            this.cboxAllSameOfPoint = new System.Windows.Forms.CheckBox();
             this.gvPoint = new System.Windows.Forms.DataGridView();
             this.lbSubPieceOfPoint = new System.Windows.Forms.Label();
             this.cboxSubPieceOfPoint = new System.Windows.Forms.ComboBox();
@@ -56,6 +57,7 @@
             this.tpGradeLevel = new System.Windows.Forms.TabPage();
             this.cboxEnableGrade = new System.Windows.Forms.CheckBox();
             this.gbGradeSetting = new System.Windows.Forms.GroupBox();
+            this.cboxAllSameOfGrade = new System.Windows.Forms.CheckBox();
             this.gvGrade = new System.Windows.Forms.DataGridView();
             this.lbSubPieceOfGrade = new System.Windows.Forms.Label();
             this.cboxSubPieceOfGrade = new System.Windows.Forms.ComboBox();
@@ -76,8 +78,6 @@
             this.bsRoiList = new System.Windows.Forms.BindingSource(this.components);
             this.bsPointSubPiece = new System.Windows.Forms.BindingSource(this.components);
             this.bsMarkSubPiece = new System.Windows.Forms.BindingSource(this.components);
-            this.cboxAllSameOfPoint = new System.Windows.Forms.CheckBox();
-            this.cboxAllSameOfGrade = new System.Windows.Forms.CheckBox();
             this.tabGradeSetup.SuspendLayout();
             this.tpROI.SuspendLayout();
             this.panelCreateGrid.SuspendLayout();
@@ -314,6 +314,16 @@
             this.gbPointSetting.TabStop = false;
             this.gbPointSetting.Text = "Point setting";
             // 
+            // cboxAllSameOfPoint
+            // 
+            this.cboxAllSameOfPoint.AutoSize = true;
+            this.cboxAllSameOfPoint.Location = new System.Drawing.Point(204, 23);
+            this.cboxAllSameOfPoint.Name = "cboxAllSameOfPoint";
+            this.cboxAllSameOfPoint.Size = new System.Drawing.Size(153, 16);
+            this.cboxAllSameOfPoint.TabIndex = 3;
+            this.cboxAllSameOfPoint.Text = "Same value from [ALL] tag";
+            this.cboxAllSameOfPoint.UseVisualStyleBackColor = true;
+            // 
             // gvPoint
             // 
             this.gvPoint.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -389,6 +399,16 @@
             this.gbGradeSetting.TabIndex = 3;
             this.gbGradeSetting.TabStop = false;
             this.gbGradeSetting.Text = "Grade setting";
+            // 
+            // cboxAllSameOfGrade
+            // 
+            this.cboxAllSameOfGrade.AutoSize = true;
+            this.cboxAllSameOfGrade.Location = new System.Drawing.Point(204, 24);
+            this.cboxAllSameOfGrade.Name = "cboxAllSameOfGrade";
+            this.cboxAllSameOfGrade.Size = new System.Drawing.Size(153, 16);
+            this.cboxAllSameOfGrade.TabIndex = 3;
+            this.cboxAllSameOfGrade.Text = "Same value from [ALL] tag";
+            this.cboxAllSameOfGrade.UseVisualStyleBackColor = true;
             // 
             // gvGrade
             // 
@@ -525,26 +545,6 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 20);
             this.comboBox2.TabIndex = 0;
-            // 
-            // cboxAllSameOfPoint
-            // 
-            this.cboxAllSameOfPoint.AutoSize = true;
-            this.cboxAllSameOfPoint.Location = new System.Drawing.Point(204, 23);
-            this.cboxAllSameOfPoint.Name = "cboxAllSameOfPoint";
-            this.cboxAllSameOfPoint.Size = new System.Drawing.Size(153, 16);
-            this.cboxAllSameOfPoint.TabIndex = 3;
-            this.cboxAllSameOfPoint.Text = "Same value from [ALL] tag";
-            this.cboxAllSameOfPoint.UseVisualStyleBackColor = true;
-            // 
-            // cboxAllSameOfGrade
-            // 
-            this.cboxAllSameOfGrade.AutoSize = true;
-            this.cboxAllSameOfGrade.Location = new System.Drawing.Point(204, 24);
-            this.cboxAllSameOfGrade.Name = "cboxAllSameOfGrade";
-            this.cboxAllSameOfGrade.Size = new System.Drawing.Size(153, 16);
-            this.cboxAllSameOfGrade.TabIndex = 3;
-            this.cboxAllSameOfGrade.Text = "Same value from [ALL] tag";
-            this.cboxAllSameOfGrade.UseVisualStyleBackColor = true;
             // 
             // GradeSetup
             // 
