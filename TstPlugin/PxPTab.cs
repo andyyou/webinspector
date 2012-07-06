@@ -1246,6 +1246,7 @@ namespace PxP
             
             //Disable MapSetup Button
             MapWindowVariable.MapWindowController.btnMapSetup.Enabled = true;
+            MapWindowVariable.MapWindowController.btnGradeSetting.Enabled = true;
             MapWindowVariable.MapWindowController.SetJobInfo();
             MapWindowVariable.MapWindowController.SetMapAxis();
             MapWindowVariable.MapWindowController.bsFlawType.ResetBindings(false);
@@ -1374,6 +1375,7 @@ namespace PxP
             //MessageBox.Show("OnJobStopped");
             //DebugTool.WriteLog("PxPTab.cs", "OnJobStopped");
             MapWindowVariable.MapWindowController.btnMapSetup.Enabled = true;
+            MapWindowVariable.MapWindowController.btnGradeSetting.Enabled = true;
             PxPThreadStatus.IsOnJobStopped = true;
             if (SystemVariable.IsReadHistory)
             {
@@ -1479,6 +1481,7 @@ namespace PxP
             if (isOnline)
             {
                 MapWindowVariable.MapWindowController.btnMapSetup.Enabled = false;
+                MapWindowVariable.MapWindowController.btnGradeSetting.Enabled = false;
                 bsFlaw.DataSource = MapWindowVariable.FlawPiece;
                 gvFlaw.Rows.Clear();
                 tlpDoffGrid.Controls.Clear();

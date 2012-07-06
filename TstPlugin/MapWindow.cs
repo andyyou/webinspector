@@ -753,7 +753,7 @@ namespace PxP
                 PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
             }
-           
+            
             int PieceNum = MapWindowVariable.CurrentPiece - 1;
             if (MapWindowVariable.ShowFlag != 0)
             {
@@ -769,11 +769,10 @@ namespace PxP
                 btnNextPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece -1 ]));
+            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
 
             //DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             DrawPieceFlaw(PieceNum - 1, false);
-            //2012-05-04 小心online時的不良影響 連動功能
             MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
         }
@@ -803,7 +802,7 @@ namespace PxP
                 btnPrevPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1]));
+            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
 
             //DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             DrawPieceFlaw(PieceNum - 1, false);
@@ -872,6 +871,20 @@ namespace PxP
         {
             SystemVariable.GradeConfigFileName = cboxGradeConfigFile.SelectedValue + ".xml";
             SystemVariable.LoadGradeConfig();
+        }
+
+        private void btnFailList_Click(object sender, EventArgs e)
+        {
+            if (PxPThreadStatus.IsOnOnline)
+            {
+                //Set WebInspector Offline
+                MapWindowThreadStatus.UpdateChange = true;
+                PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+                lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
+            }
+
+            FailList fl = new FailList();
+            fl.Show();
         }
         #endregion
 
