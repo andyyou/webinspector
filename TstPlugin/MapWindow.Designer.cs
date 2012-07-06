@@ -68,6 +68,7 @@
             this.lbTotalScore = new System.Windows.Forms.Label();
             this.lbTotalScoreValue = new System.Windows.Forms.Label();
             this.bsGradConfigList = new System.Windows.Forms.BindingSource(this.components);
+            this.btnFailList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gvFlawClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlawType)).BeginInit();
             this.tlpMapInfo.SuspendLayout();
@@ -331,9 +332,9 @@
             this.panel1.Controls.Add(this.rbAll);
             this.panel1.Controls.Add(this.rbFail);
             this.panel1.Controls.Add(this.rbPass);
-            this.panel1.Location = new System.Drawing.Point(522, 18);
+            this.panel1.Location = new System.Drawing.Point(522, 17);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(114, 100);
+            this.panel1.Size = new System.Drawing.Size(114, 68);
             this.panel1.TabIndex = 3;
             // 
             // rbAll
@@ -378,7 +379,7 @@
             // 
             // btnMapSetup
             // 
-            this.btnMapSetup.Location = new System.Drawing.Point(523, 125);
+            this.btnMapSetup.Location = new System.Drawing.Point(523, 96);
             this.btnMapSetup.Name = "btnMapSetup";
             this.btnMapSetup.Size = new System.Drawing.Size(113, 23);
             this.btnMapSetup.TabIndex = 4;
@@ -445,7 +446,7 @@
             // 
             // btnGradeSetting
             // 
-            this.btnGradeSetting.Location = new System.Drawing.Point(523, 154);
+            this.btnGradeSetting.Location = new System.Drawing.Point(523, 125);
             this.btnGradeSetting.Name = "btnGradeSetting";
             this.btnGradeSetting.Size = new System.Drawing.Size(113, 23);
             this.btnGradeSetting.TabIndex = 13;
@@ -495,6 +496,16 @@
             this.lbTotalScoreValue.TabIndex = 17;
             this.lbTotalScoreValue.Text = "--";
             // 
+            // btnFailList
+            // 
+            this.btnFailList.Location = new System.Drawing.Point(523, 154);
+            this.btnFailList.Name = "btnFailList";
+            this.btnFailList.Size = new System.Drawing.Size(113, 23);
+            this.btnFailList.TabIndex = 13;
+            this.btnFailList.Text = "Fail List";
+            this.btnFailList.UseVisualStyleBackColor = true;
+            this.btnFailList.Click += new System.EventHandler(this.btnFailList_Click);
+            // 
             // MapWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -505,6 +516,7 @@
             this.Controls.Add(this.lbTotalScore);
             this.Controls.Add(this.lbGradeConfig);
             this.Controls.Add(this.cboxGradeConfigFile);
+            this.Controls.Add(this.btnFailList);
             this.Controls.Add(this.btnGradeSetting);
             this.Controls.Add(this.lbPageCurrent);
             this.Controls.Add(this.lbPageTotal);
@@ -560,17 +572,18 @@
         private System.Windows.Forms.Label lbJobIDValue;
         private System.Windows.Forms.Label lbOperatorValue;
         private System.Windows.Forms.Label lbDateTimeValue;
-        private System.Windows.Forms.Label lbPageCurrent;
         private System.Windows.Forms.Label lbPageTotal;
         private System.Windows.Forms.Label lbNothing;
-        private System.Windows.Forms.Button btnNextPiece;
-        private System.Windows.Forms.Button btnPrevPiece;
-        private System.Windows.Forms.Button btnGradeSetting;
         private System.Windows.Forms.ComboBox cboxGradeConfigFile;
         private System.Windows.Forms.Label lbGradeConfig;
         private System.Windows.Forms.Label lbTotalScore;
         private System.Windows.Forms.Label lbTotalScoreValue;
         private System.Windows.Forms.BindingSource bsGradConfigList;
+        private System.Windows.Forms.Button btnFailList;
+        public System.Windows.Forms.Button btnGradeSetting;
+        public System.Windows.Forms.Label lbPageCurrent;
+        public System.Windows.Forms.Button btnNextPiece;
+        public System.Windows.Forms.Button btnPrevPiece;
 
     }
 }

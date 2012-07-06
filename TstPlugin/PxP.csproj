@@ -68,6 +68,12 @@
     <Compile Include="DrawIconTest.Designer.cs">
       <DependentUpon>DrawIconTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="FailList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FailList.Designer.cs">
+      <DependentUpon>FailList.cs</DependentUpon>
+    </Compile>
     <Compile Include="FlawForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,6 +191,9 @@
     <None Include="Resources\Zoom Out.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FailList.resx">
+      <DependentUpon>FailList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GradeSetup.resx">
       <DependentUpon>GradeSetup.cs</DependentUpon>
     </EmbeddedResource>
