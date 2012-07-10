@@ -19,13 +19,15 @@ namespace PxP
         public double RightEdge { set; get; }
         public double Length { set; get; }
         public double Width { set; get; }
-        //Add Column
+
+        // Add Column
         public int Priority { get; set; }
         public double RMD { get; set; }
         public double RCD { get; set; }
         public double PointScore { get; set; }
         public string SubPieceName { get; set; }
-        //Keep origin value
+        
+        // Keep original value
         public string OArea { set; get; }
         public double OCD { set; get; }
         public double OMD { set; get; }
@@ -34,13 +36,7 @@ namespace PxP
         public double ORMD { set; get; }
         public double ORCD { set; get; }
 
-        public FlawInfoAddPriority()
-        {
-
-        }
-        ////////////////////////////////////////////////////////////////////////////////
-
-
+        public FlawInfoAddPriority() { }
     }
 }
 

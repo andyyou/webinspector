@@ -9,10 +9,10 @@ namespace PxP
     {
         public string Name { set; get; }
         public int FlawType { set; get; }
-        //Add Other Properties
+        
+        // Add Other Properties
         public bool Display { set; get; }
         public int Count { set; get; }
-        //public string Letter { set; get; }
         public string Color { set; get; }
         public string Shape { set; get; }
         public int JobNum { set; get; }

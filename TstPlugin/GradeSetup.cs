@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.Reflection;
-using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using PxP.Config;
@@ -16,16 +16,17 @@ namespace PxP
 {
     public partial class GradeSetup : Form
     {
-        #region Local variable
-        private int ASCNumOfMarkGrade = 65;
+        #region Local Variables
+
         private List<PointSubPiece> TmpPointSubPieces = GradeVariable.PointSubPieces;
         private List<MarkSubPiece> TmpMarkSubPieces = GradeVariable.MarkGradeSubPieces;
         private List<RoiGrade> TmpColumnsGrid = GradeVariable.RoiColumnsGrid;
         private List<RoiGrade> TmpRowsGrid = GradeVariable.RoiRowsGrid;
+
         #endregion
 
-        
         #region Constructor
+
         public GradeSetup()
         {
             InitializeComponent();
@@ -36,17 +37,18 @@ namespace PxP
         { 
             
         }
+
         #endregion
 
         #region Reflactoring
-        
-        //初始化所有物件
+
+        // 初始化所有物件
         void InitialzeAllCustomObject()
         {
-            //Reload grade config
+            // Reload grade config
             SystemVariable.LoadGradeConfig();
 
-            //Radio button get default value
+            // Radio button get default value
             switch (GradeVariable.RoiMode)
             { 
                 case 0:
@@ -60,32 +62,32 @@ namespace PxP
                     break;
             }
 
-            //Textbox get default value
+            // Textbox get default value
             if (GradeVariable.RoiGradeColumns > 0)
                 tboxColumns.Text = GradeVariable.RoiGradeColumns.ToString();
             if (GradeVariable.RoiGradeRows > 0)
                 tboxRows.Text = GradeVariable.RoiGradeRows.ToString();
 
-            //set cobobox get xml list in config folder
+            // Set cobobox get xml list in config folder
             bsGradConfigList.DataSource = GetGradeConfList();
             cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
             cboxGradeConfigFile.SelectedItem = SystemVariable.GradeConfigFileName.ToString().Substring(0, SystemVariable.GradeConfigFileName.ToString().LastIndexOf("."));
 
-            //set columns gridview get xml default value
+            // Set columns gridview get xml default value
             bsColumns.DataSource = TmpColumnsGrid;
             gvColumns.DataSource = bsColumns.DataSource;
 
-            //set rows gridview get xml default vale
+            // Set rows gridview get xml default vale
             bsRows.DataSource = TmpRowsGrid;
             gvRows.DataSource = bsRows.DataSource;
 
-            //subpiece comobox get list
+            // Subpiece comobox get list
             bsRoiList.DataSource = GetSubPieceList();
             cboxSubPieceOfGrade.DataSource = bsRoiList.DataSource;
             cboxSubPieceOfPoint.DataSource = bsRoiList.DataSource;
 
-            //Grade setting > Point get grid value for ROI-11 ROI-12 etc...
-            foreach (var p in TmpPointSubPieces)
+            // Grade setting > Point get grid value for ROI-11, ROI-12 etc...
+            foreach (PointSubPiece p in TmpPointSubPieces)
             { 
                 if(p.Name == cboxSubPieceOfPoint.Text)
                     bsPointSubPiece.DataSource = p.Grades;
@@ -94,40 +96,40 @@ namespace PxP
             gvPoint.DataSource = bsPointSubPiece.DataSource;
             gvPoint.Columns["ClassId"].Visible = false;
             gvPoint.Columns["ClassName"].ReadOnly = true;
-            //Grade setting > Point get value of cobobox for enable 
+            // Grade setting > Point get value of cobobox for enable 
             cboxEnablePTS.Checked = GradeVariable.IsPointEnable;
 
-            //Grade setting > MarkGrade get value of cobobox for enable
+            // Grade setting > MarkGrade get value of cobobox for enable
             cboxEnableGrade.Checked = GradeVariable.IsMarkGradeEnable;
 
-            //Grade setting > MarkGrade get grid value for ROI-11, ROI-12 etc...
-            foreach (var m in TmpMarkSubPieces)
+            // Grade setting > MarkGrade get grid value for ROI-11, ROI-12 etc...
+            foreach (MarkSubPiece m in TmpMarkSubPieces)
             {
                 if (m.Name == cboxSubPieceOfPoint.Text)
                     bsMarkSubPiece.DataSource = m.Grades;
             }
             gvGrade.DataSource = bsMarkSubPiece.DataSource;
             gvGrade.Columns["GradeName"].ReadOnly = true;
-            //Grade setting > pass or fail of cobobox for enable
+
+            // Grade setting > pass or fail of cobobox for enable
             cboxEnablePFS.Checked = GradeVariable.IsPassOrFailScoreEnable;
 
-
-            //Grade setting > pass or fail of textbox for get filter score
+            // Grade setting > pass or fail of textbox for get filter score
             tboxFilterScore.Text = GradeVariable.PassOrFileScore.ToString();
 
-            //set panel visiable
+            // Set panel visiable
             panelCreateGrid.Visible = !rbNoRoi.Checked;
             gbPointSetting.Enabled = cboxEnablePTS.Checked;
             gbGradeSetting.Enabled = cboxEnableGrade.Checked;
             tboxFilterScore.Enabled = cboxEnablePFS.Checked;
         }
-        //取得Folder底下所有XML清單
+
+        // 取得 Folder 底下所有 XML 清單
         List<string> GetGradeConfList()
         {
-
             List<string> ConfList = new List<string>();
             string ConfPath = Path.GetDirectoryName(
-               Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/grade/";
+                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/grade/";
             DirectoryInfo di = new DirectoryInfo(ConfPath);
             FileInfo[] rgFiles = di.GetFiles("*.xml");
 
@@ -137,36 +139,38 @@ namespace PxP
             }
             return ConfList;
         }
-        //get subpiece list
+
+        // Get subpiece list
         List<string> GetSubPieceList()
         {
             List<string> result = new List<string>();
             result.Add("ALL");
-            foreach (var r in TmpRowsGrid)
+            foreach (RoiGrade r in TmpRowsGrid)
             {
-                foreach (var c in TmpColumnsGrid)
+                foreach (RoiGrade c in TmpColumnsGrid)
                 {
-
                     string tmp =  "ROI-" + r.Name + c.Name;
                     result.Add(tmp);
                 }
             }
             return result;
-
         }
-        //轉換ASCII Number
+
+        // 轉換 ASCII Number
         public static char Chr(int Num)
         {
             char C = Convert.ToChar(Num);
             return C;
         }
-        //轉換Char to ASCnumber
+
+        // 轉換 Char to ASCnumber
         public static int ASC(string S)
         {
             int N = Convert.ToInt32(S[0]);
             return N;
         }
-        //Switch radiobutton to get ROI Model 
+
+        // Switch radiobutton to get ROI Model 
         int GetROIMode(Control container)
         {
             int RoiMode = 0;
@@ -179,13 +183,13 @@ namespace PxP
                 case "rbSymmetrical":
                     RoiMode = 1;
                     break;
-                
             }
             return RoiMode;
         }
+
         RadioButton GetCheckedRadio(Control container)
         {
-            foreach (var control in container.Controls)
+            foreach (Control control in container.Controls)
             {
                 RadioButton radio = control as RadioButton;
 
@@ -194,35 +198,23 @@ namespace PxP
                     return radio;
                 }
             }
-
             return null;
         }
+
         #endregion
 
-       
-
         #region Action Events
-        //cancel
+        
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            //string x = "";
-            //foreach (var i in TmpMarkSubPieces)
-            //{
-            //    x += i.Name + ": ";
-            //    foreach (var j in i.Grades)
-            //    {
-            //        x += j.GradeName + ":" + j.Score + ", ";
-            //    }
-            //    x += "\n";
-            //}
-            //MessageBox.Show(x);
             this.Close();
         }
-        //save xml
+
+        // Save XML
         private void btnSaveGradeConfigFile_Click(object sender, EventArgs e)
         {
             string FolderPath = Path.GetDirectoryName(
-            Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\grade\\";
+                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\grade\\";
             string FullSystemPath = FolderPath + cboxGradeConfigFile.Text + ".xml";
             GradeConfig gc = new GradeConfig();
             gc.Roi = new Roi();
@@ -247,7 +239,7 @@ namespace PxP
             }
             gc.Grade = new PxP.Config.Grade();
           
-            //write PxP.Config.PointGrade data
+            // Write PxP.Config.PointGrade data
             gc.Grade.PointGrade = new PxP.Config.PointGrade();
             gc.Grade.PointGrade.Enable = cboxEnablePTS.Checked ? "1" : "0";
             gc.Grade.PointGrade.SubPiece = new SubPiece[TmpPointSubPieces.Count];
@@ -268,10 +260,9 @@ namespace PxP
                     ((PxP.Config.FlawType)gc.Grade.PointGrade.SubPiece[i].Items[j]).Id = ((PointSubPiece)TmpPointSubPieces[i]).Grades[j].ClassId.ToString();
                     ((PxP.Config.FlawType)gc.Grade.PointGrade.SubPiece[i].Items[j]).Value = ((PointSubPiece)TmpPointSubPieces[i]).Grades[j].Score.ToString();
                 }
-
             }
            
-            // write PxP.Config.MarkGrade data
+            // Write PxP.Config.MarkGrade data
             gc.Grade.MarkGrade = new PxP.Config.MarkGrade();
             gc.Grade.MarkGrade.Enable = cboxEnableGrade.Checked ? "1" : "0";
             gc.Grade.MarkGrade.SubPiece = new SubPiece[TmpMarkSubPieces.Count];
@@ -299,19 +290,16 @@ namespace PxP
                             ((MarkSubPiece)TmpMarkSubPieces[i]).Grades = new List<MarkGrade>(((MarkSubPiece)TmpMarkSubPieces[0]).Grades.Count);
                             ((MarkSubPiece)TmpMarkSubPieces[i]).Grades = ((MarkSubPiece)TmpMarkSubPieces[0]).Grades;
                         }
-
                     }
                     ((GradeRow)gc.Grade.MarkGrade.SubPiece[i].Items[j]).Id = ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].GradeName.ToString();
                     ((GradeRow)gc.Grade.MarkGrade.SubPiece[i].Items[j]).Value = ((MarkSubPiece)TmpMarkSubPieces[i]).Grades[j].Score.ToString();
                 }
-
             }
 
-            // write PxP.Config.PassOrFail data
+            // Write PxP.Config.PassOrFail data
             gc.Grade.PassFail = new PassFail();
             gc.Grade.PassFail.Enable = cboxEnablePFS.Checked ? "1" : "0";
             gc.Grade.PassFail.Score = tboxFilterScore.Text;
-
             
             XDocument XDoc = SerializationUtil.Serialize(gc);
 
@@ -322,10 +310,11 @@ namespace PxP
             GradeVariable.RoiRowsGrid = TmpRowsGrid;
             MessageBox.Show("Success");
         }
-        //select subpiece like ROI-11, ROI-12
+
+        // Select subpiece like ROI-11, ROI-12
         private void cboxSubPieceOfPoint_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (var p in TmpPointSubPieces)
+            foreach (PointSubPiece p in TmpPointSubPieces)
             {
                 if (p.Name == cboxSubPieceOfPoint.Text)
                 {
@@ -335,11 +324,11 @@ namespace PxP
                 }
             }
             gvPoint.DataSource = bsPointSubPiece.DataSource;
-            
         }
+
         private void cboxSubPieceOfGrade_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (var m in TmpMarkSubPieces)
+            foreach (MarkSubPiece m in TmpMarkSubPieces)
             {
                 if (m.Name == cboxSubPieceOfGrade.Text)
                 {
@@ -350,13 +339,13 @@ namespace PxP
             }
             gvGrade.DataSource = bsMarkSubPiece.DataSource;
         }
+
         private void gvGrade_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // Get all rows entered on each press of Enter.
-
             if (e.RowIndex == gvGrade.Rows.Count - 1 && !String.IsNullOrEmpty(gvGrade.Rows[e.RowIndex].Cells[1].Value.ToString()))
             {
-                foreach (var m in TmpMarkSubPieces)
+                foreach (MarkSubPiece m in TmpMarkSubPieces)
                 {
                     if (m.Name == cboxSubPieceOfGrade.Text)
                     {
@@ -375,6 +364,7 @@ namespace PxP
                 gvGrade.Columns["GradeName"].ReadOnly = true;
             }
         }
+
         private void gvGrade_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete )
@@ -388,7 +378,6 @@ namespace PxP
                     {
                         ((MarkGrade)bsMarkSubPiece[i]).GradeName = Chr(i + 65).ToString();
                     }
-                   
                 }
                 else
                 {
@@ -398,9 +387,7 @@ namespace PxP
                 gvGrade.DataSource = bsMarkSubPiece.DataSource;
                 gvGrade.Columns[0].ReadOnly = true;
             }
-           
         }
-        #endregion
 
         private void gvGrade_MouseDown(object sender, MouseEventArgs e)
         {
@@ -441,18 +428,18 @@ namespace PxP
             gvRows.DataSource = typeof(List<RoiGrade>);
             gvRows.DataSource = bsRows.DataSource;
 
-            //clear and create list of ROI-Pieces like ROI-11, ROI-12...
+            // Clear and create list of ROI-Pieces like ROI-11, ROI-12 etc...
             bsRoiList.DataSource = GetSubPieceList();
             cboxSubPieceOfPoint.DataSource = bsRoiList.DataSource;
             cboxSubPieceOfGrade.DataSource = bsRoiList.DataSource;
 
-            //create new TmpPointSubPieces
-            //1. 先加入一筆ALL的SubPiece 指全部使用相同設定
+            // Create new TmpPointSubPieces
+            // 1. 先加入一筆 ALL 的 SubPiece 指全部使用相同設定
             TmpPointSubPieces.Clear();
             PointSubPiece allsame = new PointSubPiece();
             allsame.Name = "ALL";
             allsame.Grades = new List<PointGrade>();
-            foreach (var i in PxPVariable.FlawTypeName)
+            foreach (FlawTypeNameExtend i in PxPVariable.FlawTypeName)
             {
                 PointGrade tmpPG = new PointGrade();
                 tmpPG.ClassId = i.FlawType;
@@ -462,15 +449,16 @@ namespace PxP
                 allsame.Grades.Add(tmpPG);
             }
             TmpPointSubPieces.Add(allsame);
-            //2. 用Rows和Columns造出所有欄位
-            foreach (var r in TmpRowsGrid)
+            
+            // 2. 用 Rows 和 Columns 造出所有欄位
+            foreach (RoiGrade r in TmpRowsGrid)
             {
-                foreach (var c in TmpColumnsGrid)
+                foreach (RoiGrade c in TmpColumnsGrid)
                 {
                     PointSubPiece tmpPointSubPiece = new PointSubPiece();
                     tmpPointSubPiece.Name = "ROI-" + r.Name + c.Name;
                     tmpPointSubPiece.Grades = new List<PointGrade>();
-                    foreach (var i in PxPVariable.FlawTypeName)
+                    foreach (FlawTypeNameExtend i in PxPVariable.FlawTypeName)
                     {
                         PointGrade tmpPG = new PointGrade();
                         tmpPG.ClassId = i.FlawType;
@@ -483,9 +471,8 @@ namespace PxP
             }
 
 
-            //create new TmpMarkSubPieces
-
-            //1. 先加入一筆ALL的SubPiece 指全部使用相同設定
+            // Create new TmpMarkSubPieces
+            // 1. 先加入一筆 ALL 的 SubPiece 指全部使用相同設定
             TmpMarkSubPieces.Clear();
             MarkSubPiece msp = new MarkSubPiece();
             msp.Name = "ALL";
@@ -496,10 +483,11 @@ namespace PxP
             tmpMG.Score = 0;
             msp.Grades.Add(tmpMG);
             TmpMarkSubPieces.Add(msp);
-            //2. 用Rows和Columns造出所有欄位
-            foreach (var r in TmpRowsGrid)
+            
+            // 2. 用 Rows 和 Columns 造出所有欄位
+            foreach (RoiGrade r in TmpRowsGrid)
             {
-                foreach (var c in TmpColumnsGrid)
+                foreach (RoiGrade c in TmpColumnsGrid)
                 {
                     MarkSubPiece tmpMarkSubPiece = new MarkSubPiece();
                     tmpMarkSubPiece.Name = "ROI-" + r.Name + c.Name;
@@ -514,8 +502,6 @@ namespace PxP
             }
             cboxSubPieceOfPoint_SelectedIndexChanged(cboxSubPieceOfPoint,e);
             cboxSubPieceOfGrade_SelectedIndexChanged(cboxSubPieceOfGrade,e);
-
-            
         }
 
         private void rbNoRoi_CheckedChanged(object sender, EventArgs e)
@@ -558,6 +544,7 @@ namespace PxP
                 }
             }
         }
-       
+        
+        #endregion
     }
 }
