@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PxP
 {
-    //等級設定model
+    // 等級設定 model
     public class RoiGrade
     {
         public string Name { set; get; }

@@ -11,8 +11,9 @@ namespace PxP
         public string ColumnName { set; get; }
         public int Width { set; get; }
         public string HeaderText { set; get; }
-        public DoffGridColumns()
-        { }
+
+        public DoffGridColumns(){ }
+
         public DoffGridColumns(int index, string column, int width)
         {
             this.Index = index;

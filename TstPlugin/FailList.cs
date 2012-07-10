@@ -11,13 +11,28 @@ namespace PxP
 {
     public partial class FailList : Form
     {
+        #region Local Variables
+
         int CurrentPieceTmp;
         bool btnPrevStatus, btnNextStatus;
+
+        #endregion
+
+        #region Constructor
 
         public FailList()
         {
             InitializeComponent();
         }
+
+        ~FailList()
+        {
+
+        }
+
+        #endregion
+
+        #region Action Events
 
         private void FailList_Load(object sender, EventArgs e)
         {
@@ -26,7 +41,7 @@ namespace PxP
             MapWindowVariable.MapWindowController.btnPrevPiece.Enabled = false;
             MapWindowVariable.MapWindowController.btnNextPiece.Enabled = false;
             CurrentPieceTmp = MapWindowVariable.CurrentPiece;
-            foreach (var result in MapWindowVariable.PieceResult)
+            foreach (KeyValuePair<int,bool> result in MapWindowVariable.PieceResult)
             {
                 if (result.Value == false)
                 {
@@ -51,17 +66,15 @@ namespace PxP
             MapWindowVariable.MapWindowController.btnNextPiece.Enabled = btnNextStatus;
         }
 
+        #endregion
+
+        #region Method
+
         private void ChangePiece(int pieceNum)
         {
             if (gvFailList.Rows.Count > 0)
             {
                 MapWindowVariable.CurrentPiece = pieceNum;
-                if (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece)
-                    MapWindowVariable.MapWindowController.btnNextPiece.Enabled = false;
-                if ((MapWindowVariable.CurrentPiece == 1) || (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece - PxPVariable.PieceLimit))
-                    MapWindowVariable.MapWindowController.btnPrevPiece.Enabled = false;
-                else
-                    MapWindowVariable.MapWindowController.btnNextPiece.Enabled = true;
                 MapWindowVariable.MapWindowController.CountFlawPieceDoffNum();
                 MapWindowVariable.MapWindowController.lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
                 MapWindowVariable.MapWindowController.SetTotalScoreLabel(MapWindowVariable.MapWindowController.CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
@@ -71,5 +84,7 @@ namespace PxP
                 PxPTab.MapThreadEvent.Set();
             }
         }
+
+        #endregion
     }
 }
