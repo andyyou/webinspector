@@ -7,13 +7,13 @@ namespace PxP
 {
     public class PxPThreadStatus
     {
-        public static bool IsOnShutdown;   //關閉
-        public static bool IsOnCut;        //裁切
-        public static bool IsOnJobStarted; //工單開始執行
-        public static bool IsOnJobLoaded;  //工單載入完成
-        public static bool IsOnJobStopped; //工單停止
-        public static bool IsOnOnline;     //上載工單完成之後進入可啟動狀態
-        public static bool IsOnFlaws;      //開始跑Flaws
+        public static bool IsOnShutdown;   // 關閉
+        public static bool IsOnCut;        // 裁切
+        public static bool IsOnJobStarted; // 工單開始執行
+        public static bool IsOnJobLoaded;  // 工單載入完成
+        public static bool IsOnJobStopped; // 工單停止
+        public static bool IsOnOnline;     // 上載工單完成之後進入可啟動狀態
+        public static bool IsOnFlaws;      // 開始跑 Flaws
         public static bool IsOnEvents;
         public static bool IsOnLanguageChanged;
         public static bool IsOnWebDBConnected;
@@ -29,8 +29,7 @@ namespace PxP
         public static bool IsOnUnitsChanged;
         public static bool IsOnCognitiveScience;
 
-
-        //初始化全部狀態都關閉
+        // 初始化全部狀態都關閉
         public PxPThreadStatus()
         {
             IsOnShutdown = false;
@@ -55,6 +54,5 @@ namespace PxP
             IsOnUnitsChanged = false;
             IsOnCognitiveScience = false;
         }
-
     }
 }

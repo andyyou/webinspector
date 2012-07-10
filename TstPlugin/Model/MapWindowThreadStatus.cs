@@ -13,6 +13,5 @@ namespace PxP
         public static bool IsPageRefresh = false;
         public static bool UpdateChange = false;
         public static bool IsChangePiece = false;
-
     }
 }
