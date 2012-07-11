@@ -14,3 +14,17 @@ C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.SingleFlawControl.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.DrawIconTest.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.FlawForm.resources
 C:\Project\TstPlugin\TstPlugin\obj\Debug\PxP.MapSetup.resources
+C:\Projects\Github\webinspector\TstPlugin\bin\Debug\PxP.dll
+C:\Projects\Github\webinspector\TstPlugin\bin\Debug\PxP.pdb
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\ResolveAssemblyReference.cache
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.DrawIconTest.resources
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.FlawForm.resources
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.MapSetup.resources
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.Properties.Resources.resources
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.MapWindow.resources
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.PxPTab.resources
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.SingleFlawControl.resources
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.csproj.GenerateResource.Cache
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.dll.licenses
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.dll
+C:\Projects\Github\webinspector\TstPlugin\obj\Debug\PxP.pdb

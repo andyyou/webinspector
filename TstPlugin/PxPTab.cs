@@ -878,7 +878,8 @@ namespace PxP
                             MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
                             PxPVariable.DoffNum++;
                             PxPVariable.FailNum++;
-                           
+                           
+
                         }
                         break;
                         
@@ -901,7 +902,8 @@ namespace PxP
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
-                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)                    MapWindowVariable.FlawPiece.Add(f);
+                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)
+                    MapWindowVariable.FlawPiece.Add(f);
             }
             MapWindowVariable.Flaws.Clear();
 
@@ -1402,7 +1404,8 @@ namespace PxP
             catch (Exception ex)
             {
                 MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.GeneralError, "OnDoffResult() Error!" + ex.Message, null, 0);
-            }
+            }
+
         }
 
         #endregion
@@ -1415,7 +1418,8 @@ namespace PxP
             //DebugTool.WriteLog("PxPTab.cs", "OnPxPConfig");
             PxPVariable.PxPInfo = info;
             PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
-            PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+            PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
         }
@@ -1506,7 +1510,8 @@ namespace PxP
                     flaw.Width = flaw.OWidth * ConverWidth;
                 }
             }
-            MapWindowVariable.MapWindowController.SetMapAxis();
+            MapWindowVariable.MapWindowController.SetMapAxis();
+
             gvFlaw.Refresh();
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////

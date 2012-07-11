@@ -286,7 +286,8 @@ namespace PxP
                 PxPVariable.FlawTypeName.Clear();
                 if (TmpFlawTypeName != null)
                     PxPVariable.FlawTypeName.AddRange(TmpFlawTypeName);
-                
+                
+
                 ////////////////////////////////////////////////////////////////////////////////
                 MapWindowVariable.MapWindowController.SetMapProperty();
                 MapWindowVariable.MapWindowController.SetMapAxis();

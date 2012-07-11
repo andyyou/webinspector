@@ -262,7 +262,16 @@ namespace PxP
         public void PicZoomByPercent(int ZoomPercent)
         {
             
-           PictureBox pb = null;            foreach (Control control in tcPicture.SelectedTab.Controls)            {                if (control.GetType().Name == "PictureBox")                {                    pb = (PictureBox)control;                    break;                }            }
+           PictureBox pb = null;
+            foreach (Control control in tcPicture.SelectedTab.Controls)
+            {
+
+                if (control.GetType().Name == "PictureBox")
+                {
+                    pb = (PictureBox)control;
+                    break;
+                }
+            }
 
             if (pb != null)
             {
