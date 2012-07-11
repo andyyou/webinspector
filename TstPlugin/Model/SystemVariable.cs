@@ -12,8 +12,8 @@ namespace PxP
 {
     public class SystemVariable
     {
-        internal static string ConfigFileName;                     //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
-        internal static string GradeConfigFileName;                 //儲存等級評分定義XML路徑 (預設\CPxP\grade\default.xml)
+        internal static string ConfigFileName;                       //儲存XML路徑可自訂義(預設\CPxP\conf\setup.xml)
+        internal static string GradeConfigFileName;                  //儲存等級評分定義XML路徑 (預設\CPxP\grade\default.xml)
         internal static e_Language Language = e_Language.English;   //預設為英語
         internal static string FlawLock = "FlawLock";               //OnFlaws & OnCut 鎖定
         internal static bool IsReadHistory = false;                 //判斷是否讀取歷史紀錄
@@ -36,6 +36,7 @@ namespace PxP
             return C;
         }
         #endregion
+
         #region 取得設定檔參數Method
         //取得語系檔
         internal static XDocument GetLangXDoc(e_Language lang)

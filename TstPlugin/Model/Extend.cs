@@ -43,7 +43,8 @@ namespace PxP
         {
             this.Image = image;
             this.Station = station;
-        }
+        }
+
         #endregion
     }
 
