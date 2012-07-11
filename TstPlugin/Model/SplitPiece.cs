@@ -17,10 +17,10 @@ namespace PxP
         internal string GradeLevel{set; get;}
         internal double Score{set; get;}
         internal string Note { set; get; }
+
         public SplitPiece()
         {
             this.Score = 0;
         }
-
     }
 }

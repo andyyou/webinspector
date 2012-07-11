@@ -6,14 +6,14 @@ using System.IO;
 
 namespace PxP
 {
-    public class DebugTool
+    public  class DebugTool
     {
-        const string path = @"c:\temp\PxPLifeCycle.txt";
+        const string path = @"c:\Project\PxPLifeCycle.txt";
         public static StreamWriter sw = new StreamWriter(path);
         public static int i = 1;
         public DebugTool()
         {
-            
+
         }
         ~DebugTool()
         {
@@ -24,6 +24,26 @@ namespace PxP
             lock (sw)
             {
                 sw.WriteLine(i.ToString() + ". " + FileName.PadRight(15) + " | " + Msg.PadRight(50));
+                sw.Flush();
+                i++;
+            }
+
+        }
+        public static void WriteLog(string FileName, string Msg, string OtherMsg)
+        {
+            lock (sw)
+            {
+                sw.WriteLine(i.ToString() + ". " + FileName.PadRight(15) + " | " + Msg.PadRight(50) + " | " + OtherMsg.PadRight(50));
+                sw.Flush();
+                i++;
+            }
+
+        }
+        public static void WriteLog(string FileName, string Msg, string PiecesCount, string CurrentPiece)
+        {
+            lock (sw)
+            {
+                sw.WriteLine("{0} | {1} | PiecesCount:{2} | CurrentPiece:{3} ",FileName.PadRight(15), Msg.PadRight(50), PiecesCount.PadRight(10), CurrentPiece.PadRight(10) );
                 sw.Flush();
                 i++;
             }

@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using WRPlugIn;
-using Nevron.Chart;
-using Nevron.GraphicsCore;
-using Nevron.Chart.WinForm;
 using System.Xml.Linq;
-using System.IO;
-using System.Reflection;
+using Nevron.Chart;
+using Nevron.Chart.WinForm;
+using Nevron.GraphicsCore;
+using WRPlugIn;
 
 namespace PxP
 {
-
     public partial class MapWindow : UserControl
     {
-        #region MapWindow Variables
+        #region Local Variables
+
         private NCartesianChart nChartMap;
+        private FailList fl = null;
+        
         #endregion
 
-        #region Conturctor
+        #region Constructor
+
         public MapWindow()
         {
-            
-            //MessageBox.Show("MapWindow Conturctor");
             InitializeComponent();
             SystemVariable.LoadConfig();
             InitNChart(ref nChart, out nChartMap);
@@ -36,24 +37,23 @@ namespace PxP
             btnPrevPiece.Enabled = false;
             btnNextPiece.Enabled = false;
 
-            //Get grade config list
-            ///////////////////////////////////////////////////////////////////////////////////////
-            //組態檔繫結
+            // Get grade config list
+            // 組態檔繫結
             bsGradConfigList.DataSource = GetGradeConfList();
             cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
             cboxGradeConfigFile.SelectedItem = SystemVariable.ConfigFileName.ToString().Substring(0, SystemVariable.GradeConfigFileName.ToString().LastIndexOf("."));
-            ///////////////////////////////////////////////////////////////////////////////////////
         }
+
         ~MapWindow()
         {
             try
             {
                 string FolderPath = Path.GetDirectoryName(
-           Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
+                    Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
                 string FullSystemPath = FolderPath + SystemVariable.ConfigFileName;
                 XDocument XDoc = XDocument.Load(FullSystemPath);
                 XElement xShowFlag = XDoc.Element("Config").Element("MapVariable").Element("ShowFlag");
-                //紀錄顯示項目 0:All, 1:Pass, 2:Fail
+                // 紀錄顯示項目 0:All, 1:Pass, 2:Fail
                 if (rbAll.Checked)
                     xShowFlag.Value = "0";
                 else if (rbPass.Checked)
@@ -66,20 +66,20 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Map Setup UnConstructor Error");
+                MessageBox.Show("Map Setup Destructor Error");
             }
         }
+
         #endregion
 
         #region Refactoring
+
         public void InitNChart(ref NChartControl ncc, out NCartesianChart chart)
         {
-            //2D line chart
+            // 2D line chart
             ncc.Settings.RenderDevice = RenderDevice.GDI;
-            //Add chart header
-            //NLabel nchartHeader = nChart.Labels.AddHeader("缺陷圖");
 
-            //Add tools to chart controller
+            // Add tools to chart controller
             ncc.Controller.Tools.Add(new NSelectorTool());
             ncc.Controller.Tools.Add(new NDataZoomTool());
             //ncc.Controller.Tools.Add(new NDataPanTool());
@@ -88,22 +88,21 @@ namespace PxP
 
             chart = (NCartesianChart)ncc.Charts[0];
 
-            //Set range selections property
+            // Set range selections property
             NRangeSelection rangeSelection = new NRangeSelection();
-            //Reset Axis when zoom out
+            
+            // Reset Axis when zoom out
             rangeSelection.ZoomOutResetsAxis = true;
             chart.RangeSelections.Add(rangeSelection);
 
-            //Set chart axis property
+            // Set chart axis property
             chart.Axis(StandardAxis.Depth).Visible = false;
-            //chart.BoundsMode = BoundsMode.Stretch;
-            SetMapProperty();
-            
+            SetMapProperty();            
         }
-        //取得Folder底下所有XML清單
+
+        // 取得 Folder 底下所有 XML 清單
         List<string> GetGradeConfList()
         {
-
             List<string> ConfList = new List<string>();
             string ConfPath = Path.GetDirectoryName(
                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/grade/";
@@ -116,17 +115,19 @@ namespace PxP
             }
             return ConfList;
         }
-        //計算piece的分數
+
+        // 計算 piece 的分數
         public double CountPieceScore(List<FlawInfoAddPriority> list)
         {
             double tmp = 0;
-            foreach (var i in list)
+            foreach (FlawInfoAddPriority i in list)
             {
                 tmp += i.PointScore;
             }
             return tmp;
         }
-        //判斷piece是Pass or Fail
+
+        // 判斷 piece 是 Pass or Fail
         public bool GetPassOfPiece(List<FlawInfoAddPriority> list)
         {
             double score = CountPieceScore(list);
@@ -135,19 +136,14 @@ namespace PxP
                 return false;
             else
                 return true;
-
-
         }
-        #endregion
-
-        #region Inherit Interface
-
-
 
         #endregion
 
         #region Method
-        public void DrawPieceFlaw(/*List<FlawInfoAddPriority> flawPiece*/int pieceNum, bool drawFlag)
+
+        // Draw Flaws on Map
+        public void DrawPieceFlaw(int pieceNum, bool drawFlag)
         {
             List<FlawInfoAddPriority> flawPiece = MapWindowVariable.FlawPieces[pieceNum];
 
@@ -157,7 +153,7 @@ namespace PxP
             if (flawPiece.Count > 0)
             {
                 bool skipFlag = false;
-                foreach (var f in flawPiece)
+                foreach (FlawInfoAddPriority f in flawPiece)
                 {
                     skipFlag = false;
                     NPointSeries point = (NPointSeries)nChartMap.Series.Add(SeriesType.Point);
@@ -187,18 +183,15 @@ namespace PxP
                             {
                                 case "▲":
                                     point.PointShape = PointShape.DiagonalCross;
-                                    //point.PointShape = PointShape.Cone
                                     break;
                                 case "▼":
                                     point.PointShape = PointShape.InvertedCone;
-                                    //point.PointShape = PointShape.InvertedPyramid;
                                     break;
                                 case "■":
                                     point.PointShape = PointShape.Bar;
                                     break;
                                 case "●":
                                     point.PointShape = PointShape.Sphere;
-                                    //point.PointShape = PointShape.Ellipse
                                     break;
                                 case "+":
                                     point.PointShape = PointShape.Cross;
@@ -214,36 +207,37 @@ namespace PxP
                             }
                         }
                     }
-                    if (skipFlag)
-                        continue;
+
+                    if (skipFlag) continue;
 
                     point.Tag = f.FlawType;
                     point.UseXValues = true;
-                    //When BottomAxe equals zero, bottom axis is CD otherwise is RMD
+                    
+                    // When BottomAxe equals zero, bottom axis is CD otherwise is RMD
                     if (MapWindowVariable.BottomAxe == 0)
                         point.AddDataPoint(new NDataPoint(f.CD, f.RMD));
                     else
                         point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
-
                 }
             }
 
-            
             if (drawFlag)
             {
                 MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageCurrent.Text = MapWindowVariable.FlawPieces.Count.ToString();
                 lbPageTotal.Text = lbPageCurrent.Text;
+
                 if (MapWindowVariable.FlawPieces.Count > 1)
                 {
                     btnPrevPiece.Enabled = true;
                 }
                 btnNextPiece.Enabled = false;
-
             }
+
             Color red = Color.FromArgb(255, 150, 150);
             NGradientFillStyle WallFail = new NGradientFillStyle(red, red);
             NGradientFillStyle WallPass = new NGradientFillStyle(Color.White, Color.White);
+
             if (MapWindowVariable.PieceResult[MapWindowVariable.CurrentPiece - 1])
                 nChartMap.Wall(ChartWallType.Back).FillStyle = WallPass;
             else
@@ -251,20 +245,20 @@ namespace PxP
 
             nChart.Refresh();
         }
+
         public void ClearMap()
         {
             nChartMap.Series.Clear();
             nChart.Refresh();
         }
+
         public void InitGvFlawClass()
         {
-
-            //IList<FlawTypeNameExtend> tmpFlawTypes = new List<FlawTypeNameExtend>();
             bsFlawType.DataSource = PxPVariable.FlawTypeName;
             gvFlawClass.DataSource = bsFlawType;
             gvFlawClass.AllowUserToAddRows = false;
             
-            foreach (var column in MapWindowVariable.DoffTypeGridSetup)
+            foreach (DoffGridColumns column in MapWindowVariable.DoffTypeGridSetup)
             {
                 if (column.ColumnName == "Display")
                     gvFlawClass.Columns[column.ColumnName].ReadOnly = false;
@@ -276,17 +270,17 @@ namespace PxP
                 gvFlawClass.Columns[column.ColumnName].DisplayIndex = column.Index;
                 gvFlawClass.Columns[column.ColumnName].Width = column.Width;
             }
-            //Display
+            // Hide columns
             gvFlawClass.Columns["Count"].Visible = false;
             gvFlawClass.Columns["OfflineDoffNum"].Visible = false;
             gvFlawClass.Columns["OfflineJobNum"].Visible = false;
-         
         }
+
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)
         {
-
             bsFlawType.DataSource = flawTypes;
         }
+
         public void ResetGvFlawClassDoffNum()
         {
             foreach (DataGridViewRow r in gvFlawClass.Rows)
@@ -294,18 +288,18 @@ namespace PxP
                 r.Cells["DoffNum"].Value = 0;
             }
         }
+
         public void RefreshGvFlawClass()
         {
             gvFlawClass.Refresh();
             gvFlawClass.EndEdit();
         }
+
         private NLinearScaleConfigurator GetScaleConfigurator()
         {
             NLinearScaleConfigurator linearScale = new NLinearScaleConfigurator();
 
             linearScale.SetPredefinedScaleStyle(PredefinedScaleStyle.Scientific);
-            //linearScale.MinorTickCount = 5;
-
             linearScale.MajorGridStyle.SetShowAtWall(ChartWallType.Back, MapWindowVariable.ShowGridSet);
             linearScale.MajorGridStyle.LineStyle.Pattern = LinePattern.Dot;
 
@@ -313,10 +307,12 @@ namespace PxP
             linearScale.RoundToTickMax = false;
             return linearScale;
         }
+
         private void AxisScaleConfigurator()
         {
             double tmpScale = 0;
-            //Configure X axis scale
+
+            // Configure X axis scale
             NAxis xAxis = nChartMap.Axis(StandardAxis.PrimaryX);
             NLinearScaleConfigurator xLinearScale = xAxis.ScaleConfigurator as NLinearScaleConfigurator;
 
@@ -334,7 +330,7 @@ namespace PxP
             }
             xLinearScale.CustomStep = Math.Round(xLinearScale.CustomStep, 2);
 
-            //Configure Y axis scale
+            // Configure Y axis scale
             NAxis yAxis = nChartMap.Axis(StandardAxis.PrimaryY);
             NLinearScaleConfigurator yLinearScale = yAxis.ScaleConfigurator as NLinearScaleConfigurator;
 
@@ -379,6 +375,7 @@ namespace PxP
                 }
             }
         }
+
         public void OnChartMouseMove(object sender, MouseEventArgs e)
         {
             NHitTestResult hitTestResult = nChart.HitTest(e.Location);
@@ -387,7 +384,6 @@ namespace PxP
                 NSeries series = hitTestResult.Series as NSeries;
                 if (series != null && series.Name != "Markup")
                 {
-                    //MessageBox.Show(hitTestResult.Series.Id.ToString());
                     series.FillStyle = new NColorFillStyle(Color.Red);
                     series.DataLabelStyle.Visible = true;
                 }
@@ -410,23 +406,21 @@ namespace PxP
             }
             nChart.Refresh();
         }
+
         public void SetJobInfo()
         {
             lbOrderNumberValue.Text = PxPVariable.JobInfo.OrderNumber;
             lbJobIDValue.Text = PxPVariable.JobInfo.JobID;
-            
             lbMeterialTypeValue.Text = PxPVariable.JobInfo.MaterialType;
             lbOperatorValue.Text = PxPVariable.JobInfo.OperatorName;
             lbDateTimeValue.Text = DateTime.Now.ToShortDateString();
-            lbDoffValue.Text = MapWindowVariable.CurrentPiece.ToString(); 
-            //lbPassValue.Text = "";
-            //lbFailValue.Text = "";
-            
+            lbDoffValue.Text = MapWindowVariable.CurrentPiece.ToString();
         }
+
         public void SetFilterRadioButtons()
         {
             switch (MapWindowVariable.ShowFlag)
-            {  //紀錄顯示項目 0:All, 1:Pass, 2:Fail
+            {  // 紀錄顯示項目 0:All, 1:Pass, 2:Fail
                 case 0:
                     rbAll.Checked = true;
                     break;
@@ -441,27 +435,28 @@ namespace PxP
                     break;
             }
         }
+
         public void SetMapProperty()
         {
             switch (MapWindowVariable.MapProportion)
             {
-                case 0: // 1:1
+                case 0:  // 1:1
                     nChartMap.Width = 400;
                     nChartMap.Height = 400;
                     break;
-                case 1: // 2:1
+                case 1:  // 2:1
                     nChartMap.Width = 400;
                     nChartMap.Height = 200;
                     break;
-                case 2: // 4:3
+                case 2:  // 4:3
                     nChartMap.Width = 400;
                     nChartMap.Height = 300;
                     break;
-                case 3: // 3:4
+                case 3:  // 3:4
                     nChartMap.Width = 300;
                     nChartMap.Height = 400;
                     break;
-                case 4: // 16:9
+                case 4:  // 16:9
                     nChartMap.Width = 608;
                     nChartMap.Height = 342;
                     break;
@@ -470,6 +465,7 @@ namespace PxP
                     nChartMap.Height = 400;
                     break;
             }
+
             nChartMap.Axis(StandardAxis.PrimaryX).ScaleConfigurator = GetScaleConfigurator();
             nChartMap.Axis(StandardAxis.PrimaryY).ScaleConfigurator = GetScaleConfigurator();
             nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
@@ -477,6 +473,7 @@ namespace PxP
             AxisScaleConfigurator();
             nChart.Refresh();
         }
+
         public void SetMapAxis()
         {
             if (PxPVariable.PxPInfo != null)
@@ -507,6 +504,7 @@ namespace PxP
             nChart.Refresh();
             AxisScaleConfigurator();
         }
+
         public void SetMapInfoLabel()
         {
             lbDoffValue.Text = PxPVariable.DoffNum.ToString();
@@ -514,6 +512,7 @@ namespace PxP
             lbPassValue.Text = PxPVariable.PassNum.ToString();
             lbYieldValue.Text = (Math.Round((double)PxPVariable.PassNum / (double)(PxPVariable.PassNum + PxPVariable.FailNum), 4) * 100).ToString() + "%";
         }
+
         public void SetUserTermLabel(IUserTerms terms)
         {
             lbDoff.Text = terms.Doff;
@@ -522,11 +521,15 @@ namespace PxP
             lbOperator.Text =  terms.OperatorName;
             lbOrderNumber.Text =  terms.OrderNumber;
         }
-        //2012/06/04
+        
         public void SetTotalScoreLabel(double score)
         {
+            //Debug
+            DebugTool.WriteLog("MapWindow.cs", "SetTotalScoreLabel() entry. ");
+
             lbTotalScoreValue.Text = score.ToString();
         }
+
         public void SetPieceTotalLabel()
         {
             lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
@@ -534,14 +537,14 @@ namespace PxP
 
         public void CountFlawPieceDoffNum()
         {
-            foreach (var c in PxPVariable.FlawTypeName)
+            foreach (FlawTypeNameExtend c in PxPVariable.FlawTypeName)
             {
                 c.DoffNum = 0;
             }
-            foreach (var f in MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1])
+            foreach (FlawInfoAddPriority f in MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1])
             {
                 
-                foreach (var ft in PxPVariable.FlawTypeName)
+                foreach (FlawTypeNameExtend ft in PxPVariable.FlawTypeName)
                 {
                     if (ft.FlawType == f.FlawType)
                     {
@@ -551,11 +554,11 @@ namespace PxP
             }
             gvFlawClass.Refresh();
         }
+
         public int CheckPieceNum(int PageNum, string Direction)
         {
             if ((PageNum < PxPVariable.FreezPiece - PxPVariable.PieceLimit) || (PageNum > PxPVariable.FreezPiece))
             { }
-            //return MapWindowVariable.CurrentPiece - 1; //Not Found
             else
             {
                 bool result = MapWindowVariable.PieceResult[PageNum - 1];
@@ -565,15 +568,15 @@ namespace PxP
                 else
                     if (PageNum == 1)
                     { }
-                    //return MapWindowVariable.CurrentPiece - 1; //Not Found
                     else
                         if (Direction == "Next")
                             return CheckPieceNum(PageNum + 1, Direction);
                         else
                             return CheckPieceNum(PageNum - 1, Direction);
             }
-            return MapWindowVariable.CurrentPiece; //Not Found
+            return MapWindowVariable.CurrentPiece;  // Not Found
         }
+
         public void InitLabel()
         {
             lbPageCurrent.Text = "--";
@@ -595,7 +598,6 @@ namespace PxP
                     NAxisConstLine cl = nChartMap.Axis(StandardAxis.PrimaryY).ConstLines.Add();
                     cl.StrokeStyle.Color = Color.FromArgb(80, Color.Blue);
                     cl.StrokeStyle.Width = new NLength(1.5f);
-                    //cl.FillStyle = new NColorFillStyle(new NArgbColor(12, Color.SteelBlue));
                     cl.Value = GradeVariable.RoiRowsGrid[i].Start;
                 }
                 for (int j = 0; j < GradeVariable.RoiColumnsGrid.Count; j++)
@@ -615,7 +617,6 @@ namespace PxP
                     j = -1;
             }
 
-            //******************************************************************//
             // Draw vertical line
             for (int i = 0; i < GradeVariable.RoiColumnsGrid.Count; i++)
             {
@@ -625,7 +626,6 @@ namespace PxP
                     NAxisConstLine cl = nChartMap.Axis(StandardAxis.PrimaryX).ConstLines.Add();
                     cl.StrokeStyle.Color = Color.FromArgb(80, Color.Blue);
                     cl.StrokeStyle.Width = new NLength(1.5f);
-                    //cl.FillStyle = new NColorFillStyle(new NArgbColor(125, Color.SteelBlue));
                     cl.Value = GradeVariable.RoiColumnsGrid[i].Start;
                 }
                 for (int j = 0; j < GradeVariable.RoiRowsGrid.Count; j++)
@@ -645,6 +645,7 @@ namespace PxP
                     j = -1;
             }
         }
+
         private void DrawSubPieceHorizontal(int idx, double begin, double end)
         {
             NAxisConstLine cl = (NAxisConstLine)nChartMap.Axis(StandardAxis.PrimaryY).ConstLines[idx];
@@ -658,7 +659,6 @@ namespace PxP
             NAxis referenceAxis = nChartMap.Axis(StandardAxis.PrimaryY);
             cl.ReferenceRanges.Add(new NReferenceAxisRange(referenceAxis, begin, end));
         }
-
 
         private void SubPieceFail(int SubPieceNumber)
         {
@@ -683,11 +683,11 @@ namespace PxP
         {
             SplitPieces SubPieces = GradeVariable.SplitPiecesContainer[pieceNum];
 
-            foreach (var r in GradeVariable.RoiRowsGrid)
+            foreach (RoiGrade r in GradeVariable.RoiRowsGrid)
             {
-                foreach (var c in GradeVariable.RoiColumnsGrid)
+                foreach (RoiGrade c in GradeVariable.RoiColumnsGrid)
                 {
-                    foreach (var s in SubPieces.Pieces)
+                    foreach (SplitPiece s in SubPieces.Pieces)
                     {
                         if (s.Name == string.Format("ROI-{0}{1}", r.Name, c.Name))
                         {
@@ -719,14 +719,16 @@ namespace PxP
                 }
             }
         }
+
         #endregion
 
         #region Action Events
+
         private void MapWindow_Load(object sender, EventArgs e)
         {
             InitGvFlawClass();
-            
         }
+
         private void btnMapSetup_Click(object sender, EventArgs e)
         {
             if (!PxPThreadStatus.IsOnOnline && !PxPThreadStatus.IsOnJobLoaded || !PxPThreadStatus.IsOnOnline && PxPThreadStatus.IsOnJobStopped)
@@ -742,24 +744,24 @@ namespace PxP
             MapWindowThreadStatus.UpdateChange = true;
             PxPTab.MapThreadEvent.Set();
             PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
-
         }
+
         private void btnPrevPiece_Click(object sender, EventArgs e)
         {
             if (PxPThreadStatus.IsOnOnline)
             {
-                //Set WebInspector Offline
+                // Set WebInspector Offline
                 MapWindowThreadStatus.UpdateChange = true;
                 PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
             }
-           
+            
             int PieceNum = MapWindowVariable.CurrentPiece - 1;
             if (MapWindowVariable.ShowFlag != 0)
             {
                 PieceNum = CheckPieceNum(PieceNum, "Prev");
-                //MessageBox.Show(PieceNum.ToString());
             }
+
             MapWindowVariable.CurrentPiece = PieceNum;
             if ((MapWindowVariable.CurrentPiece == 1) || (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece - PxPVariable.PieceLimit))
                 btnPrevPiece.Enabled = false;
@@ -769,31 +771,29 @@ namespace PxP
                 btnNextPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece -1 ]));
+            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
 
-            //DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             DrawPieceFlaw(PieceNum - 1, false);
-            //2012-05-04 小心online時的不良影響 連動功能
             MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
         }
+
         private void btnNextPiece_Click(object sender, EventArgs e)
         {
             if (PxPThreadStatus.IsOnOnline)
             {
-                //Set WebInspector Offline
+                // Set WebInspector Offline
                 MapWindowThreadStatus.UpdateChange = true;
                 PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                 lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
             }
-           
-            
+
             int PieceNum = MapWindowVariable.CurrentPiece + 1;
             if (MapWindowVariable.ShowFlag != 0)
             {
                 PieceNum = CheckPieceNum(PieceNum, "Next");
-                //MessageBox.Show(PieceNum.ToString());
             }
+
             MapWindowVariable.CurrentPiece = PieceNum;
             if (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece)
                 btnNextPiece.Enabled = false;
@@ -803,40 +803,43 @@ namespace PxP
                 btnPrevPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece-1]));
+            MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
 
-            //DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             DrawPieceFlaw(PieceNum - 1, false);
             MapWindowThreadStatus.IsChangePiece = true;
             PxPTab.MapThreadEvent.Set();
         }
+
         private void rb_CheckedChanged(object sender, EventArgs e)
         {
             if (((RadioButton)sender).Checked == true)
             {
                 switch (((RadioButton)sender).Name)
-                {   //0:All, 1:Pass, 2:Fail
+                {
+                    // 0: All, 1: Pass, 2: Fail
                     case "rbAll":
                         MapWindowVariable.ShowFlag = 0;
                         break;
+
                     case "rbFail":
                         MapWindowVariable.ShowFlag = 2;
                         break;
+
                     case "rbPass":
                         MapWindowVariable.ShowFlag = 1;
                         break;
                 }
             }
         }
+
         private void gvFlawClass_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-
             if (e.ColumnIndex == 5)
                 e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(gvFlawClass.Rows[e.RowIndex].Cells["Color"].Value.ToString());
             if (e.ColumnIndex == 4)
                 e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(e.Value.ToString());
-
         }
+
         private void gvFlawClass_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             foreach (DataGridViewRow row in gvFlawClass.Rows)
@@ -846,12 +849,12 @@ namespace PxP
                     if (e.ColumnIndex == row.Cells["Display"].ColumnIndex)
                     {
                         if (MapWindowVariable.FlawPieces.Count > 0)
+                        {
                             if (Convert.ToBoolean(row.Cells["Display"].EditedFormattedValue))
                             {
-                                //DrawPieceFlaw(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1], false);
                                 DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, false);
                             }
-
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -860,7 +863,6 @@ namespace PxP
                 }
             }
         }
-
 
         private void btnGradeSetting_Click(object sender, EventArgs e)
         {
@@ -873,24 +875,27 @@ namespace PxP
             SystemVariable.GradeConfigFileName = cboxGradeConfigFile.SelectedValue + ".xml";
             SystemVariable.LoadGradeConfig();
         }
+
+        private void btnFailList_Click(object sender, EventArgs e)
+        {
+            // Check whether the form is opened
+            if (fl == null || fl.IsDisposed)
+            {
+                if (PxPThreadStatus.IsOnOnline)
+                {
+                    // Set WebInspector Offline
+                    MapWindowThreadStatus.UpdateChange = true;
+                    PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+                    lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
+                }
+
+                fl = new FailList();
+                fl.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+                fl.Location = new Point(Screen.PrimaryScreen.Bounds.Width - fl.Width - 5, 5);
+                fl.Show();
+            }
+        }
+
         #endregion
-
-       
-
-       
-
-       
-
-      
-
-        
-
-        
-
-       
-
-       
-
-
     }
 }

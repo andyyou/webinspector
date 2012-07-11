@@ -44,6 +44,7 @@ namespace PxP
         IWRMessageLog MsgLog;
         [Import(typeof(IWRJob))]
         IWRJob Job;
+
         #region Local Variable
 
         public PictureBox[] pbFlaws;
@@ -51,6 +52,7 @@ namespace PxP
         public int ImgPlaceHolderHeight;                  //右下角DataGrid內置放圖片容器寬高
         bool SortSwitch = false;
         bool IsFreeze = false;
+     
         
         #endregion
         //////////////////////////////////////////////////////////////////////////
@@ -62,6 +64,7 @@ namespace PxP
          *  MapThread : 判斷在暫停時部分需要中斷的程序或需要重繪的物件
          */
         #endregion
+        
         private Thread PxPThread = null;
         private AutoResetEvent PxPThreadEvent = new AutoResetEvent(false);
         private Thread MapThread = null;
@@ -76,8 +79,8 @@ namespace PxP
         public PxPTab()
         {
             InitializeComponent();
-            //MessageBox.Show("PxPTab");
-            //DebugTool.WriteLog("PxPTab.cs", "PxPTab Constructor");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "PxPTab() initialize");
             
             //執行緒啟動
             MapThread = new Thread(new ThreadStart(RefreshCheck));
@@ -96,6 +99,9 @@ namespace PxP
         //解構子 關閉時儲存一些調整過的設定
         ~PxPTab()
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", " ~PxPTab() initialize");
+
             try
             {
                 //Save columns sorted
@@ -134,13 +140,15 @@ namespace PxP
                
                 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show("Close Program Error");
+                DebugTool.WriteLog("PxPTab.cs", "*** ~PxPTab() errors:" + ex.Message );
             }
 
             PxPThreadStatus.IsOnShutdown = true;
             PxPThreadEvent.Set();
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "~PxPTab() complete.");
         }
         #endregion
 
@@ -148,6 +156,9 @@ namespace PxP
         //定義右上角DataGridView
         void DefineDataGridView(DataGridView Dgv)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "DefineDataGridView() entry.");
+
             //全部欄位都有實作 不要的從最下面Visible關閉
             bsFlaw.DataSource = MapWindowVariable.FlawPiece;
             Dgv.DataSource = bsFlaw;
@@ -177,18 +188,30 @@ namespace PxP
             Dgv.Columns["OWidth"].Visible = false;
             Dgv.Columns["SubPieceName"].Visible = false;
             Dgv.Columns["PointScore"].Visible = false;
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "DefineDataGridView() complete.");
             
         }       
         //更新頁面,該換圖或Map調整,語系變更,全域變數變更時更新物件資料
         public void PageRefresh()
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "PageRefresh() entry.");
+
             tlpDoffGrid.Controls.Clear();
             InitTableLayout(tlpDoffGrid); //重置TableLayout
             DefineDataGridView(gvFlaw);   //重繪右上角DataGridView
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "PageRefresh() complete.");
         }
         //右邊Grid更新 連動DataSource 吃gvFlaw的Controls
         public void TableLayoutRefresh()
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "TableLayoutRefresh() entry.");
+
             this.tlpDoffGrid.Refresh();
            
             foreach (DataGridViewRow r in gvFlaw.Rows)
@@ -201,16 +224,28 @@ namespace PxP
                 }
                 
             }
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "TableLayoutRefresh() complete.");
         }
         //當變換Piece時單純只要重畫TableLayout
         public void TableLayoutChangePiece()
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "TableLayoutRefresh() entry.");
+
             bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
             DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "TableLayoutRefresh() complete.");
         }
         //設定初始化TableLayoutPanel
         void InitTableLayout(TableLayoutPanel Tlp)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "InitTableLayouti() entry");
+
             Tlp.ColumnStyles.Clear();
             Tlp.RowCount = PxPVariable.ImgRowsSet;
             Tlp.ColumnCount = PxPVariable.ImgColsSet;
@@ -225,17 +260,21 @@ namespace PxP
             {
                 Tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             }
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "InitTableLayouti() complete.");
         }
         //繪製TableLayoutPanel將圖片置入Control 包含計算頁面
         public void DrawTablePictures(List<List<FlawInfoAddPriority>> FlawPieces, int PieceID, int PageNum)
         {
-            
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "InitTableLayouti() entry.");
+
             PxPVariable.PageCurrent = (PageNum < 1) ? 1 : PageNum;
             PxPVariable.PageTotal = gvFlaw.Rows.Count % PxPVariable.PageSize == 0 ?
                                        gvFlaw.Rows.Count / PxPVariable.PageSize :
                                        gvFlaw.Rows.Count / PxPVariable.PageSize + 1;
             
-            //Edit at 2012/04/18 ******
             if (PxPVariable.PageTotal < 1)
             {
                 lbPageCurrent.Text = "--";
@@ -274,6 +313,8 @@ namespace PxP
             tlpDoffGrid.Controls.Clear();
             tlpDoffGrid.Refresh();
             tlpDoffGrid.Visible = false;
+
+
             //Add controls into table layout
             if (gvFlaw.Rows.Count > 0)
             {
@@ -296,39 +337,17 @@ namespace PxP
             }
             // For improve efficacy
             tlpDoffGrid.Visible = true;
-        }
-        //調整圖片縮放讓整張圖可以完整呈現
-        //public void ImageAdjust(Bitmap Bmp, PictureBox Pb)
-        //{
-        //    double Width_d = (double)Bmp.Width / Pb.Width;
-        //    double Height_d = (double)Bmp.Height / Pb.Height;
-        //    double Ratio = 1.0;
-        //    if (Width_d > 1 || Height_d > 1)
-        //    {
-        //        if (Width_d > Height_d)
-        //        {
-        //            Ratio = Width_d;
 
-        //        }
-        //        else
-        //        {
-        //            Ratio = Height_d;
-        //        }
-        //    }
-        //    else if (Width_d < 1 && Height_d < 1)
-        //    {
-        //        if (Width_d > Height_d)
-        //            Ratio = Width_d;
-        //        else
-        //            Ratio = Height_d;
-        //    }
-        //    Pb.Width = (int)Math.Round(Bmp.Width / Ratio);
-        //    Pb.Height = (int)Math.Round(Bmp.Height / Ratio);
-        //    Pb.Image = Bmp;
-        //}
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "InitTableLayouti() complete.");
+        }
+        
         //DataGridView排序
         public void SortGridViewByColumn(string ColumnName)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "SortGridViewByColumn() entry.");
+
             /*
               * false = 沒點過
               * true = 點過
@@ -464,6 +483,9 @@ namespace PxP
                     gvFlaw.Refresh();
                     break;
             };
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "SortGridViewByColumn() complete.");
         }
         //Find Control
         public IEnumerable<Control> GetAll(Control control, Type type)
@@ -477,6 +499,9 @@ namespace PxP
         //Deal History Cut
         public void OnHistoryCut(double MD)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnHistoryCut() entry.");
+
             double Convertion = Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString());
             MD = Math.Round(MD * Convertion, 2);
             MapWindowVariable.FlawPiece.Clear();
@@ -500,6 +525,9 @@ namespace PxP
             subPiece = CalcFlawScore(subPiece); // 計算個缺陷點分數及歸屬子片
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
             MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count - 1;
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnHistoryCut() add subpiece.", MapWindowVariable.FlawPieces.Count.ToString(),MapWindowVariable.CurrentPiece.ToString());
+            
             ///////////////////////////////////////////////////////////////////////
             //處理分數缺點分類
             MapWindowVariable.PieceResult[PxPVariable.DoffNum] = GetPassOfPiece(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
@@ -573,6 +601,9 @@ namespace PxP
         //Set Unit
         public void InitUnitsData()
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "InitUnitsData() entry. ");
+
             var unitsDoc = XDocument.Load(PxPVariable.UnitsXMLPath);
 
             // Get Flaw index into units table
@@ -588,6 +619,9 @@ namespace PxP
             // Get units
             PxPVariable.UnitsData = new DataSet();
             PxPVariable.UnitsData.ReadXml(PxPVariable.UnitsXMLPath);
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "InitUnitsData() complete. ");
         }
         #endregion
 
@@ -607,16 +641,26 @@ namespace PxP
         //計算piece的分數
         public double CountPieceScore(List<FlawInfoAddPriority> list)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "CountPieceScore() entry. ", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             double tmp = 0;
             foreach (var i in list)
             {
                 tmp += i.PointScore;
             }
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "CountPieceScore() complete. ", String.Format("Piece score : {0}", tmp));
+
             return tmp;
         }
         //判斷piece是Pass or Fail
         public bool GetPassOfPiece(List<FlawInfoAddPriority> list)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "GetPassOfPiece() entry. ", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             double score = CountPieceScore(list);
 
             if (score >= GradeVariable.PassOrFileScore)
@@ -627,6 +671,10 @@ namespace PxP
         //處理大片裡面切割的小片評分機制
         public void DealSplitPieces(List<FlawInfoAddPriority> piece)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "DealSplitPieces() entry.", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
+
             SplitPieces tmpSplitPieces = new SplitPieces();
             tmpSplitPieces.Pieces = new List<SplitPiece>();
             foreach (var r in GradeVariable.RoiRowsGrid)
@@ -683,10 +731,17 @@ namespace PxP
             }
             GradeVariable.SplitPiecesContainer.Add(tmpSplitPieces);
 
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "DealSplitPieces() complete.", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
         }
         // 計算個缺陷點分數及歸屬子片
         public List<FlawInfoAddPriority> CalcFlawScore(List<FlawInfoAddPriority> SubPiece)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "CalcFlawScore() entry.", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
+
             foreach (var f in SubPiece)
             {
                 // get point score   //2012/06/04
@@ -723,6 +778,9 @@ namespace PxP
                     }
                 }
             }
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "CalcFlawScore() complete.", "return sub piece : " + SubPiece.Count);
+
             return SubPiece;
         }
         #endregion
@@ -756,8 +814,9 @@ namespace PxP
         /// <param name="hndl"></param>
         public void GetControlHandle(out IntPtr hndl)
         {
-            //MessageBox.Show("IWRPlugIn-GetControlHandle");
-            //DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-GetControlHandle");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-GetControlHandle().", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             hndl = Handle;
         }
         /// <summary>
@@ -767,8 +826,9 @@ namespace PxP
         /// <param name="h"></param>
         public void SetPosition(int w, int h)
         {
-            //MessageBox.Show("IWRPlugIn-SetPosition");
-            //DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-SetPosition");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-SetPosition().", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             SetBounds(0, 0, w, h); //Default : w760,h747
         }
 
@@ -779,8 +839,9 @@ namespace PxP
         /// <param name="name"></param>
         public void GetName(e_Language lang, out string name)
         {
-            //MessageBox.Show("IWRPlugIn-GetName");
-            //DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-GetName");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-GetName().", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             switch (lang)
             {
                 case e_Language.Chinese:
@@ -791,10 +852,20 @@ namespace PxP
                     break;
             }
             if (MapWindowVariable.FlawPieces.Count > 0)
-                DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
+            {
+                MapWindowThreadStatus.IsChangePiece = true;
+                PxPTab.MapThreadEvent.Set();
+            } 
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-GetName() after get name do DrawTablePictures().", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
         }
         public void Initialize(string unitsXMLPath)
         {
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-Initialize(). ", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             PxPVariable.UnitsXMLPath = unitsXMLPath;
             InitUnitsData();
         }
@@ -803,8 +874,6 @@ namespace PxP
         /// </summary>
         public void Unplug()
         {
-            //MessageBox.Show("IWRPlugIn-Unplug");
-            //DebugTool.WriteLog("PxPTab.cs", "IWRPlugIn-Unplug");
             //trigger on close the window
         }
         #endregion
@@ -812,15 +881,16 @@ namespace PxP
         #region IWRMapWindow 成員
         public void GetMapControlHandle(out IntPtr hndl)
         {
-            //MessageBox.Show("IWRMapWindow-GetMapControlHandle");
-            //DebugTool.WriteLog("PxPTab.cs", "IWRMapWindow-GetMapControlHandle");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "IWRMapWindow-GetMapControlHandle() entry. ");
+
             hndl = MapWindowVariable.MapWindowController.Handle;
         }
 
         public void SetMapPosition(int w, int h)
         {
-            //MessageBox.Show("IWRMapWindow-SetMapPosition");
-            //DebugTool.WriteLog("PxPTab.cs", "IWRMapWindow-SetMapPosition");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "IWRMapWindow-GetMapControlHandle() entry. ");
             MapWindowVariable.MapWindowController.SetBounds(0, 0, w, h);
         }
 
@@ -829,8 +899,9 @@ namespace PxP
         #region IOnFlaws 成員
         public void OnFlaws(IList<IFlawInfo> flaws)
         {
-            //MessageBox.Show("OnFlaws");
-            //DebugTool.WriteLog("PxPTab.cs", "OnFlaws");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnFlaws() entry. ");
+
             try
             {
                
@@ -932,9 +1003,14 @@ namespace PxP
             catch (Exception ex)
             {
                 MsgLog.Log(e_LogID.MessageLog, e_LogVisibility.GeneralError, "OnFlaws() Error!" + ex.Message, null, 0);
+                DebugTool.WriteLog("PxPTab.cs", "*** OnFlaws() Errors:" + ex.Message, MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
             }
             PxPThreadStatus.IsOnFlaws = true;
             PxPThreadEvent.Set();
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnFlaws() complete. ");
+
             
         }
 
@@ -944,14 +1020,19 @@ namespace PxP
 
         public void OnEvents(IList<IEventInfo> events)
         {
-            //MessageBox.Show("OnEvents");
-            //DebugTool.WriteLog("PxPTab.cs", "OnEvents");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnEvents() entry. ");
+
+
             PxPThreadStatus.IsOnEvents = true;
             foreach (var eventInfo in events)
             {
                 switch ((e_EventID)eventInfo.EventType)
                 {
                     case e_EventID.STOP_JOB:
+                        //Debug
+                        DebugTool.WriteLog("PxPTab.cs", "OnEvents() e_EventID.STOP_JOB. ");
+
                         PxPThreadStatus.IsOnOnline = false;
                         PxPThreadStatus.IsOnJobStopped = true;
                         if (MapWindowVariable.CurrentPiece > 0)
@@ -962,6 +1043,9 @@ namespace PxP
                        
                         break;
                     case e_EventID.STOP_INSPECTION:
+                        //Debug
+                        DebugTool.WriteLog("PxPTab.cs", "OnEvents() e_EventID.STOP_INSPECTION. ");
+
                         PxPThreadStatus.IsOnOnline = false;
                         if (MapWindowVariable.CurrentPiece > 0)
                         {
@@ -970,21 +1054,28 @@ namespace PxP
                         }
                         break;
                     case e_EventID.START_INSPECTION:
+                        //Debug
+                        DebugTool.WriteLog("PxPTab.cs", "OnEvents() e_EventID.START_INSPECTION. ");
+
                         PxPThreadStatus.IsOnOnline = true;
                         bsFlaw.DataSource = MapWindowVariable.FlawPiece;
                         break;
                     case e_EventID.CUT_SIGNAL:
+
+                        //Debug
+                        DebugTool.WriteLog("PxPTab.cs", "OnEvents() e_EventID.CUT_SIGNAL start. ", "SystemVariable.IsReadHistory = " + SystemVariable.IsReadHistory.ToString());
+                        DebugTool.WriteLog("PxPTab.cs", "OnEvents() e_EventID.CUT_SIGNAL start. ", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
                         if (SystemVariable.IsReadHistory)
                         {
                             OnHistoryCut(eventInfo.MD);
-                            //if (PxPThreadStatus.IsOnOnline)
                             MapWindowVariable.MapWindowController.SetMapInfoLabel();
-
                             //MapWindowVariable.PieceResult[PxPVariable.DoffNum] = GetPassOfPiece(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]);
-                           
                             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece]));
-
                         }
+
+                        //Debug
+                        DebugTool.WriteLog("PxPTab.cs", "OnEvents() e_EventID.CUT_SIGNAL end. ");
                         break;
                         
                     //case e_EventID.DOFF_PASSED :
@@ -1010,6 +1101,9 @@ namespace PxP
             }
 
             PxPThreadEvent.Set();
+
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnEvents() complete. ", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
         }
 
         #endregion
@@ -1018,14 +1112,18 @@ namespace PxP
 
         public void OnCut(double md)
         {
-            //MessageBox.Show("OnCut");
-            //DebugTool.WriteLog("PxPTab.cs", "OnCut");
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnCut() entry. ", MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             MapWindowVariable.FlawPiece.Clear();
             foreach (var f in MapWindowVariable.Flaws)
             {
                 if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)
                     MapWindowVariable.FlawPiece.Add(f);
             }
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnCut() dealed flawpiece. ");
+
             MapWindowVariable.Flaws.Clear();
 
             List<FlawInfoAddPriority> subPiece = new List<FlawInfoAddPriority>();
@@ -1034,6 +1132,9 @@ namespace PxP
                 subPiece.Add(f);
             }
 
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnCut() dealed subpiece. ");
+
             subPiece = CalcFlawScore(subPiece); // 計算個缺陷點分數及歸屬子片
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
             //先處理統計不使用Pieces 改用SubPiece
@@ -1041,8 +1142,6 @@ namespace PxP
             {
                 ft.DoffNum = 0;
             }
-            //2012/06/04
-           
             //處理Pass Fail 分數並設定到Mapwindow
             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(subPiece));
 
@@ -1051,7 +1150,11 @@ namespace PxP
           
             ////////////////////////////////////////////////////////////////////////////
             PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
+            
+            //Debug
+            DebugTool.WriteLog("PxPTab.cs", "OnCut() dealing CurrentCutPosition  ", String.Format("Current cut position: {0}", PxPVariable.CurrentCutPosition.ToString()));
 
+            //UNDONE: 處理到這裡
             if (PxPThreadStatus.IsOnOnline)
             {
                 gvFlaw.DataSource = bsFlaw;

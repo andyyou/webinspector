@@ -22,26 +22,32 @@ namespace PxP
         internal static string DBConnectString;
 
         #region Constructor
-        public SystemVariable()
-        {
 
+        public SystemVariable() {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "SystemVariable()");
         }
+
         #endregion
 
         #region Refactoring
-        //ASC number to char
+
+        // ASC number to char
         public static char Chr(int Num)
         {
             char C = Convert.ToChar(Num);
             return C;
         }
+
         #endregion
 
         #region 取得設定檔參數Method
-        //取得語系檔
+
+        // 取得語系檔
         internal static XDocument GetLangXDoc(e_Language lang)
         {
             #region 註解
+
             /*
              * 需要變更語系的變數或屬性列表
              * 1. 右上方缺陷點DataGridView Columns
@@ -49,7 +55,12 @@ namespace PxP
              * 3. 左下方缺陷點分類DataGridView Columns
              * 4. 
              */
+
             #endregion
+
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetLangXDoc()");
+
             string selectedFile = "";
             switch (lang)
             {
@@ -70,59 +81,82 @@ namespace PxP
                     break;
             }
             string file = Path.GetDirectoryName(
-               Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/i18n/";
+                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "/../Parameter Files/CPxP/i18n/";
             string filename = file + selectedFile;
             XDocument xd = XDocument.Load(filename);
+            
             return xd;
         }
-        //取得sys_conf/sys.xml 用來設定自訂參數檔 & Grid排序位置
+
+        // 取得 sys_conf/sys.xml 用來設定自訂參數檔及 Grid 排序位置
         internal static XDocument GetSysConfXDoc()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetSysConfXDoc()");
+
             string path = Path.GetDirectoryName(
-              Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
+                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
             string FullFilePath = path + "sys.xml";
             XDocument XD = XDocument.Load(FullFilePath);
+
             return XD;
         }
-        //取得conf底下參數檔可自訂
+
+        // 取得 conf 底下參數檔可自訂
         internal static XDocument GetConfig()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetConfig()");
+
             LoadSystemConfig();
             string path = Path.GetDirectoryName(
-             Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
+                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
             string FullFilePath = string.Format("{0}{1}", path, SystemVariable.ConfigFileName);
             XDocument XD2 = XDocument.Load(FullFilePath);
+
             return XD2;
         }
-        //取得grade conf 參數檔
+
+        // 取得 grade conf 參數檔
         internal static XDocument GetGradeConfXDoc()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetGradeConfXDoc() # 取得 grade conf 參數檔");
+
             string path = Path.GetDirectoryName(
              Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\grade\\";
             string FullFilePath = string.Format("{0}{1}", path, SystemVariable.GradeConfigFileName);
             XDocument XD2 = XDocument.Load(FullFilePath);
+
             return XD2;
         }
        
-        //載入/sys_conf/sys.xml  ==> 根據有定義語系資料再變更一次參數
+        // 載入/sys_conf/sys.xml  ==> 根據有定義語系資料再變更一次參數
         internal static void LoadSystemConfig()
         {
             #region 註解
+
             /*
-             * 開啟程式啟動完執行緒之後,立刻載入相關設定檔,將設定檔的值帶入Model 全域變數中
+             * 開啟程式啟動完執行緒之後, 立刻載入相關設定檔, 將設定檔的值帶入 Model 全域變數中
              * 系統變數包含 : 
-             *   1. 載入其他Conf檔的檔名 (因為User可自訂Conf檔)
-             *   2. 右上角缺陷DataGridView的欄位左右排列順序
+             *   1. 載入其他 Conf 檔的檔名 (因為 User 可自訂 Conf 檔)
+             *   2. 右上角缺陷 DataGridView 的欄位左右排列順序
              */
+
             #endregion
+
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", " LoadSystemConfig() # 載入/sys_conf/sys.xml");
+
             try
             {
                 XDocument XSysConf = GetSysConfXDoc();
-                XElement XConfFile = XSysConf.Element("SystemConfig").Element("ConfFile"); //儲存Conf檔名到SystemVariable變數
-                IEnumerable<XElement> XDoffGrid = XSysConf.Element("SystemConfig").Element("DoffGrid").Elements("Column"); //自動儲存右上方GridView的排序和欄位Size
+                XElement XConfFile = XSysConf.Element("SystemConfig").Element("ConfFile");  // 儲存 Conf 檔名到 SystemVariable 變數
+                IEnumerable<XElement> XDoffGrid = XSysConf.Element("SystemConfig").Element("DoffGrid").Elements("Column");  // 自動儲存右上方 GridView 的排序和欄位 Size
                 SystemVariable.ConfigFileName = XConfFile.Value + ".xml";
-                //儲存GradeConfig到全域變數
-                XElement XGradeConfFile = XSysConf.Element("SystemConfig").Element("GradeConfigFile"); //儲存GradeConf檔名到SystemVariable變數
+
+                // 儲存GradeConfig到全域變數
+                XElement XGradeConfFile = XSysConf.Element("SystemConfig").Element("GradeConfigFile");  // 儲存 GradeConf 檔名到 SystemVariable 變數
                 SystemVariable.GradeConfigFileName = XGradeConfFile.Value + ".xml"; ;
                 PxPVariable.DoffGridSetup.Clear();
                 foreach (XElement el in XDoffGrid)
@@ -133,7 +167,6 @@ namespace PxP
                 XElement OrderByColumn = XSysConf.Element("SystemConfig").Element("DoffGrid").Element("OrderBy");
                 PxPVariable.FlawGridViewOrderColumn = OrderByColumn.Value;
 
-                ////////////////////////////////////////////////////////////////////////////////////////////////
                 if (MapWindowVariable.DoffTypeGridSetup == null)
                     MapWindowVariable.DoffTypeGridSetup = new List<DoffGridColumns>();
                 else
@@ -145,22 +178,25 @@ namespace PxP
                     MapWindowVariable.DoffTypeGridSetup.Add(d);
                 }
 
-                ////////////////////////////////////////////////////////////////////////////////////////////////
                 XElement XLimit = XSysConf.Element("SystemConfig").Element("Limit");
                 PxPVariable.PieceLimit = int.TryParse(XLimit.Value, out PxPVariable.PieceLimit) ? PxPVariable.PieceLimit : 20;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Load System Config Error : \n" + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** Load System Config Error:" + ex.Message);
             }
 
-
-
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", " LoadSystemConfig() # 載入/sys_conf/sys.xml 完畢");
         }
-        //載入/CPxP/conf/setup.xml 或 自定義的設定檔
-        //如果該變數會受Conf檔影響,請記得在此補上
+
+        // 載入 /CPxP/conf/setup.xml 或自訂的設定檔
+        // 如果該變數會受 Conf 檔影響, 請記得在此補上
         internal static void LoadConfig()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadConfig() # 載入 /CPxP/conf/setup.xml ");
+
             XDocument XConf = GetConfig();
             XElement MapVariable = XConf.Element("Config").Element("MapVariable");
             try
@@ -184,7 +220,6 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail : \n" + ex.Message);
                 PxPVariable.ImgRowsSet = 2;
                 PxPVariable.ImgColsSet = 2;
                 MapWindowVariable.MapProportion = 0;
@@ -198,14 +233,16 @@ namespace PxP
                 MapWindowVariable.CDInver = 0;
                 MapWindowVariable.LastMapCDConvertion = 1.00;
                 MapWindowVariable.LastMapMDConvertion = 1.00;
+
+                //Debug
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadConfig() # 載入 /CPxP/conf/setup.xml 錯誤 ");
             }
 
-            ///////////////////////////////////////////////////////////////////////////////////////////
             IEnumerable<XElement> xMapFlawTypeName = XConf.Element("Config").Element("MapVariable").Elements("FlawTypeName");
             try
             {
                 PxPVariable.FlawTypeName.Clear();
-                foreach (var el in xMapFlawTypeName)
+                foreach (XElement el in xMapFlawTypeName)
                 {
                     FlawTypeNameExtend tmp = new FlawTypeNameExtend();
                     tmp.Display = (int.Parse(el.Element("Display").Value) == 1) ? true : false;
@@ -216,18 +253,23 @@ namespace PxP
                     tmp.FlawType = int.Parse(el.Element("FlawType").Value.ToString());
                     PxPVariable.FlawTypeName.Add(tmp);
                 }
-
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail :  MapDoffTypeGrid \n" + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** Load Roi mode Error:" + ex.Message, MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
             }
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadConfig() # 載入 /CPxP/conf/setup.xml 完畢 ");
         }
-        //載入Grade的xml 內容到全域變數
+
+        // 載入 Grade 的 xml 內容到全域變數
         internal static void LoadGradeConfig()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadGradeConfig()");
+
             XDocument XGrade = GetGradeConfXDoc();
-            //載入Roi模式, 
+            // 載入 Roi 模式
             XElement XRoiMode = XGrade.Element("GradeConfig").Element("Roi").Element("RoiMode");
             XElement XRoiColumns = XGrade.Element("GradeConfig").Element("Roi").Element("RoiColumns");
             XElement XRoiRows = XGrade.Element("GradeConfig").Element("Roi").Element("RoiRows");
@@ -240,18 +282,15 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Grade Config Fail :  \n" + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** Load Roi mode Error:" + ex.Message, MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
             }
 
-            //////////////////////////////////////////////////////////////////////////////////////
-
-
-            //載入Roi 欄位start end 座標資料
+            // 載入 Roi 欄位 start, end 座標資料
             try
             {
                 IEnumerable<XElement> XColumns = XGrade.Element("GradeConfig").Element("Roi").Elements("Column");
                 GradeVariable.RoiColumnsGrid.Clear();
-                foreach (var c in XColumns)
+                foreach (XElement c in XColumns)
                 {
                     RoiGrade tmpRoiColumn = new RoiGrade();
                     tmpRoiColumn.Name = c.Attribute("Name").Value;
@@ -262,7 +301,7 @@ namespace PxP
 
                 IEnumerable<XElement> XRows = XGrade.Element("GradeConfig").Element("Roi").Elements("Row");
                 GradeVariable.RoiRowsGrid.Clear();
-                foreach (var r in XRows)
+                foreach (XElement r in XRows)
                 {
                     RoiGrade tmpRoiRow = new RoiGrade();
                     tmpRoiRow.Name = r.Attribute("Name").Value;
@@ -273,12 +312,10 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global roi variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** Load Roi columns Error:" + ex.Message, MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
             }
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-
-            //載入 Grade setting > Point xml default value
+            // 載入 Grade setting > Point xml default value
             try
             {
                 XElement XPointEnable = XGrade.Element("GradeConfig").Element("Grade").Element("PointGrade").Element("Enable");
@@ -287,11 +324,11 @@ namespace PxP
                 IEnumerable<XElement> XPointSubPieces = XGrade.Element("GradeConfig").Element("Grade").Element("PointGrade").Elements("SubPiece");
                 GradeVariable.PointSubPieces.Clear();
                 
-                //1. 先加入一筆ALL的SubPiece 指全部使用相同設定
+                // 1. 先加入一筆 ALL 的 SubPiece 指全部使用相同設定
                 PointSubPiece allsame = new PointSubPiece();
                 allsame.Name = "ALL";
                 allsame.Grades = new List<PointGrade>();
-                foreach (var i in PxPVariable.FlawTypeName)
+                foreach (FlawTypeNameExtend i in PxPVariable.FlawTypeName)
                 {
                     PointGrade tmpPG = new PointGrade();
                     tmpPG.ClassId = i.FlawType;
@@ -301,15 +338,16 @@ namespace PxP
                     allsame.Grades.Add(tmpPG);
                 }
                 GradeVariable.PointSubPieces.Add(allsame);
-                //2. 用Rows和Columns造出所有欄位再去xml補資料
-                foreach (var r in GradeVariable.RoiRowsGrid)
+
+                // 2. 用 Rows 和 Columns 造出所有欄位再去 xml 補資料
+                foreach (RoiGrade r in GradeVariable.RoiRowsGrid)
                 {
-                    foreach (var c in GradeVariable.RoiColumnsGrid)
+                    foreach (RoiGrade c in GradeVariable.RoiColumnsGrid)
                     {
                         PointSubPiece tmpPointSubPiece = new PointSubPiece();
                         tmpPointSubPiece.Name = "ROI-" + r.Name + c.Name;
                         tmpPointSubPiece.Grades = new List<PointGrade>();
-                        foreach (var i in PxPVariable.FlawTypeName)
+                        foreach (FlawTypeNameExtend i in PxPVariable.FlawTypeName)
                         {
                             PointGrade tmpPG = new PointGrade();
                             tmpPG.ClassId = i.FlawType;
@@ -320,16 +358,16 @@ namespace PxP
                         GradeVariable.PointSubPieces.Add(tmpPointSubPiece);
                     }
                 }
-                //3. 補上XML有記錄的資料到GradeVariable.PointSubPieses
-                foreach (var xsp in XPointSubPieces)
+                // 3. 補上 XML 有記錄的資料到 GradeVariable.PointSubPieses
+                foreach (XElement xsp in XPointSubPieces)
                 {
-                    foreach (var gsp in GradeVariable.PointSubPieces)
+                    foreach (PointSubPiece gsp in GradeVariable.PointSubPieces)
                     {
                         if (gsp.Name == xsp.Attribute("Name").Value)
                         {
-                            foreach (var g in gsp.Grades)
+                            foreach (PointGrade g in gsp.Grades)
                             {
-                                foreach (var ft in xsp.Elements("FlawType"))
+                                foreach (XElement ft in xsp.Elements("FlawType"))
                                 { 
                                     if(g.ClassId == int.Parse(ft.Attribute("Id").Value))
                                         g.Score = int.Parse(ft.Value);
@@ -338,18 +376,15 @@ namespace PxP
                         }
                     }
 
-                }
+                }                
 
-                
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global point variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** Set Grade setting > Point xml default value errors:" + ex.Message, MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
             }
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-
-            //載入 Grade setting > Mark grade xml default
+            // 載入 Grade setting > Mark grade xml default
             try
             {
                 XElement XMarkGradetEnable = XGrade.Element("GradeConfig").Element("Grade").Element("MarkGrade").Element("Enable");
@@ -359,17 +394,17 @@ namespace PxP
                 IEnumerable<XElement> XMarkGradeSubPieces = XGrade.Element("GradeConfig").Element("Grade").Element("MarkGrade").Elements("SubPiece");
                 GradeVariable.MarkGradeSubPieces.Clear();
 
-                //1. 先加入一筆ALL的SubPiece 指全部使用相同設定
+                // 1. 先加入一筆 ALL 的 SubPiece 指全部使用相同設定
                 MarkSubPiece allsame = new MarkSubPiece();
                 allsame.Name = "ALL";
                 allsame.Grades = new List<MarkGrade>();
-                foreach (var i in XMarkGradeSubPieces)
+                foreach (XElement i in XMarkGradeSubPieces)
                 {
                     int asc = 65;
                     Regex rgx = new Regex("^[A-Z]*$");
                     if (i.Attribute("Name").Value == allsame.Name)
                     {
-                        foreach (var j in i.Elements("GradeRow"))
+                        foreach (XElement j in i.Elements("GradeRow"))
                         {
                             MarkGrade tmp = new MarkGrade();
                             tmp.GradeName = rgx.IsMatch(j.Attribute("Id").Value.ToString()) ? j.Attribute("Id").Value : Chr(asc).ToString();
@@ -388,22 +423,22 @@ namespace PxP
                 }
                 GradeVariable.MarkGradeSubPieces.Add(allsame);
 
-                //2. 用Rows和Columns造出所有欄位再去xml補資料
-                foreach (var r in GradeVariable.RoiRowsGrid)
+                // 2. 用 Rows 和 Columns 造出所有欄位再去 xml 補資料
+                foreach (RoiGrade r in GradeVariable.RoiRowsGrid)
                 {
-                    foreach (var c in GradeVariable.RoiColumnsGrid)
+                    foreach (RoiGrade c in GradeVariable.RoiColumnsGrid)
                     {
                         MarkSubPiece tmpMarkSubPiece = new MarkSubPiece();
                         tmpMarkSubPiece.Name = "ROI-" + r.Name + c.Name;
                         tmpMarkSubPiece.Grades = new List<MarkGrade>();
-                        foreach (var i in XMarkGradeSubPieces)
+                        foreach (XElement i in XMarkGradeSubPieces)
                         {
                             if (i.Attribute("Name").Value == tmpMarkSubPiece.Name)
                             {
-                                //3. 補上XML有記錄的資料
+                                // 3. 補上 XML 有記錄的資料
                                 int asc = 65;
                                 Regex rgx = new Regex("^[A-Z]*$");
-                                foreach (var j in i.Elements("GradeRow"))
+                                foreach (XElement j in i.Elements("GradeRow"))
                                 {
                                     MarkGrade tmp = new MarkGrade();
 
@@ -412,30 +447,25 @@ namespace PxP
                                     tmp.Score = int.Parse(j.Value);
                                     tmpMarkSubPiece.Grades.Add(tmp);
                                 }
-                                //4. 如果沒有新增一筆A
+                                // 4. 如果沒有新增一筆 A
                                 if (tmpMarkSubPiece.Grades.Count <= 0)
                                 {
                                     MarkGrade tmg = new MarkGrade();
                                     tmg.GradeName = Chr(65).ToString();
                                     tmpMarkSubPiece.Grades.Add(tmg);
                                 }
-
                             }
                         }
-                        
                         GradeVariable.MarkGradeSubPieces.Add(tmpMarkSubPiece);
                     }
                 }
-               
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global mark grade variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** Grade setting > Mark grade xml default errors:" + ex.Message, MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
             }
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-
-            //載入 Grade setting > Pass or fail filter socre xml default
+            // 載入 Grade setting > Pass or fail filter socre xml default
             try
             {
                 XElement XPFEnable = XGrade.Element("GradeConfig").Element("Grade").Element("PassFail").Element("Enable");
@@ -445,11 +475,14 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global pass or fail variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** Grade setting > Pass or fail filter socre xml default errors:" + ex.Message, MapWindowVariable.FlawPieces.Count.ToString(), MapWindowVariable.CurrentPiece.ToString());
+
             }
 
-
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadGradeConfig() # Complete");
         }
+
         #endregion
     }
 }

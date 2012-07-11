@@ -69,9 +69,6 @@
             this.lbGradeConfig = new System.Windows.Forms.Label();
             this.btnSaveGradeConfigFile = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.bsGradConfigList = new System.Windows.Forms.BindingSource(this.components);
             this.bsColumns = new System.Windows.Forms.BindingSource(this.components);
             this.bsRows = new System.Windows.Forms.BindingSource(this.components);
@@ -93,7 +90,6 @@
             this.gbGradeSetting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gvGrade)).BeginInit();
             this.tpPassOrFail.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsGradConfigList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsColumns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsRows)).BeginInit();
@@ -520,32 +516,6 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(23, 51);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(425, 268);
-            this.dataGridView1.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 12);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "SubPiece";
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(76, 21);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 20);
-            this.comboBox2.TabIndex = 0;
-            // 
             // GradeSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -581,7 +551,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gvGrade)).EndInit();
             this.tpPassOrFail.ResumeLayout(false);
             this.tpPassOrFail.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsGradConfigList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsColumns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsRows)).EndInit();
@@ -628,9 +597,6 @@
         private System.Windows.Forms.DataGridView gvGrade;
         private System.Windows.Forms.Label lbSubPieceOfGrade;
         private System.Windows.Forms.ComboBox cboxSubPieceOfGrade;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.CheckBox cboxEnablePFS;
         private System.Windows.Forms.Label lbScore;
         private System.Windows.Forms.TextBox tboxFilterScore;
