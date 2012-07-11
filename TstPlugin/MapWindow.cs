@@ -26,8 +26,6 @@ namespace PxP
         #region Conturctor
         public MapWindow()
         {
-            
-            //MessageBox.Show("MapWindow Conturctor");
             InitializeComponent();
             SystemVariable.LoadConfig();
             InitNChart(ref nChart, out nChartMap);
@@ -96,8 +94,6 @@ namespace PxP
         #endregion
 
         #region Inherit Interface
-
-
 
         #endregion
 
@@ -634,7 +630,6 @@ namespace PxP
                 e.CellStyle.ForeColor = System.Drawing.ColorTranslator.FromHtml(e.Value.ToString());
 
         }
-        #endregion
 
         private void gvFlawClass_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -655,6 +650,10 @@ namespace PxP
                 }
             }
         }
+
+        #endregion
+
+        
 
        
 

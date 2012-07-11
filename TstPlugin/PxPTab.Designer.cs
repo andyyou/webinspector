@@ -47,6 +47,8 @@
             this.gvFlaw.AllowUserToAddRows = false;
             this.gvFlaw.AllowUserToDeleteRows = false;
             this.gvFlaw.AllowUserToOrderColumns = true;
+            this.gvFlaw.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.gvFlaw.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvFlaw.Location = new System.Drawing.Point(12, 12);
             this.gvFlaw.MultiSelect = false;
@@ -62,6 +64,9 @@
             // 
             // tlpDoffGrid
             // 
+            this.tlpDoffGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tlpDoffGrid.BackColor = System.Drawing.Color.Transparent;
             this.tlpDoffGrid.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.tlpDoffGrid.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
@@ -79,6 +84,7 @@
             // 
             // btnPrevGrid
             // 
+            this.btnPrevGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrevGrid.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnPrevGrid.Enabled = false;
             this.btnPrevGrid.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -92,6 +98,7 @@
             // 
             // btnNextGrid
             // 
+            this.btnNextGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNextGrid.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnNextGrid.Enabled = false;
             this.btnNextGrid.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -105,17 +112,19 @@
             // 
             // lbNothing
             // 
+            this.lbNothing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbNothing.AutoSize = true;
             this.lbNothing.BackColor = System.Drawing.Color.Transparent;
-            this.lbNothing.Font = new System.Drawing.Font("Ubuntu", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNothing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbNothing.Location = new System.Drawing.Point(371, 705);
             this.lbNothing.Name = "lbNothing";
-            this.lbNothing.Size = new System.Drawing.Size(17, 21);
+            this.lbNothing.Size = new System.Drawing.Size(14, 20);
             this.lbNothing.TabIndex = 5;
             this.lbNothing.Text = "/";
             // 
             // lbPageTotal
             // 
+            this.lbPageTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPageTotal.AutoSize = true;
             this.lbPageTotal.BackColor = System.Drawing.Color.Transparent;
             this.lbPageTotal.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -127,6 +136,7 @@
             // 
             // lbPageCurrent
             // 
+            this.lbPageCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPageCurrent.AutoSize = true;
             this.lbPageCurrent.BackColor = System.Drawing.Color.Transparent;
             this.lbPageCurrent.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
