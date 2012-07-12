@@ -132,9 +132,9 @@ namespace PxP
                
                 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show("Deconstructor Program Error!");
+                MessageBox.Show("Deconstructor Program Error:" + ex.Message);
             }
 
             PxPThreadStatus.IsOnShutdown = true;
@@ -1079,7 +1079,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Language loading error");
+                MessageBox.Show("Language loading error : " + ex.Message);
             }
             // PxPThreadEvent.Set();
         }
@@ -1763,7 +1763,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                MessageBox.Show("tlpDoffGrid Paint Error");
+                MessageBox.Show("tlpDoffGrid Paint Error : " + ex.Message);
             }
         }
 
