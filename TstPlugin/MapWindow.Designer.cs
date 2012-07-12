@@ -379,6 +379,7 @@
             // 
             // btnMapSetup
             // 
+            this.btnMapSetup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMapSetup.Location = new System.Drawing.Point(523, 125);
             this.btnMapSetup.Name = "btnMapSetup";
             this.btnMapSetup.Size = new System.Drawing.Size(113, 23);
