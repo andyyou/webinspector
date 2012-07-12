@@ -164,7 +164,8 @@ namespace PxP
                     MethodInvoker GetThread = new MethodInvoker(GetLabel);
                     this.BeginInvoke(GetThread);
 
-                }).Start();
+                }).Start();
+
             }
         }
         public void pb_MouseDoubleClick(object sender, MouseEventArgs e)

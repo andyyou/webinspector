@@ -70,6 +70,9 @@
             // 
             // nChart
             // 
+            this.nChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.nChart.AutoRefresh = false;
             this.nChart.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.nChart.InputKeys = new System.Windows.Forms.Keys[0];
@@ -82,6 +85,8 @@
             // 
             // gvFlawClass
             // 
+            this.gvFlawClass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.gvFlawClass.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvFlawClass.Location = new System.Drawing.Point(14, 639);
             this.gvFlawClass.Name = "gvFlawClass";
@@ -94,6 +99,8 @@
             // 
             // tlpMapInfo
             // 
+            this.tlpMapInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tlpMapInfo.AutoSize = true;
             this.tlpMapInfo.BackColor = System.Drawing.Color.Transparent;
             this.tlpMapInfo.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
@@ -320,6 +327,7 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.rbAll);
             this.panel1.Controls.Add(this.rbFail);
@@ -371,6 +379,7 @@
             // 
             // btnMapSetup
             // 
+            this.btnMapSetup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMapSetup.Location = new System.Drawing.Point(523, 125);
             this.btnMapSetup.Name = "btnMapSetup";
             this.btnMapSetup.Size = new System.Drawing.Size(113, 23);
@@ -381,6 +390,7 @@
             // 
             // lbPageCurrent
             // 
+            this.lbPageCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPageCurrent.BackColor = System.Drawing.Color.Transparent;
             this.lbPageCurrent.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPageCurrent.Location = new System.Drawing.Point(233, 610);
@@ -392,6 +402,7 @@
             // 
             // lbPageTotal
             // 
+            this.lbPageTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPageTotal.BackColor = System.Drawing.Color.Transparent;
             this.lbPageTotal.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPageTotal.Location = new System.Drawing.Point(335, 610);
@@ -403,6 +414,7 @@
             // 
             // lbNothing
             // 
+            this.lbNothing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbNothing.AutoSize = true;
             this.lbNothing.BackColor = System.Drawing.Color.Transparent;
             this.lbNothing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -414,6 +426,7 @@
             // 
             // btnNextPiece
             // 
+            this.btnNextPiece.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNextPiece.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnNextPiece.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnNextPiece.Location = new System.Drawing.Point(444, 606);
@@ -426,6 +439,7 @@
             // 
             // btnPrevPiece
             // 
+            this.btnPrevPiece.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrevPiece.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnPrevPiece.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnPrevPiece.Location = new System.Drawing.Point(177, 606);

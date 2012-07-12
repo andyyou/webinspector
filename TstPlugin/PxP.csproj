@@ -39,7 +39,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition, Version=2010.2.11.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files\Web Ranger\Web Inspector\System.ComponentModel.Composition.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Web Ranger\Web Inspector\System.ComponentModel.Composition.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WRPlugIn, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files\Web Ranger\Web Inspector\WRPlugIn.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Web Ranger\Web Inspector\WRPlugIn.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +174,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files\Web Ranger\Plugins"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files (x86)\Web Ranger\Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>
