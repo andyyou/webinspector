@@ -296,8 +296,14 @@ namespace PxP
         }
         public void RefreshGvFlawClass()
         {
+            //Debug
+            DebugTool.WriteLog("MapWindow.cs", "RefreshGvFlawClass() Entry");
+
             gvFlawClass.Refresh();
             gvFlawClass.EndEdit();
+
+            //Debug
+            DebugTool.WriteLog("MapWindow.cs", "RefreshGvFlawClass() Completed");
         }
         private NLinearScaleConfigurator GetScaleConfigurator()
         {

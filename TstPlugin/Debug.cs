@@ -29,6 +29,15 @@ namespace PxP
             }
 
         }
+        public static void WriteLog(string FileName, string Msg, int PiecesCount, int CurrentPiece)
+        {
+            lock (sw)
+            {
+                sw.WriteLine(i.ToString() + ". " + FileName.PadRight(15) + " | " + Msg.PadRight(50) + String.Format("PiecesCount = {0} | CurrentPiece = {1}", PiecesCount.ToString().PadRight(8), CurrentPiece.ToString().PadRight(8)));
+                sw.Flush();
+                i++;
+            }
+        }
         static void Some()
         { }
 

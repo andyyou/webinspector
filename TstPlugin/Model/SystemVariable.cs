@@ -87,20 +87,34 @@ namespace PxP
         //取得conf底下參數檔可自訂
         internal static XDocument GetConfig()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetConfig() Entry");
+
             LoadSystemConfig();
             string path = Path.GetDirectoryName(
              Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
             string FullFilePath = string.Format("{0}{1}", path, SystemVariable.ConfigFileName);
             XDocument XD2 = XDocument.Load(FullFilePath);
+
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetConfig() Completed return xdocument");
+
             return XD2;
         }
         //取得grade conf 參數檔
         internal static XDocument GetGradeConfXDoc()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetGradeConfXDoc() Entry");
+
             string path = Path.GetDirectoryName(
              Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\grade\\";
             string FullFilePath = string.Format("{0}{1}", path, SystemVariable.GradeConfigFileName);
             XDocument XD2 = XDocument.Load(FullFilePath);
+
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "GetGradeConfXDoc() Completed return xdocument");
+
             return XD2;
         }
        
@@ -115,6 +129,10 @@ namespace PxP
              *   2. 右上角缺陷DataGridView的欄位左右排列順序
              */
             #endregion
+
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadSystemConfig() Entry");
+
             try
             {
                 XDocument XSysConf = GetSysConfXDoc();
@@ -151,16 +169,21 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Load System Config Error : \n" + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadSystemConfig() Exception : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
             }
 
-
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadSystemConfig() Completed");
+            
 
         }
         //載入/CPxP/conf/setup.xml 或 自定義的設定檔
         //如果該變數會受Conf檔影響,請記得在此補上
         internal static void LoadConfig()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadConfig() Entry");
+
             XDocument XConf = GetConfig();
             XElement MapVariable = XConf.Element("Config").Element("MapVariable");
             try
@@ -184,7 +207,6 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail : \n" + ex.Message);
                 PxPVariable.ImgRowsSet = 2;
                 PxPVariable.ImgColsSet = 2;
                 MapWindowVariable.MapProportion = 0;
@@ -198,6 +220,7 @@ namespace PxP
                 MapWindowVariable.CDInver = 0;
                 MapWindowVariable.LastMapCDConvertion = 1.00;
                 MapWindowVariable.LastMapMDConvertion = 1.00;
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadConfig() - 1. Set MapWindowVariable Exception (but set default value) : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////
@@ -221,11 +244,16 @@ namespace PxP
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail :  MapDoffTypeGrid \n" + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadConfig() - 2. Set FlawType Exception  : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
+
             }
         }
         //載入Grade的xml 內容到全域變數
         internal static void LoadGradeConfig()
         {
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadConfig() Entry");
+
             XDocument XGrade = GetGradeConfXDoc();
             //載入Roi模式, 
             XElement XRoiMode = XGrade.Element("GradeConfig").Element("Roi").Element("RoiMode");
@@ -240,7 +268,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Grade Config Fail :  \n" + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadGradeConfig() - 1. Load Roi Mode Exception  : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
             }
 
             //////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +301,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global roi variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadGradeConfig() - 2. Load Roi start and end position Exception  : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
             }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,6 +373,8 @@ namespace PxP
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show("Setting global point variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadGradeConfig() - 3. Load Roi Grade setting > Point xml default value Exception  : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
+
             }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -430,7 +460,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global mark grade variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadGradeConfig() - 4. Load Roi Grade setting > Mark grade xml default Exception  : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
             }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -446,8 +476,11 @@ namespace PxP
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show("Setting global pass or fail variable errors : " + ex.Message);
+                DebugTool.WriteLog("SystemVariable.cs", "*** LoadGradeConfig() - 5. Load Roi Grade setting > Pass or fail filter socre xml default Exception  : " + ex.Message, MapWindowVariable.FlawPieces.Count, MapWindowVariable.CurrentPiece);
             }
 
+            //Debug
+            DebugTool.WriteLog("SystemVariable.cs", "LoadGradeConfig() Completed");
 
         }
         #endregion
