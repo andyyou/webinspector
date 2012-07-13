@@ -1589,7 +1589,7 @@ namespace PxP
                 //Debug
                 DebugTool.WriteLog("PxPTab.cs", "IOnJobStopped 成員 > OnJobStopped() SystemVariable.IsReadHistory is true Start!! ");
                 //Debug
-                DebugTool.WriteLog("PxPTab.cs", "IOnJobStopped 成員 > OnJobStopped() Variable : " + String.Format("Stop md = {0}", md.ToString());
+                DebugTool.WriteLog("PxPTab.cs", "IOnJobStopped 成員 > OnJobStopped() Variable : " + String.Format("Stop md = {0}", md.ToString()));
                 //Debug
                 DebugTool.WriteLog("PxPTab.cs", "IOnJobStopped 成員 > OnJobStopped() - call OnHistoryCut()");
                 
