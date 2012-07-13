@@ -117,7 +117,8 @@ namespace PxP
                     dataLabel.Format = f.FlawID.ToString();
                     dataLabel.TextStyle.StringFormatStyle.HorzAlign = Nevron.HorzAlign.Center;
                     point.DataLabelStyle = dataLabel;
-                    point.DataLabelStyle.Visible = false;
+                    point.DataLabelStyle.Visible = false;
+
                     foreach (DataGridViewRow row in gvFlawClass.Rows)
                     {
                         DataGridViewCheckBoxCell col = (DataGridViewCheckBoxCell)row.Cells[2];
@@ -170,7 +171,8 @@ namespace PxP
                     if (MapWindowVariable.BottomAxe == 0)
                         point.AddDataPoint(new NDataPoint(f.CD, f.RMD));
                     else
-                        point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
+                        point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
+
                 }
             }
 
@@ -215,7 +217,8 @@ namespace PxP
                 if (column.ColumnName == "Display")
                     gvFlawClass.Columns[column.ColumnName].ReadOnly = false;
                 else
-                    gvFlawClass.Columns[column.ColumnName].ReadOnly = true;
+                    gvFlawClass.Columns[column.ColumnName].ReadOnly = true;
+
                 gvFlawClass.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
                 gvFlawClass.Columns[column.ColumnName].HeaderText = column.HeaderText;
                 gvFlawClass.Columns[column.ColumnName].DisplayIndex = column.Index;
@@ -223,8 +226,8 @@ namespace PxP
             }
             //Display
             gvFlawClass.Columns["Count"].Visible = false;
-            
-         
+            gvFlawClass.Columns["OfflineDoffNum"].Visible = false;
+            gvFlawClass.Columns["OfflineJobNum"].Visible = false;         
         }
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)
         {
@@ -304,7 +307,8 @@ namespace PxP
             }
             xAxis.UpdateScale();
             yAxis.UpdateScale();
-        }
+        }
+
         public void OnChartMouseDoubleClick(object sender, MouseEventArgs e)
         {
             MapWindowThreadStatus.UpdateChange = true;
@@ -352,7 +356,8 @@ namespace PxP
                 }
             }
             nChart.Refresh();
-        }        public void SetJobInfo()
+        }
+        public void SetJobInfo()
         {
             lbOrderNumberValue.Text = PxPVariable.JobInfo.OrderNumber;
             lbJobIDValue.Text = PxPVariable.JobInfo.JobID;
@@ -424,7 +429,8 @@ namespace PxP
             if (PxPVariable.PxPInfo != null)
             {
                 PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
-                PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+                PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+
                 if (MapWindowVariable.BottomAxe == 0)
                 {
                     nChartMap.Axis(StandardAxis.PrimaryX).View = new NRangeAxisView(new NRange1DD(0, PxPVariable.PxPWidth), true, true);
@@ -466,7 +472,8 @@ namespace PxP
         public void SetPieceTotalLabel()
         {
             lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
-        }
+        }
+
         public void CountFlawPieceDoffNum()
         {
             foreach (var c in PxPVariable.FlawTypeName)
@@ -513,7 +520,8 @@ namespace PxP
         {
             lbPageCurrent.Text = "--";
             lbPageTotal.Text = "--";
-        }
+        }
+
         #endregion
 
         #region Action Events
@@ -536,7 +544,8 @@ namespace PxP
         {
             MapWindowThreadStatus.UpdateChange = true;
             PxPTab.MapThreadEvent.Set();
-            PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+            PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
+
         }
         private void btnPrevPiece_Click(object sender, EventArgs e)
         {
@@ -563,7 +572,8 @@ namespace PxP
                 btnNextPiece.Enabled = true;
             CountFlawPieceDoffNum();
             lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
-
+
+
             DrawPieceFlaw(MapWindowVariable.FlawPieces[PieceNum - 1], false);
             //2012-05-04 小心online時的不良影響 連動功能
             MapWindowThreadStatus.IsChangePiece = true;

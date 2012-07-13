@@ -133,6 +133,7 @@ namespace PxP
         internal static int ShowFlag = 0;                           //紀錄顯示項目 0:All, 1:Pass, 2:Fail
         internal static List<DoffGridColumns> DoffTypeGridSetup;    //紀錄左下角DataGrid欄位左右排序
         internal static Dictionary<int, bool> PieceResult = new Dictionary<int, bool>();          //紀錄每片玻璃的檢測結果
+        internal static int tmpPieceKey = -1;                            //暫存 PieceResult 數量, 供判斷是否已達最末片
         internal static double LastMapMDConvertion;                 //紀錄上一次MD單位變更的比例
         internal static double LastMapCDConvertion;                 //紀錄上一次CD單位變更的比例
         public MapWindowVariable()

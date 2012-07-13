@@ -164,8 +164,8 @@ namespace PxP
             Dgv.Columns["LeftEdge"].Visible = false;
             Dgv.Columns["RightEdge"].Visible = false;
             Dgv.Columns["FlawType"].Visible = false;
-            Dgv.Columns["RMD"].Visible = false;
-            Dgv.Columns["RCD"].Visible = false;
+            //Dgv.Columns["RMD"].Visible = false;
+            //Dgv.Columns["RCD"].Visible = false;
             Dgv.Columns["ORMD"].Visible = false;
             Dgv.Columns["ORCD"].Visible = false;
             Dgv.Columns["OArea"].Visible = false;
@@ -463,6 +463,16 @@ namespace PxP
             }
             MapWindowVariable.FlawPieces.Add(subPiece); //把PxP處理完的每一片儲存
 
+
+            ///////////////////////////////////////////////////////////////////////
+            // 最後一次 Cut 因為沒有 DoffResult 所以最後一片直接先算不合格
+            if (MapWindowVariable.tmpPieceKey == MapWindowVariable.PieceResult.Count)
+            {
+                MapWindowVariable.PieceResult[MapWindowVariable.PieceResult.Count] = false;
+                PxPVariable.DoffNum++;
+                PxPVariable.FailNum++;
+            }
+            MapWindowVariable.tmpPieceKey = MapWindowVariable.PieceResult.Count;
             ///////////////////////////////////////////////////////////////////////
 
             PxPVariable.CurrentCutPosition = MD;
@@ -1131,12 +1141,12 @@ namespace PxP
                 }
                 MapWindowVariable.MapWindowController.RefreshGvFlawClass();
                 //最後一次Cut因為沒有DoffResult 所以最後一片直接先算不合格
-                if (PxPVariable.CurrentCutPosition < (Math.Round(md, 2) * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString())))
-                {
-                    MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
-                    PxPVariable.DoffNum++;
-                    PxPVariable.FailNum++;
-                }
+                //if (PxPVariable.CurrentCutPosition < (Math.Round(md, 2) * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString())))
+                //{
+                //    MapWindowVariable.PieceResult[PxPVariable.DoffNum] = false;
+                //    PxPVariable.DoffNum++;
+                //    PxPVariable.FailNum++;
+                //}
                 MapWindowVariable.MapWindowController.SetMapInfoLabel();
             }
             SystemVariable.IsReadHistory = false;
@@ -1763,7 +1773,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                MessageBox.Show("tlpDoffGrid Paint Error : " + ex.Message);
+                //MessageBox.Show("tlpDoffGrid Paint Error : " + ex.Message);
             }
         }
 
