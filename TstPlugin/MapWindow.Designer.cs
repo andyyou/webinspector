@@ -534,6 +534,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
             this.BackgroundImage = global::PxP.Properties.Resources.bgLeft;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.Controls.Add(this.lbTotalScoreValue);
             this.Controls.Add(this.lbTotalScore);
             this.Controls.Add(this.lbGradeConfig);

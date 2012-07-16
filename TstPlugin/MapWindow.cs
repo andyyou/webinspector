@@ -148,7 +148,10 @@ namespace PxP
             List<FlawInfoAddPriority> flawPiece = MapWindowVariable.FlawPieces[pieceNum];
 
             nChartMap.Series.Clear();
-            SubPieceMarkup(pieceNum);
+            if (GradeVariable.RoiMode == 1)
+            {
+                SubPieceMarkup(pieceNum);
+            }
 
             if (flawPiece.Count > 0)
             {

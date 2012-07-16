@@ -282,10 +282,6 @@ namespace PxP
                     flag = gvFlaw.Rows[flag].Index;
                     if (flag < FlawPieces[PieceID - 1].Count )
                     {
-                        MessageBox.Show("FlawPieces Count: " + FlawPieces.Count.ToString());
-                        MessageBox.Show("PieceID: " + PieceID.ToString());
-                        MessageBox.Show("flag: " + flag.ToString());
-
                         SingleFlawControl sfc = new SingleFlawControl(FlawPieces[PieceID - 1][flag]);
                         sfc.Width = ImgPlaceHolderWidth;
                         sfc.Height = ImgPlaceHolderHeight;
@@ -1187,7 +1183,10 @@ namespace PxP
             MapWindowVariable.MapWindowController.SetJobInfo();
             MapWindowVariable.MapWindowController.SetMapAxis();
             MapWindowVariable.MapWindowController.bsFlawType.ResetBindings(false);
-            MapWindowVariable.MapWindowController.InitSubPiece();
+            if (GradeVariable.RoiMode == 1)
+            {
+                MapWindowVariable.MapWindowController.InitSubPiece();
+            }
             PxPThreadEvent.Set();
         }
 
