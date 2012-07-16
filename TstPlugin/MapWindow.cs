@@ -223,8 +223,10 @@ namespace PxP
 
             if (drawFlag)
             {
-                MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
-                lbPageCurrent.Text = MapWindowVariable.FlawPieces.Count.ToString();
+                //UNDONE : CurrentPiece 設定改至 OnCut -> ProcessDoffResult 處理
+                //MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
+                //lbPageCurrent.Text = MapWindowVariable.FlawPieces.Count.ToString();
+                lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
                 lbPageTotal.Text = lbPageCurrent.Text;
 
                 if (MapWindowVariable.FlawPieces.Count > 1)
@@ -689,7 +691,7 @@ namespace PxP
                         if (s.Name == string.Format("ROI-{0}{1}", r.Name, c.Name))
                         {
                             NPointSeries labels = new NPointSeries();
-
+                            
                             labels.Name = "Markup";
                             labels.UseXValues = true;
                             labels.MarkerStyle.Visible = false;

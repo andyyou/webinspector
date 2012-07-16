@@ -97,8 +97,56 @@ namespace PxP
 
         private void tabFlawControl_SizeChanged(object sender, EventArgs e)
         {
+            try
+            {
+                if (flaw.Images == null)
+                {
+                    MessageBox.Show("flaw.Images is NULL");
+                    return;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("flaw.Images is NULL");
+            }
             foreach (IImageInfo image in flaw.Images)
             {
+                try
+                {
+                    if (image.Image == null)
+                    {
+                        MessageBox.Show("image.Image is NULL");
+                        break;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("image.Image is NULL");
+                }
+                try
+                {
+                    if (tabFlawControl.TabPages[image.Station] == null)
+                    {
+                        MessageBox.Show("tabFlawControl.TabPages[" + image.Station.ToString() + "] is NULL");
+                        break;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("tabFlawControl.TabPages[" + image.Station.ToString() + "] is NULL");
+                }
+                try
+                {
+                    if (pb[image.Station] == null)
+                    {
+                        MessageBox.Show("pb[" + image.Station.ToString() + "] is NULL");
+                        break;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("pb[" + image.Station.ToString() + "] is NULL");
+                }
                 Init_Image(image.Image, tabFlawControl.TabPages[image.Station], pb[image.Station]);
             }
         }
@@ -269,5 +317,6 @@ namespace PxP
         }
 
         #endregion
+
     }
 }
