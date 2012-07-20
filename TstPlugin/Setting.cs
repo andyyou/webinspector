@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System.Xml;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Xml;
 
 namespace PxP
 {
@@ -38,11 +37,8 @@ namespace PxP
 
         }
 
-
-
         public bool writeXMLString(string parent, string key, string value)
         {
-
             try
             {
                 XmlElement rootElement = this.docXmlSettings.DocumentElement;
@@ -107,7 +103,7 @@ namespace PxP
                     root.AppendChild(SeriesSettingElement);
                 }
                 SeriesSettingElement = (XmlElement)root.SelectSingleNode("SeriesSetting");
-                //XmlNodeList GetList=null;
+
                 XmlNodeList GetList = SeriesSettingElement.ChildNodes;
                 XmlNodeList GetNode = null;
 
@@ -161,9 +157,9 @@ namespace PxP
             try
             {
                 XmlElement root = docXmlSettings.DocumentElement, SeriesSettingElement = null;
-                XmlElement Issue = null, idValue = null, colorValue = null, ShowValue = null;
+                //XmlElement Issue = null, idValue = null, colorValue = null, ShowValue = null;
                 SeriesSettingElement = (XmlElement)root.SelectSingleNode("SeriesSetting");
-                //XmlNodeList GetList=null;
+                
                 XmlNodeList GetList = SeriesSettingElement.ChildNodes;
                 foreach (XmlNode Node in GetList)
                 {
@@ -196,7 +192,6 @@ namespace PxP
                 return false;
             }
         }
-
     }
 }
 

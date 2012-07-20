@@ -10,11 +10,8 @@ using WRPlugIn;
 namespace PxP
 {
     public class ConfFile { public string Name { get; set; } }
-    
-  
 
-    // 三角形, 倒三角形, 正方形, 圓形, 十字, 叉叉, 星號
-    //public enum Shape { Triangle, Ellipse, Square, Cone, Cross, LineDiagonalCross, Star };
+    // 定義列舉型別 : 三角形, 倒三角形, 正方形, 圓形, 十字, 叉叉, 星號
     public enum Shape {
         [DescriptionAttribute("▲"), EnumDescription("▲")]
         Triangle,
@@ -31,14 +28,14 @@ namespace PxP
         [DescriptionAttribute("★"), EnumDescription("★")]
         Star 
     };
+
     public class ImageInfo :IImageInfo
     {
-
         #region IImageInfo 成員
 
         public System.Drawing.Bitmap Image { set; get; }
-
         public int Station { set; get; }
+
         public ImageInfo(System.Drawing.Bitmap image, int station)
         {
             this.Image = image;
@@ -49,29 +46,29 @@ namespace PxP
     }
 
     #region 增加列舉型別ENUM其他功能
+
     static class ExtensionMethods
     {
-        public static string ToGraphic(this Enum en) //ext method
+        public static string ToGraphic(this Enum en)  // extend method
         {
-
             Type type = en.GetType();
             MemberInfo[] memInfo = type.GetMember(en.ToString());
             if (memInfo != null && memInfo.Length > 0)
             {
                 object[] attrs = memInfo[0].GetCustomAttributes(
-                                              typeof(DescriptionAttribute),
-                                              false);
+                    typeof(DescriptionAttribute),
+                    false);
                 if (attrs != null && attrs.Length > 0)
                     return ((DescriptionAttribute)attrs[0]).Description;
             }
             return en.ToString();
         }
     }
+
     /// <summary>
     /// Provides a description for an enumerated type.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field,
-     AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field, AllowMultiple = false)]
     public sealed class EnumDescriptionAttribute : Attribute
     {
         private string description;
@@ -94,12 +91,12 @@ namespace PxP
         /// </summary>
         /// <param name="description">The description to store in this attribute.
         /// </param>
-        public EnumDescriptionAttribute(string description)
-            : base()
+        public EnumDescriptionAttribute(string description): base()
         {
             this.description = description;
         }
     }
+
     /// <summary>
     /// Provides a static utility object of methods and properties to interact
     /// with enumerated types.
@@ -123,8 +120,8 @@ namespace PxP
             string description = value.ToString();
             FieldInfo fieldInfo = value.GetType().GetField(description);
             EnumDescriptionAttribute[] attributes =
-               (EnumDescriptionAttribute[])
-             fieldInfo.GetCustomAttributes(typeof(EnumDescriptionAttribute), false);
+                (EnumDescriptionAttribute[])
+                fieldInfo.GetCustomAttributes(typeof(EnumDescriptionAttribute), false);
 
             if (attributes != null && attributes.Length > 0)
             {
@@ -157,6 +154,7 @@ namespace PxP
 
             return list;
         }
+
         public static string GetItemString(string Description)
         {
             string result = "";
@@ -189,5 +187,6 @@ namespace PxP
             return result;
         }
     }
+
     #endregion
 }

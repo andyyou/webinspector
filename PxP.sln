@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PxP", "TstPlugin\PxP.csproj", "{4C3D5655-7D2D-431B-8B86-625F3371718B}"
 EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = PxP.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
