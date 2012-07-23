@@ -1004,6 +1004,7 @@ namespace PxP
                     f.LeftEdge = i.LeftEdge ;
                     f.Length = i.Length * ConverLength;
                     f.MD = Math.Round(i.MD * ConverMD, 2);
+                    
                     f.RMD = Math.Round(i.MD * ConverMD - PxPVariable.CurrentCutPosition, 2);
                     f.RCD = Math.Round(i.CD * ConverCD - PxPVariable.CurrentCutPosition, 2);
                     f.RightEdge = i.RightEdge ;
@@ -1176,17 +1177,21 @@ namespace PxP
             {
                 //UNDONE : 判斷MD範圍
                 //if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)
-                if (f.MD < PxPVariable.CurrentCutPosition && f.MD > PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight)
+                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight)
                     MapWindowVariable.FlawPiece.Add(f);
             }
             MapWindowVariable.Flaws.Clear();
             List<FlawInfoAddPriority> subPiece = new List<FlawInfoAddPriority>();
             foreach (FlawInfoAddPriority f in MapWindowVariable.FlawPiece)
             {
-                f.RMD = Math.Round(f.MD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 2);
-                f.RCD = Math.Round(f.CD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 2);
-                f.ORCD = Math.Round(f.ORCD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
-                f.ORMD = Math.Round(f.ORMD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
+                //UNDONE: Filter first cd md
+                if (PxPVariable.CurrentCutPosition > PxPVariable.PxPHeight)
+                {
+                    f.RMD = Math.Round(f.MD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 2);
+                    f.RCD = Math.Round(f.CD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 2);
+                    f.ORCD = Math.Round(f.ORCD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
+                    f.ORMD = Math.Round(f.ORMD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
+                }
                 subPiece.Add(f);
             }
             subPiece = CalcFlawScore(subPiece);  // 計算個缺陷點分數及歸屬子片
@@ -2489,7 +2494,8 @@ namespace PxP
 
             try
             {
-                if (PxPVariable.ChooseFlawID == -1) return;
+                //UNDONE: ChooseFlawID Error on Paint
+                //if (PxPVariable.ChooseFlawID == -1) return;
                 Graphics g = e.Graphics;
                 Control c = tlpDoffGrid.Controls[PxPVariable.ChooseFlawID.ToString()] as SingleFlawControl;
                 Pen p = new Pen(Color.SandyBrown, 6.0f);
