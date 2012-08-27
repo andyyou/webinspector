@@ -27,7 +27,7 @@ namespace PxP
         internal static int MDInver = 0;          // 記錄是否反轉座標軸
         internal static int CDInver = 0;
         internal static int ShowFlag = 0;         // 記錄顯示項目 0:All, 1:Pass, 2:Fail
-        internal static List<DoffGridColumns> DoffTypeGridSetup;    // 記錄左下角 DataGridView 欄位左右排序
+        internal static List<DoffGridColumns> DoffTypeGridSetup = new List<DoffGridColumns>();    // 記錄左下角 DataGridView 欄位左右排序
         internal static Dictionary<int, bool> PieceResult = new Dictionary<int, bool>();  // 記錄每片玻璃的檢測結果
         internal static int tmpPieceKey = -1;        // 暫存 PieceResult 數量, 供判斷是否已達最末片
         internal static double LastMapMDConvertion;  // 記錄上一次 MD 單位變更的比例

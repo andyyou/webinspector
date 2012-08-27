@@ -1,0 +1,335 @@
+SECTION CameraInfo
+	Version		"1.0.0"
+	Type		OPSIS7500LowContrastCamera
+	Desc		""
+ENDSECTION
+
+SECTION CameraCommunications
+	Number	1
+	Name		"192.168.1.201"
+	CommandPort	24000
+	DataPort	24202
+	AuxPort		24002
+ENDSECTION
+
+SECTION CameraControl
+	EnabledState	ENABLED
+	CameraMode	ONLINE
+ENDSECTION
+
+SECTION SensorControl
+	StartPixel	3001
+	StopPixel	4884
+	LineRate	5000
+	ShiftCycles	7620
+	VideoMode	LINESCAN
+	ExposureTime	200
+ENDSECTION
+
+SECTION SyncControl
+	LineClockSrc			INTERNAL
+	FrameTriggerSrc			INTERNAL
+	AsyncEncoder			ENABLED
+	AsyncEncoderSrc			EXTERNALCONTROL
+	ASYNCSCALEFACTOR			0.244514106583
+	EncoderProcessorEdge		RISINGEDGE
+	EncoderProcessorMuliplier	1
+	EncoderProcessorDivider		1
+	EncoderProcessorPhaseShift	0
+	EncoderProcessorPolarity	POSITIVE
+ENDSECTION
+
+SECTION AnalogSettings
+	Gain		0  3.26
+	Offset		0  0
+	Gain		1  3.26
+	Offset		1  0
+ENDSECTION
+
+SECTION 2DImage
+	ImageHeight	0
+	IndexOffset	0
+ENDSECTION
+
+SECTION LightingCorrection
+	EnabledState	DISABLED
+	TargetValue	128
+	NumberOfLines	1000
+	LightingCorrectionFile	""
+ENDSECTION
+
+SECTION Threshold
+	NumOfThresholds	0
+	MasterThresholdState	ENABLED
+ENDSECTION
+
+SECTION CdmdSpacing
+	NumOfCDMDSpacings	16
+	CDMDRejectEnable	ENABLED
+	CDMDMergeEnable	ENABLED
+		CDMDGroup		1
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		2
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		3
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		4
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		5
+		RejectCDMD		50	50
+		MergeCDMD		50	50
+		CDMDGroup		6
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		7
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		8
+		RejectCDMD		50	50
+		MergeCDMD		50	50
+		CDMDGroup		9
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		10
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		11
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		12
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		13
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		14
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		15
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+		CDMDGroup		16
+		RejectCDMD		0	0
+		MergeCDMD		0	0
+ENDSECTION
+
+SECTION 1DFeatureAcceptance
+	Streak		2  7448
+ENDSECTION
+
+SECTION 2DFeatureRejection
+	NumOfFilters	1
+	Filter	1
+		EnabledState	ENABLED
+		Group	8
+		Area	0	0
+		Width	2000	99999999
+		Height	0	0
+		HotPixelThreshold	0
+ENDSECTION
+
+SECTION Classifier
+	NumOfClasses	3
+	ClassGroup	1
+		EnabledState	ENABLED
+		Group	8
+		Area	0	0
+		Width	0	20
+		Height	0	0
+		AspectRatio	0.000	0.000
+		Class	1
+	ClassGroup	2
+		EnabledState	ENABLED
+		Group	8
+		Area	0	0
+		Width	20	120
+		Height	0	0
+		AspectRatio	0.000	0.000
+		Class	2
+	ClassGroup	3
+		EnabledState	ENABLED
+		Group	8
+		Area	0	0
+		Width	0	0
+		Height	0	0
+		AspectRatio	0.000	0.000
+		Class	3
+ENDSECTION
+
+SECTION FeatureImageControl
+	MaxFeatureImageSize	500000
+	NumOfFeatureImages	4
+	NullClassifierEnable	ENABLED
+	DilationMultiplier	3
+	DilationDivisor	2
+	MaxImageHeight	1024
+	Feature	1
+		ClassGroup	1
+		EnabledState	ENABLED
+		RelativePlace	0	0
+		RelativeSize	40	40
+	Feature	2
+		ClassGroup	2
+		EnabledState	ENABLED
+		RelativePlace	0	0
+		RelativeSize	40	40
+	Feature	3
+		ClassGroup	3
+		EnabledState	ENABLED
+		RelativePlace	0	0
+		RelativeSize	40	40
+	Feature	4
+		ClassGroup	0
+		EnabledState	ENABLED
+		RelativePlace	0	0
+		RelativeSize	40	40
+ENDSECTION
+
+SECTION EdgeTrackControl
+	EdgeTrackState			ENABLED
+	TrackingDirection			OutsideIn
+	DifferentialModeEnable			DISABLED
+	DifferentialModeType			Single
+	EdgeTrackSimulatedState			DISABLED
+	ProductIntensityThreshold	31
+	ProductType			DARK
+	ProductAbsPresCD		0
+	ProductAbsPresMD		0
+	ProductAbsState			DISABLED
+	LeftEdgeState			DISABLED
+	RightEdgeState			DISABLED
+	EdgeWidth			1	1
+	EdgeMargin			0	0
+	EdgeLimit			0	7448
+	LeftEdgeSpeed			1	1
+	RightEdgeSpeed			1	1
+	SmoothingState			DISABLED
+	WebEdgeProductRepFreq		0
+ENDSECTION
+
+SECTION PieceByPiece
+	EnabledState			ENABLED
+	Polarity			POSITIVE
+	Distance0			2560
+	Distance1			300
+	Distance2			56
+	Distance3			356
+ENDSECTION
+
+SECTION DigitalInputControl
+	NumberDigitalInputs	6
+	InputNumber	1
+		EventID	0
+		Mode	DISABLED
+		MD Offset	0
+	InputNumber	2
+		EventID	0
+		Mode	DISABLED
+		MD Offset	0
+	InputNumber	3
+		EventID	0
+		Mode	DISABLED
+		MD Offset	0
+	InputNumber	4
+		EventID	0
+		Mode	DISABLED
+		MD Offset	0
+	InputNumber	5
+		EventID	0
+		Mode	DISABLED
+		MD Offset	0
+	InputNumber	6
+		EventID	0
+		Mode	DISABLED
+		MD Offset	0
+ENDSECTION
+
+SECTION LowContrastFilter
+	Filter	1
+		ThresholdLL	-32640	DISABLED
+		ThresholdLH	-32640	DISABLED
+		ThresholdHL	32640	DISABLED
+		ThresholdHH	32640	DISABLED
+		FilterSubEnable	ENABLED
+	Filter	2
+		Height	3
+		Width	3
+		ThresholdLL	-3840	ENABLED
+		ThresholdLH	-3840	DISABLED
+		ThresholdHL	5120	DISABLED
+		ThresholdHH	5120	ENABLED
+		FilterSubEnable	ENABLED
+	Filter	3
+		Height	0
+		Width	0
+		ThresholdLL	-32640	DISABLED
+		ThresholdLH	-32640	DISABLED
+		ThresholdHL	32640	DISABLED
+		ThresholdHH	32640	DISABLED
+		FilterSubEnable	ENABLED
+	Filter	4
+		Height	0
+		Width	0
+		ThresholdLH	-32640	DISABLED
+		ThresholdHL	32640	DISABLED
+		FilterSubEnable	ENABLED
+	Filter	5
+		Height	8
+		Width	8
+		ThresholdHL	0	DISABLED
+		ThresholdHH	32640	DISABLED
+		FilterSubEnable	DISABLED
+ENDSECTION
+
+SECTION LowContrastPriorityTable
+	Group	1	0
+	Group	2	0
+	Group	3	0
+	Group	4	0
+	Group	5	2
+	Group	6	0
+	Group	7	0
+	Group	8	1
+	Group	9	0
+	Group	10	0
+	Group	11	0
+	Group	12	0
+	Group	13	0
+	Group	14	0
+ENDSECTION
+
+SECTION DigitalOutputControl
+	NumberDigitalOutputs	0
+ENDSECTION
+
+SECTION AutoGain
+	AverageTarget	128
+	PeakTarget	0
+	NumLines	25
+	MinGain	1.500
+	MaxGain	20.000
+	AvgError	DISABLED
+	MinAvg	0
+	MaxAvg	0
+	PixError	DISABLED
+	MinPix	0
+	MaxPix	0
+	PeakError	DISABLED
+	MinPeak	0
+	MaxPeak	0
+	NumLinesTest	25
+	AutoGainStartPixel	3500
+	AutoGainStopPixel	4000
+ENDSECTION
+
+SECTION AutoLighting
+	AutoLightingStartPixel	0
+	AutoLightingStopPixel	5150
+	AutoLightingGain	2.000000
+ENDSECTION
+
+ENDOFFILE
