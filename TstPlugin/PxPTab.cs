@@ -987,13 +987,11 @@ namespace PxP
                 return;
             }
 
-            PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString());
             MapWindowVariable.FlawPiece.Clear();
             foreach (FlawInfoAddPriority f in MapWindowVariable.Flaws)
             {
                 //UNDONE : 判斷MD範圍
-                //if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)
-                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight)
+                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)
                     MapWindowVariable.FlawPiece.Add(f);
             }
             MapWindowVariable.Flaws.Clear();
@@ -1008,6 +1006,13 @@ namespace PxP
                     f.ORCD = Math.Round(f.ORCD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
                     f.ORMD = Math.Round(f.ORMD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
                 }
+                else
+                {
+                    f.RMD = Math.Round(f.MD, 2);
+                    f.RCD = Math.Round(f.CD, 2);
+                    f.ORCD = Math.Round(f.ORCD, 6);
+                    f.ORMD = Math.Round(f.ORMD, 6);
+                }
                 subPiece.Add(f);
             }
             subPiece = CalcFlawScore(subPiece);          // 計算個缺陷點分數及歸屬子片
@@ -1021,7 +1026,7 @@ namespace PxP
             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(subPiece));
             DealSplitPieces(subPiece);
             
-            //PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
+            PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
             //UNDONE: ProcessDoffResult
             ProcessDoffResult(MapWindowVariable.FlawPieces.Count - 1);
             if (PxPThreadStatus.IsOnOnline)
