@@ -157,7 +157,7 @@ namespace PxP
             try
             {
                 XmlElement root = docXmlSettings.DocumentElement, SeriesSettingElement = null;
-                XmlElement Issue = null, idValue = null, colorValue = null, ShowValue = null;
+                //XmlElement Issue = null, idValue = null, colorValue = null, ShowValue = null;
                 SeriesSettingElement = (XmlElement)root.SelectSingleNode("SeriesSetting");
                 
                 XmlNodeList GetList = SeriesSettingElement.ChildNodes;

@@ -12,24 +12,29 @@ namespace PxP
 {
     public class SystemVariable
     {
-        internal static string ConfigFileName;                     // 儲存 XML 路徑可自訂義(預設\CPxP\conf\setup.xml)
-        internal static string GradeConfigFileName;                // 儲存等級評分定義 XML 路徑 (預設\CPxP\grade\default.xml)
+        internal static string ConfigFileName;                      // 儲存 XML 路徑可自訂義(預設\CPxP\conf\setup.xml)
+        internal static string GradeConfigFileName;                 // 儲存等級評分定義 XML 路徑 (預設\CPxP\grade\default.xml)
         internal static e_Language Language = e_Language.English;  // 預設為英語
         internal static string FlawLock = "FlawLock";              // OnFlaws & OnCut 鎖定
         internal static bool IsReadHistory = false;                // 判斷是否讀取歷史紀錄
         internal static bool IsSystemFreez = false;                // 判斷系統現在是否在 Offline 凍結狀態
         internal static IWebDBConnectionInfo DBConnectInfo;
         internal static string DBConnectString;
+        private static bool IsLoadSystemConfig = false;             // 判斷系統檔相關設定檔路徑是否載入
 
         #region Constructor
 
-        public SystemVariable() { }
+        public SystemVariable() 
+        {
+            
+        
+        }
 
         #endregion
 
         #region Refactoring
 
-        // ASC number to char
+        // ASCII碼轉字元
         public static char Chr(int Num)
         {
             char C = Convert.ToChar(Num);
@@ -40,7 +45,7 @@ namespace PxP
 
         #region 取得設定檔參數Method
 
-        // 取得語系檔
+        // 取得 語系檔
         internal static XDocument GetLangXDoc(e_Language lang)
         {
             #region 註解
@@ -81,65 +86,61 @@ namespace PxP
             
             return xd;
         }
-
-        // 取得 sys_conf/sys.xml 用來設定自訂參數檔及 Grid 排序位置
+        // 取得 sys_conf/sys.xml (用來設定自訂參數檔路徑 & Grid 排序位置)
         internal static XDocument GetSysConfXDoc()
         {
             string path = Path.GetDirectoryName(
                 Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
             string FullFilePath = path + "sys.xml";
-            XDocument XD = XDocument.Load(FullFilePath);
-
-            return XD;
+            XDocument xdSystemXml = XDocument.Load(FullFilePath);
+            return xdSystemXml;
         }
-
-        // 取得 conf 底下參數檔可自訂
+        // 取得 conf 底下參數檔可自訂 (用來設定gvFlaw等欄位資料) 
         internal static XDocument GetConfig()
         {
             LoadSystemConfig();
             string path = Path.GetDirectoryName(
                 Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
             string FullFilePath = string.Format("{0}{1}", path, SystemVariable.ConfigFileName);
-            XDocument XD2 = XDocument.Load(FullFilePath);
-
-            return XD2;
+            XDocument xdSetupXml = XDocument.Load(FullFilePath);
+            return xdSetupXml;
         }
-
         // 取得 grade conf 參數檔
         internal static XDocument GetGradeConfXDoc()
         {
             string path = Path.GetDirectoryName(
              Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\grade\\";
             string FullFilePath = string.Format("{0}{1}", path, SystemVariable.GradeConfigFileName);
-            XDocument XD2 = XDocument.Load(FullFilePath);
-
-            return XD2;
+            XDocument xdGradeXml = XDocument.Load(FullFilePath);
+            return xdGradeXml;
         }
-       
-        // 載入/sys_conf/sys.xml  ==> 根據有定義語系資料再變更一次參數
+        // 載入 /sys_conf/sys.xml  
         internal static void LoadSystemConfig()
         {
             #region 註解
-
             /*
              * 開啟程式啟動完執行緒之後, 立刻載入相關設定檔, 將設定檔的值帶入 Model 全域變數中
              * 系統變數包含 : 
              *   1. 載入其他 Conf 檔的檔名 (因為 User 可自訂 Conf 檔)
              *   2. 右上角缺陷 DataGridView 的欄位左右排列順序
              */
-
             #endregion
 
             try
             {
-                XDocument XSysConf = GetSysConfXDoc();
-                XElement XConfFile = XSysConf.Element("SystemConfig").Element("ConfFile");  // 儲存 Conf 檔名到 SystemVariable 變數
-                IEnumerable<XElement> XDoffGrid = XSysConf.Element("SystemConfig").Element("DoffGrid").Elements("Column");  // 自動儲存右上方 GridView 的排序和欄位 Size
-                SystemVariable.ConfigFileName = XConfFile.Value + ".xml";
 
-                // 儲存GradeConfig到全域變數
-                XElement XGradeConfFile = XSysConf.Element("SystemConfig").Element("GradeConfigFile");  // 儲存 GradeConf 檔名到 SystemVariable 變數
+                XDocument XSysConf = GetSysConfXDoc();
+
+                // 儲存 Conf 檔名到 SystemVariable 變數
+                XElement XConfFile = XSysConf.Element("SystemConfig").Element("ConfFile");  
+                SystemVariable.ConfigFileName = XConfFile.Value + ".xml";
+                
+                // 儲存 GradeConf 檔名到 SystemVariable 變數
+                XElement XGradeConfFile = XSysConf.Element("SystemConfig").Element("GradeConfigFile");  
                 SystemVariable.GradeConfigFileName = XGradeConfFile.Value + ".xml"; ;
+
+                // 儲存 右上方 GridView (gvFlaw) 的排序和欄位Width
+                IEnumerable<XElement> XDoffGrid = XSysConf.Element("SystemConfig").Element("DoffGrid").Elements("Column"); 
                 PxPVariable.DoffGridSetup.Clear();
                 foreach (XElement el in XDoffGrid)
                 {
@@ -149,28 +150,26 @@ namespace PxP
                 XElement OrderByColumn = XSysConf.Element("SystemConfig").Element("DoffGrid").Element("OrderBy");
                 PxPVariable.FlawGridViewOrderColumn = OrderByColumn.Value;
 
-                if (MapWindowVariable.DoffTypeGridSetup == null)
-                    MapWindowVariable.DoffTypeGridSetup = new List<DoffGridColumns>();
-                else
-                    MapWindowVariable.DoffTypeGridSetup.Clear();
-                IEnumerable<XElement> XDoffTypeGrid = XSysConf.Element("SystemConfig").Element("DoffTypeGrid").Elements("Column"); //自動儲存右上方GridView的排序和欄位Size
+                // 儲存 缺陷類型 gvSeries, gvFlawClass 相依 MapWindowVariable.DoffTypeGridSetup
+                MapWindowVariable.DoffTypeGridSetup.Clear();
+                IEnumerable<XElement> XDoffTypeGrid = XSysConf.Element("SystemConfig").Element("DoffTypeGrid").Elements("Column"); 
                 foreach (XElement el in XDoffTypeGrid)
                 {
                     DoffGridColumns d = new DoffGridColumns(int.Parse(el.Element("Index").Value), el.Attribute("Name").Value, int.Parse(el.Element("Size").Value));
                     MapWindowVariable.DoffTypeGridSetup.Add(d);
                 }
 
+                // 設定片數上限
                 XElement XLimit = XSysConf.Element("SystemConfig").Element("Limit");
                 PxPVariable.PieceLimit = int.TryParse(XLimit.Value, out PxPVariable.PieceLimit) ? PxPVariable.PieceLimit : 20;
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Load System Config Error : \n" + ex.Message);
             }
-        }
 
-        // 載入 /CPxP/conf/setup.xml 或自訂的設定檔
-        // 如果該變數會受 Conf 檔影響, 請記得在此補上
+        }
+        // 載入 /CPxP/conf/setup.xml 或自訂的設定檔, 如果該變數有定義在 Conf (setup.xml) 檔影響, 請記得在此補上.
         internal static void LoadConfig()
         {
             XDocument XConf = GetConfig();
@@ -196,7 +195,6 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail : \n" + ex.Message);
                 PxPVariable.ImgRowsSet = 2;
                 PxPVariable.ImgColsSet = 2;
                 MapWindowVariable.MapProportion = 0;
@@ -230,14 +228,14 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Config Fail :  MapDoffTypeGrid \n" + ex.Message);
+                System.Windows.Forms.MessageBox.Show("載入 /CPxP/conf/setup.xml :  MapDoffTypeGrid \n" + ex.Message);
             }
         }
-
-        // 載入 Grade 的 xml 內容到全域變數
+        // 載入 /CPxP/grade/ 的 xml 內容到全域變數
         internal static void LoadGradeConfig()
         {
             XDocument XGrade = GetGradeConfXDoc();
+
             // 載入 Roi 模式
             XElement XRoiMode = XGrade.Element("GradeConfig").Element("Roi").Element("RoiMode");
             XElement XRoiColumns = XGrade.Element("GradeConfig").Element("Roi").Element("RoiColumns");
@@ -251,7 +249,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Initialize Load Grade Config Fail :  \n" + ex.Message);
+                System.Windows.Forms.MessageBox.Show(" 載入 /CPxP/grade/ 的 xml 內容到全域變數 錯誤 : \n" + ex.Message);
             }
 
             // 載入 Roi 欄位 start, end 座標資料
@@ -281,7 +279,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global roi variable errors : " + ex.Message);
+                System.Windows.Forms.MessageBox.Show(" 載入 Roi 欄位 start, end 座標資料 錯誤 : \n" + ex.Message);
             }
 
             // 載入 Grade setting > Point xml default value
@@ -430,7 +428,8 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global mark grade variable errors : " + ex.Message);
+
+                System.Windows.Forms.MessageBox.Show("載入 Grade setting > Mark grade xml default 錯誤 : \n" + ex.Message);
             }
 
             // 載入 Grade setting > Pass or fail filter socre xml default
@@ -443,7 +442,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Setting global pass or fail variable errors : " + ex.Message);
+                System.Windows.Forms.MessageBox.Show("載入 Grade setting > Pass or fail filter socre xml default 錯誤 : \n" + ex.Message);
             }
         }
 

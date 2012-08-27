@@ -269,7 +269,7 @@ namespace PxP
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message.ToString());
             }
         }
 
@@ -407,7 +407,7 @@ namespace PxP
                 }
                 catch (Exception ex)
                 {
-
+                    MessageBox.Show(ex.Message.ToString());
                 }
             }
         }

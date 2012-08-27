@@ -31,7 +31,7 @@ namespace PxP
             InitializeComponent();
             flaws = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1][PointIndex];
             pb = new PictureBox[PxPVariable.JobInfo.NumberOfStations];
-            
+
             SrcImg = new Image[PxPVariable.JobInfo.NumberOfStations];
             pb_ratio = new double[PxPVariable.JobInfo.NumberOfStations];
         }
@@ -60,7 +60,7 @@ namespace PxP
             {
                 tcPicture.TabPages.Add("S" + ((i + 1).ToString()));
                 tcPicture.TabPages[i].AutoScroll = true;
-                
+
                 pb[i] = new PictureBox();
                 pb[i].Width = tcPicture.TabPages[i].Width;
                 pb[i].Height = tcPicture.TabPages[i].Height;
@@ -73,7 +73,7 @@ namespace PxP
                 pb[i].MouseClick += new MouseEventHandler(pb_Click);
                 pb[i].MouseDoubleClick += new MouseEventHandler(pb_MouseDoubleClick);
                 pb[i].Cursor = System.Windows.Forms.Cursors.Hand;
-                     
+
                 tcPicture.TabPages[i].Controls.Add(pb[i]);
             }
 
@@ -255,3 +255,5 @@ namespace PxP
         #endregion
     }
 }
+
+

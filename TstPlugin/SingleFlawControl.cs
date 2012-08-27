@@ -31,7 +31,6 @@ namespace PxP
         public SingleFlawControl(FlawInfoAddPriority info)
         {
             InitializeComponent();
-
             flaw = info;
             lbFlawID.Text += info.FlawID.ToString();
             lbCoordinate = new Label();
@@ -97,9 +96,19 @@ namespace PxP
 
         private void tabFlawControl_SizeChanged(object sender, EventArgs e)
         {
-            foreach (IImageInfo image in flaw.Images)
+            try
             {
-                Init_Image(image.Image, tabFlawControl.TabPages[image.Station], pb[image.Station]);
+                if (((TabControl)sender).IsHandleCreated)
+                {
+                    foreach (IImageInfo image in flaw.Images)
+                    {
+                        Init_Image(image.Image, tabFlawControl.TabPages[image.Station], pb[image.Station]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("SizeChanged Error!" + ex.Message.ToString());
             }
         }
 

@@ -29,6 +29,9 @@ namespace PxP
 
         public MapWindow()
         {
+            //db
+            DebugTool.WriteLog(0, 0, "MapWindow.cs", "MapWindow()", "");
+
             InitializeComponent();
             SystemVariable.LoadConfig();
             InitNChart(ref nChart, out nChartMap);
@@ -42,10 +45,16 @@ namespace PxP
             bsGradConfigList.DataSource = GetGradeConfList();
             cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
             cboxGradeConfigFile.SelectedItem = SystemVariable.ConfigFileName.ToString().Substring(0, SystemVariable.GradeConfigFileName.ToString().LastIndexOf("."));
+
+            //db
+            DebugTool.WriteLog(0, 1, "MapWindow.cs", "MapWindow()", "");
         }
 
         ~MapWindow()
         {
+            //db
+            DebugTool.WriteLog(1, 0, "MapWindow.cs", "~MapWindow()", "");
+
             try
             {
                 string FolderPath = Path.GetDirectoryName(
@@ -66,8 +75,11 @@ namespace PxP
             }
             catch (Exception ex)
             {
+                DebugTool.WriteLog(1, 2, "MapWindow.cs", "~MapWindow()", ex.Message);
                 MessageBox.Show("Map Setup Destructor Error");
             }
+            //db
+            DebugTool.WriteLog(1, 1, "MapWindow.cs", "~MapWindow()", "");
         }
 
         #endregion
@@ -145,6 +157,9 @@ namespace PxP
         // Draw Flaws on Map
         public void DrawPieceFlaw(int pieceNum, bool drawFlag)
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "DrawPieceFlaw()", String.Format("PieceNum = {0}, DrawFlag = {1}", pieceNum.ToString(), drawFlag.ToString()));
+
             List<FlawInfoAddPriority> flawPiece = MapWindowVariable.FlawPieces[pieceNum];
 
             nChartMap.Series.Clear();
@@ -249,16 +264,27 @@ namespace PxP
                 nChartMap.Wall(ChartWallType.Back).FillStyle = WallFail;
 
             nChart.Refresh();
+             //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "DrawPieceFlaw()", "");
         }
 
         public void ClearMap()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "ClearMap()", "");
+
             nChartMap.Series.Clear();
             nChart.Refresh();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "ClearMap()", "");
         }
 
         public void InitGvFlawClass()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "InitGvFlawClass()", "bsFlawType 重新繫結，DoffGridColumns 重新設定欄位。");
+
             bsFlawType.DataSource = PxPVariable.FlawTypeName;
             gvFlawClass.DataSource = bsFlawType;
             gvFlawClass.AllowUserToAddRows = false;
@@ -279,25 +305,45 @@ namespace PxP
             gvFlawClass.Columns["Count"].Visible = false;
             gvFlawClass.Columns["OfflineDoffNum"].Visible = false;
             gvFlawClass.Columns["OfflineJobNum"].Visible = false;
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "InitGvFlawClass()", "");
         }
 
         public void SetGvFlawClass(IList<FlawTypeNameExtend> flawTypes)
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetGvFlawClass()", "將 flawTypes 繫結至 bsFlawType");
+
             bsFlawType.DataSource = flawTypes;
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "InitGvFlawClass()", "");
         }
 
         public void ResetGvFlawClassDoffNum()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "ResetGvFlawClassDoffNum()", "把 DoffNum 歸零。");
+
             foreach (DataGridViewRow r in gvFlawClass.Rows)
             {
                 r.Cells["DoffNum"].Value = 0;
             }
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "ResetGvFlawClassDoffNum()", "");
         }
 
         public void RefreshGvFlawClass()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "RefreshGvFlawClass()", "把 gvFlawClass Refuesh and EndEdit。");
+
             gvFlawClass.Refresh();
             gvFlawClass.EndEdit();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "RefreshGvFlawClass()", "");
         }
 
         private NLinearScaleConfigurator GetScaleConfigurator()
@@ -315,6 +361,9 @@ namespace PxP
 
         private void AxisScaleConfigurator()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "AxisScaleConfigurator()", "設定 CD MD 哪邊為底");
+
             double tmpScale = 0;
 
             // Configure X axis scale
@@ -361,6 +410,9 @@ namespace PxP
             }
             xAxis.UpdateScale();
             yAxis.UpdateScale();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "AxisScaleConfigurator()", "");
         }
 
         public void OnChartMouseDoubleClick(object sender, MouseEventArgs e)
@@ -414,16 +466,25 @@ namespace PxP
 
         public void SetJobInfo()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetJobInfo()", "");
+
             lbOrderNumberValue.Text = PxPVariable.JobInfo.OrderNumber;
             lbJobIDValue.Text = PxPVariable.JobInfo.JobID;
             lbMeterialTypeValue.Text = PxPVariable.JobInfo.MaterialType;
             lbOperatorValue.Text = PxPVariable.JobInfo.OperatorName;
             lbDateTimeValue.Text = DateTime.Now.ToShortDateString();
             lbDoffValue.Text = MapWindowVariable.CurrentPiece.ToString();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetJobInfo()", "");
         }
 
         public void SetFilterRadioButtons()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetFilterRadioButtons()", "紀錄顯示項目 0:All, 1:Pass, 2:Fail");
+
             switch (MapWindowVariable.ShowFlag)
             {  // 紀錄顯示項目 0:All, 1:Pass, 2:Fail
                 case 0:
@@ -439,10 +500,16 @@ namespace PxP
                     rbAll.Checked = true;
                     break;
             }
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetFilterRadioButtons()", "");
         }
 
         public void SetMapProperty()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetMapProperty()", "設定比例");
+
             switch (MapWindowVariable.MapProportion)
             {
                 case 0:  // 1:1
@@ -477,10 +544,16 @@ namespace PxP
             nChartMap.Axis(StandardAxis.PrimaryY).View = new NRangeAxisView(new NRange1DD(0, 0), true, true);
             AxisScaleConfigurator();
             nChart.Refresh();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetMapProperty()", "");
         }
 
         public void SetMapAxis()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetMapAxis()", "");
+
             if (PxPVariable.PxPInfo != null)
             {
                 PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
@@ -508,37 +581,68 @@ namespace PxP
             nChartMap.Axis(StandardAxis.PrimaryY).PagingView.MinPageLength = 0.01f;
             nChart.Refresh();
             AxisScaleConfigurator();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetMapAxis()", "");
         }
 
         public void SetMapInfoLabel()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetMapInfoLabel()", "");
+
             lbDoffValue.Text = PxPVariable.DoffNum.ToString();
             lbFailValue.Text = PxPVariable.FailNum.ToString();
             lbPassValue.Text = PxPVariable.PassNum.ToString();
             lbYieldValue.Text = (Math.Round((double)PxPVariable.PassNum / (double)(PxPVariable.PassNum + PxPVariable.FailNum), 4) * 100).ToString() + "%";
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetMapInfoLabel()", "");
         }
 
         public void SetUserTermLabel(IUserTerms terms)
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetUserTermLabel()", "");
+
             lbDoff.Text = terms.Doff;
             lbJobID.Text =   terms.JobID;
             lbMeterialType.Text =  terms.MaterialType;
             lbOperator.Text =  terms.OperatorName;
             lbOrderNumber.Text =  terms.OrderNumber;
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetUserTermLabel()", "");
         }
         
         public void SetTotalScoreLabel(double score)
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetTotalScoreLabel()", "");
+
             lbTotalScoreValue.Text = score.ToString();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetTotalScoreLabel()", "");
         }
 
         public void SetPieceTotalLabel()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetPieceTotalLabel()", "");
+
             lbPageTotal.Text = PxPVariable.FreezPiece.ToString();
+
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "SetPieceTotalLabel()", "");
         }
 
         public void CountFlawPieceDoffNum()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "CountFlawPieceDoffNum()", "");
+
             foreach (FlawTypeNameExtend c in PxPVariable.FlawTypeName)
             {
                 c.DoffNum = 0;
@@ -555,10 +659,16 @@ namespace PxP
                 }
             }
             gvFlawClass.Refresh();
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "CountFlawPieceDoffNum()", "gvFlawClass.Refresh();");
         }
 
         public int CheckPieceNum(int PageNum, string Direction)
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "CheckPieceNum()", "");
+
             if ((PageNum < PxPVariable.FreezPiece - PxPVariable.PieceLimit) || (PageNum > PxPVariable.FreezPiece))
             { }
             else
@@ -576,18 +686,30 @@ namespace PxP
                         else
                             return CheckPieceNum(PageNum - 1, Direction);
             }
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "CheckPieceNum()", "MapWindowVariable.CurrentPiece = " + MapWindowVariable.CurrentPiece.ToString());
+
             return MapWindowVariable.CurrentPiece;  // Not Found
         }
 
         public void InitLabel()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "InitLabel()", "");
+
             lbPageCurrent.Text = "--";
             lbPageTotal.Text = "--";
             lbTotalScoreValue.Text = "--";
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "InitLabel()", "");
         }
 
         public void InitSubPiece()
         {
+            //db
+            DebugTool.WriteLog(2, 0, "MapWindow.cs", "InitSubPiece()", "");
+
             // Draw horizontal line
             nChartMap.Axis(StandardAxis.PrimaryX).ConstLines.Clear();
             nChartMap.Axis(StandardAxis.PrimaryY).ConstLines.Clear();
@@ -646,6 +768,9 @@ namespace PxP
                 if (j == (GradeVariable.RoiRowsGrid.Count - 1))
                     j = -1;
             }
+
+            //db
+            DebugTool.WriteLog(2, 1, "MapWindow.cs", "InitSubPiece()", "");
         }
 
         private void DrawSubPieceHorizontal(int idx, double begin, double end)
@@ -728,7 +853,13 @@ namespace PxP
 
         private void MapWindow_Load(object sender, EventArgs e)
         {
+            //db
+            DebugTool.WriteLog(1, 0, "MapWindow.cs", "MapWindow_Load()", "");
+
             InitGvFlawClass();
+
+            //db
+            DebugTool.WriteLog(1, 1, "MapWindow.cs", "MapWindow_Load()", "");
         }
 
         private void btnMapSetup_Click(object sender, EventArgs e)
@@ -861,6 +992,7 @@ namespace PxP
                 }
                 catch (Exception ex)
                 {
+                    DebugTool.WriteLog(1, 2, "MapWindow.cs", "gvFlawClass_CellContentClick()", ex.Message);
                     MessageBox.Show(ex.Message);
                 }
             }
