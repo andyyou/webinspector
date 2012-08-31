@@ -226,11 +226,7 @@ namespace PxP
                         point.AddDataPoint(new NDataPoint(f.CD, f.RMD));
                     else
                         point.AddDataPoint(new NDataPoint(f.RMD, f.CD));
-
-
                 }
-
-                
             }
 
             if (drawFlag)
@@ -468,7 +464,10 @@ namespace PxP
             lbOperatorValue.Text = PxPVariable.JobInfo.OperatorName;
             lbDateTimeValue.Text = DateTime.Now.ToShortDateString();
             lbDoffValue.Text = MapWindowVariable.CurrentPiece.ToString();
-
+            lbPass.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
+            lbPassValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
+            lbFail.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
+            lbFailValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
         }
 
         public void SetFilterRadioButtons()
@@ -609,19 +608,20 @@ namespace PxP
 
              if (MapWindowVariable.PieceResult[MapWindowVariable.CurrentPiece - 1])
              {
-                 lbFail.ForeColor = System.Drawing.ColorTranslator.FromHtml("#993333");
-                 lbFailValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#993333");
-                 lbPass.ForeColor = System.Drawing.ColorTranslator.FromHtml("#00ff33");
-                 lbPassValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#00ff33");
+                 lbFail.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
+                 lbFailValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
+                 lbPass.ForeColor = System.Drawing.ColorTranslator.FromHtml("#00ff00");
+                 lbPassValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#00ff00");
              }
              else
              {
                  lbFail.ForeColor = System.Drawing.ColorTranslator.FromHtml("#ff0000");
                  lbFailValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#ff0000");
-                 lbPass.ForeColor = System.Drawing.ColorTranslator.FromHtml("#339933");
-                 lbPassValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#339933");
+                 lbPass.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
+                 lbPassValue.ForeColor = System.Drawing.ColorTranslator.FromHtml("#999999");
              }
         }
+
         public void SetMapInfoLabel(bool IsPass)
         {
             lbDoffValue.Text = PxPVariable.DoffNum.ToString();
