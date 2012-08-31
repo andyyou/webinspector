@@ -43,13 +43,15 @@ namespace PxP
         IWRMessageLog MsgLog;
         [Import(typeof(IWRJob))]
         IWRJob Job;
-
+        [Import(typeof(IWRFireEvent))]
+        IWRFireEvent Fire;
 
         #region Local Variable
 
         public int ImgPlaceHolderWidth;   // 右下角 TableLayout 內置放圖片容器寬
         public int ImgPlaceHolderHeight;  // 右下角 TableLayout 內置放圖片容器高
         bool SortSwitch = false;          // gvFlaw 排序 ASC DESC 判斷
+        int SectionID = 0;                // 2012-0-27 改版: 新增段號紀錄
 
         #endregion
 
@@ -439,8 +441,8 @@ namespace PxP
                 if (f.MD <= MD && f.MD > PxPVariable.CurrentCutPosition)
                 {
                     // Adjust RMD, RCD value
-                    f.RMD = Math.Round(f.MD - PxPVariable.CurrentCutPosition, 2);
-                    f.RCD = Math.Round(f.CD - PxPVariable.CurrentCutPosition, 2);
+                    f.RMD = Math.Round(f.MD - (MD - PxPVariable.PxPHeight), 2);
+                    f.RCD = Math.Round(f.CD - (MD - PxPVariable.PxPHeight), 2);
                     MapWindowVariable.FlawPiece.Add(f);
                 }
             }
@@ -686,6 +688,7 @@ namespace PxP
             return SubPiece;
         }
 
+        // 處理 Grade 評分機制
         public void ProcessDoffResult(int doffNumber)
         {
             try
@@ -707,10 +710,18 @@ namespace PxP
                 PxPVariable.DoffNum = doffNumber;
                 PxPThreadStatus.IsOnDoffResult = true;
                 if (PxPThreadStatus.IsOnOnline)
-                    MapWindowVariable.MapWindowController.SetMapInfoLabel();
+                {
+
+                    //if (GradeVariable.PassOrFileScore < CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]))
+                        MapWindowVariable.MapWindowController.SetMapInfoLabel();
+                   
+                }
 
                 MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
                 PxPThreadEvent.Set();
+                //if (GradeVariable.PassOrFileScore < CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]))
+                if (MapWindowVariable.PieceResult[MapWindowVariable.CurrentPiece - 1])
+                    Fire.FireEvent(0,0,0);
             }
             catch (Exception ex)
             {
@@ -718,6 +729,11 @@ namespace PxP
             }
         }
 
+        // 2012-08-27 改版:
+        public void DealPxP()
+        { 
+            
+        }
         #endregion
 
         #region Inherit Interface
@@ -833,7 +849,7 @@ namespace PxP
                     f.MD = Math.Round(i.MD * ConverMD, 2);
                     
                     f.RMD = Math.Round(i.MD * ConverMD - PxPVariable.CurrentCutPosition, 2);
-                    f.RCD = Math.Round(i.CD * ConverCD - PxPVariable.CurrentCutPosition, 2);
+                    //f.RCD = Math.Round(i.CD * ConverCD - PxPVariable.CurrentCutPosition, 2);
                     f.RightEdge = i.RightEdge ;
                     f.Width = Math.Round(i.Width * ConverWidth, 4);
 
@@ -982,41 +998,44 @@ namespace PxP
 
         public void OnCut(double md)
         {
-            if (md <= 0)
-            {
-                return;
-            }
+            //DebugTool.WriteLog(1, 0, "***", "***", "OnCut");
+            
+            // 2012-08-27 改版: OnCut 只記錄MD
+            // PxPVariable.CutPositionList.Add(SectionID, md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()));
+            
+            // 延遲送Cut  md 延遲 : 0.240m
+            PxPVariable.CurrentCutPosition = (md) * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); //UnitTest
 
             MapWindowVariable.FlawPiece.Clear();
             foreach (FlawInfoAddPriority f in MapWindowVariable.Flaws)
             {
-                //UNDONE : 判斷MD範圍
-                if (f.MD < PxPVariable.CurrentCutPosition + PxPVariable.PxPHeight && f.MD > PxPVariable.CurrentCutPosition)
+                if (f.MD < PxPVariable.CurrentCutPosition && f.MD > PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight)
                     MapWindowVariable.FlawPiece.Add(f);
             }
             MapWindowVariable.Flaws.Clear();
             List<FlawInfoAddPriority> subPiece = new List<FlawInfoAddPriority>();
             foreach (FlawInfoAddPriority f in MapWindowVariable.FlawPiece)
             {
-                //UNDONE: Filter first cd md
+                // Filter first cd md
                 if (PxPVariable.CurrentCutPosition > PxPVariable.PxPHeight)
                 {
                     f.RMD = Math.Round(f.MD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 2);
-                    f.RCD = Math.Round(f.CD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 2);
-                    f.ORCD = Math.Round(f.ORCD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
+                    //f.RCD = Math.Round(f.CD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 2);
+                    //f.ORCD = Math.Round(f.OCD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
                     f.ORMD = Math.Round(f.ORMD - (PxPVariable.CurrentCutPosition - PxPVariable.PxPHeight), 6);
                 }
                 else
                 {
                     f.RMD = Math.Round(f.MD, 2);
                     f.RCD = Math.Round(f.CD, 2);
-                    f.ORCD = Math.Round(f.ORCD, 6);
-                    f.ORMD = Math.Round(f.ORMD, 6);
+                    f.ORCD = Math.Round(f.OCD, 6);
+                    f.ORMD = Math.Round(f.OMD, 6);
                 }
                 subPiece.Add(f);
             }
             subPiece = CalcFlawScore(subPiece);          // 計算個缺陷點分數及歸屬子片
             MapWindowVariable.FlawPieces.Add(subPiece);  // 把 PxP 處理完的每一片儲存
+            
             // 先處理統計不使用 Pieces 改用 SubPiece
             foreach (FlawTypeNameExtend ft in PxPVariable.FlawTypeName)
             {
@@ -1026,7 +1045,7 @@ namespace PxP
             MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(subPiece));
             DealSplitPieces(subPiece);
             
-            PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); ; //UnitTest
+            //PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); //UnitTest
             //UNDONE: ProcessDoffResult
             ProcessDoffResult(MapWindowVariable.FlawPieces.Count - 1);
             if (PxPThreadStatus.IsOnOnline)
@@ -1083,8 +1102,7 @@ namespace PxP
                     }
                 }
             }
-
-
+            
             
         }
 
@@ -1101,6 +1119,7 @@ namespace PxP
             GradeVariable.SplitPiecesContainer.Clear();
             MapWindowVariable.CurrentPiece = 0;
             PxPVariable.CurrentCutPosition = 0;
+            PxPVariable.CutPositionList.Clear();
             MapWindowVariable.MapWindowController.InitLabel();
 
             // Reload Grade config useing mcs value
@@ -1400,7 +1419,11 @@ namespace PxP
             {
                 if (MapWindowVariable.CurrentPiece > 0)
                 {
+                    PxPVariable.FreezPiece = MapWindowVariable.FlawPieces.Count;
                     MapWindowVariable.MapWindowController.SetPieceTotalLabel();
+                    //2012-08-30
+                    bsFlaw.DataSource = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1];
+                    DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
                 }
             }
             PxPThreadEvent.Set();
@@ -1423,7 +1446,6 @@ namespace PxP
 
         public void OnDoffResult(double md, int doffNumber, bool pass)
         {
-
             //try
             //{
             //    //MapWindowVariable.PieceResult.Add(doffNumber, pass);
@@ -1462,7 +1484,7 @@ namespace PxP
         {
             PxPVariable.PxPInfo = info;
             PxPVariable.PxPWidth = PxPVariable.PxPInfo.Width * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[2].ToString());
-            PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString());
+            PxPVariable.PxPHeight = PxPVariable.PxPInfo.Height * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[2].ToString()) ;
             PxPThreadStatus.IsOnPxPConfig = true;
             PxPThreadEvent.Set();
         }
@@ -1500,8 +1522,8 @@ namespace PxP
 
         public void FireEvent(int eventID, double cd, double md)
         {
-            PxPThreadStatus.IsFireEvent = true;
-            PxPThreadEvent.Set();
+
+            
         }
 
         #endregion
@@ -1804,5 +1826,7 @@ namespace PxP
         }
 
         #endregion
+
+       
     }
 }
