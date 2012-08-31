@@ -29,11 +29,14 @@ namespace PxP
         public FlawForm(int PointIndex)
         {
             InitializeComponent();
-            flaws = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1][PointIndex];
-            pb = new PictureBox[PxPVariable.JobInfo.NumberOfStations];
+            if (PointIndex <  MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1].Count)
+            {
+                flaws = MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1][PointIndex];
+                pb = new PictureBox[PxPVariable.JobInfo.NumberOfStations];
 
-            SrcImg = new Image[PxPVariable.JobInfo.NumberOfStations];
-            pb_ratio = new double[PxPVariable.JobInfo.NumberOfStations];
+                SrcImg = new Image[PxPVariable.JobInfo.NumberOfStations];
+                pb_ratio = new double[PxPVariable.JobInfo.NumberOfStations];
+            }
         }
 
         ~FlawForm()
