@@ -455,9 +455,6 @@ namespace PxP
 
         public void SetJobInfo()
         {
-            //db
-            DebugTool.WriteLog(2, 0, "MapWindow.cs", "SetJobInfo()", "");
-
             lbOrderNumberValue.Text = PxPVariable.JobInfo.OrderNumber;
             lbJobIDValue.Text = PxPVariable.JobInfo.JobID;
             lbMeterialTypeValue.Text = PxPVariable.JobInfo.MaterialType;

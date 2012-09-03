@@ -40,7 +40,5 @@ namespace PxP
 
         public static Dictionary<string, int> UnitsKeys = new Dictionary<string, int>();
         public static DataSet UnitsData;
-        //2012-08-27 改版: 
-        public static Dictionary<int, double> CutPositionList = new Dictionary<int, double>();
     }
 }

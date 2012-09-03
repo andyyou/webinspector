@@ -477,13 +477,20 @@ namespace PxP
                 MapWindowVariable.PieceResult[MapWindowVariable.PieceResult.Count] = false;
                 PxPVariable.DoffNum++;
                 PxPVariable.FailNum++;
+               
             }
+           
             MapWindowVariable.tmpPieceKey = MapWindowVariable.PieceResult.Count;
             PxPVariable.CurrentCutPosition = MD;
+            
             gvFlaw.DataSource = bsFlaw;
             bsFlaw.ResetBindings(false);
             bsFlaw.ResumeBinding();
-            PxPThreadStatus.IsOnCut = true;
+
+            MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, true);
+            // 處理右下角圖片
+            DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
+
             PxPThreadEvent.Set();
         }
 
@@ -729,11 +736,7 @@ namespace PxP
             }
         }
 
-        // 2012-08-27 改版:
-        public void DealPxP()
-        { 
-            
-        }
+ 
         #endregion
 
         #region Inherit Interface
@@ -770,7 +773,7 @@ namespace PxP
         // 設定控制項顯示的X,Y位置座標及寬高
         public void SetPosition(int w, int h)
         {
-            SetBounds(0, 0, w, h); // Default : w760,h747
+            SetBounds(0, 0, w, h); 
         }
 
         // 主畫面透過 GetName 根據語系取得分頁名稱, 在 Plugin 內部則是透過 out 設定傳入變數
@@ -998,13 +1001,7 @@ namespace PxP
 
         public void OnCut(double md)
         {
-            //DebugTool.WriteLog(1, 0, "***", "***", "OnCut");
-            
-            // 2012-08-27 改版: OnCut 只記錄MD
-            // PxPVariable.CutPositionList.Add(SectionID, md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()));
-            
-            // 延遲送Cut  md 延遲 : 0.240m
-            PxPVariable.CurrentCutPosition = (md) * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); //UnitTest
+            PxPVariable.CurrentCutPosition = md * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString()); //UnitTest
 
             MapWindowVariable.FlawPiece.Clear();
             foreach (FlawInfoAddPriority f in MapWindowVariable.Flaws)
@@ -1083,7 +1080,11 @@ namespace PxP
                         MapWindowVariable.FlawPieces[i] = null;
                 }
                 MapWindowVariable.MapWindowController.RefreshGvFlawClass();
-                PxPThreadStatus.IsOnCut = true;
+
+                MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, true);
+                // 處理右下角圖片
+                DrawTablePictures(MapWindowVariable.FlawPieces, MapWindowVariable.CurrentPiece, 1);
+
                 PxPThreadEvent.Set();
 
             }
@@ -1119,7 +1120,6 @@ namespace PxP
             GradeVariable.SplitPiecesContainer.Clear();
             MapWindowVariable.CurrentPiece = 0;
             PxPVariable.CurrentCutPosition = 0;
-            PxPVariable.CutPositionList.Clear();
             MapWindowVariable.MapWindowController.InitLabel();
 
             // Reload Grade config useing mcs value
@@ -1344,8 +1344,9 @@ namespace PxP
                         }
                     }
                 }
+
                 MapWindowVariable.MapWindowController.RefreshGvFlawClass();
-                //UNDONE : OnJobStopped 不處理最後一片 Pass/Fail
+
                 // 最後一次 Cut 因為沒有 DoffResult 所以最後一片直接先算不合格
                 //if (PxPVariable.CurrentCutPosition < (Math.Round(md, 2) * Convert.ToDouble(PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw List MD"]].ItemArray[2].ToString())))
                 //{
@@ -1353,13 +1354,31 @@ namespace PxP
                 //    PxPVariable.DoffNum++;
                 //    PxPVariable.FailNum++;
                 //}
+               
                 MapWindowVariable.MapWindowController.SetMapInfoLabel();
                 MapWindowVariable.MapWindowController.SetTotalScoreLabel(CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
+                
+                MapWindowVariable.CurrentPiece = 1;
+                MapWindowVariable.MapWindowController.CountFlawPieceDoffNum();
+                MapWindowVariable.MapWindowController.lbPageCurrent.Text = MapWindowVariable.CurrentPiece.ToString();
+                MapWindowVariable.MapWindowController.SetTotalScoreLabel(MapWindowVariable.MapWindowController.CountPieceScore(MapWindowVariable.FlawPieces[MapWindowVariable.CurrentPiece - 1]));
+                MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, false);
+                MapWindowVariable.MapWindowController.btnPrevPiece.Enabled = false;
+                if (MapWindowVariable.CurrentPiece == PxPVariable.FreezPiece)
+                    MapWindowVariable.MapWindowController.btnNextPiece.Enabled = false;
+                else
+                    MapWindowVariable.MapWindowController.btnNextPiece.Enabled = true;
+                MapWindowThreadStatus.IsChangePiece = true;
+                PxPTab.MapThreadEvent.Set();
             }
             SystemVariable.IsReadHistory = false;
             PxPThreadEvent.Set();
-        }
 
+           
+
+
+        }
+       
         #endregion
 
         #region IOnWebDBConnected 成員
@@ -1653,13 +1672,6 @@ namespace PxP
                         MethodInvoker JobStarted = new MethodInvoker(ProcessJobStarted);
                         this.BeginInvoke(JobStarted);
                     }
-
-                    if (PxPThreadStatus.IsOnCut)
-                    {
-                        PxPThreadStatus.IsOnCut = false;
-                        MethodInvoker Cut = new MethodInvoker(ProcessOnCut);
-                        this.BeginInvoke(Cut);
-                    }
                 }
             }
             catch (Exception ex)
@@ -1731,19 +1743,7 @@ namespace PxP
             PxPThreadStatus.IsOnJobStarted = false;
         }
 
-        public void ProcessOnCut()
-        {
-            // UNDONE : 新增判斷非讀取歷史資料時設定 CurrentPiece
-            //if (!SystemVariable.IsReadHistory)
-            //{
-            //    MapWindowVariable.CurrentPiece = MapWindowVariable.FlawPieces.Count;
-            //}
-            MapWindowVariable.MapWindowController.DrawPieceFlaw(MapWindowVariable.CurrentPiece - 1, true);
-            
-            // 處理右下角圖片
-            DrawTablePictures(MapWindowVariable.FlawPieces,MapWindowVariable.CurrentPiece,1);
-            PxPThreadStatus.IsOnCut = false;
-        }
+      
 
         #endregion
 

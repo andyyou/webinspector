@@ -34,24 +34,24 @@
             this.gvFlawClass = new System.Windows.Forms.DataGridView();
             this.bsFlawType = new System.Windows.Forms.BindingSource(this.components);
             this.tlpMapInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.lbMeterialTypeValue = new System.Windows.Forms.Label();
             this.lbDoffValue = new System.Windows.Forms.Label();
             this.lbJobIDValue = new System.Windows.Forms.Label();
             this.lbOrderNumber = new System.Windows.Forms.Label();
             this.lbJobID = new System.Windows.Forms.Label();
             this.lbDoff = new System.Windows.Forms.Label();
+            this.lbOrderNumberValue = new System.Windows.Forms.Label();
             this.lbMeterialType = new System.Windows.Forms.Label();
+            this.lbMeterialTypeValue = new System.Windows.Forms.Label();
+            this.lbDateTime = new System.Windows.Forms.Label();
+            this.lbDateTimeValue = new System.Windows.Forms.Label();
             this.lbOperator = new System.Windows.Forms.Label();
+            this.lbOperatorValue = new System.Windows.Forms.Label();
             this.lbPass = new System.Windows.Forms.Label();
             this.lbFail = new System.Windows.Forms.Label();
             this.lbYield = new System.Windows.Forms.Label();
             this.lbPassValue = new System.Windows.Forms.Label();
             this.lbFailValue = new System.Windows.Forms.Label();
             this.lbYieldValue = new System.Windows.Forms.Label();
-            this.lbOrderNumberValue = new System.Windows.Forms.Label();
-            this.lbOperatorValue = new System.Windows.Forms.Label();
-            this.lbDateTime = new System.Windows.Forms.Label();
-            this.lbDateTimeValue = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rbAll = new System.Windows.Forms.RadioButton();
             this.rbFail = new System.Windows.Forms.RadioButton();
@@ -146,16 +146,6 @@
             this.tlpMapInfo.Size = new System.Drawing.Size(500, 78);
             this.tlpMapInfo.TabIndex = 2;
             // 
-            // lbMeterialTypeValue
-            // 
-            this.lbMeterialTypeValue.AutoSize = true;
-            this.lbMeterialTypeValue.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbMeterialTypeValue.Location = new System.Drawing.Point(378, 0);
-            this.lbMeterialTypeValue.Name = "lbMeterialTypeValue";
-            this.lbMeterialTypeValue.Size = new System.Drawing.Size(18, 16);
-            this.lbMeterialTypeValue.TabIndex = 16;
-            this.lbMeterialTypeValue.Text = "--";
-            // 
             // lbDoffValue
             // 
             this.lbDoffValue.AutoSize = true;
@@ -210,98 +200,6 @@
             this.lbDoff.TabIndex = 2;
             this.lbDoff.Text = "Doff";
             // 
-            // lbMeterialType
-            // 
-            this.lbMeterialType.AutoSize = true;
-            this.lbMeterialType.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMeterialType.Location = new System.Drawing.Point(253, 0);
-            this.lbMeterialType.Name = "lbMeterialType";
-            this.lbMeterialType.Size = new System.Drawing.Size(86, 16);
-            this.lbMeterialType.TabIndex = 3;
-            this.lbMeterialType.Text = "Meterial Type";
-            // 
-            // lbOperator
-            // 
-            this.lbOperator.AutoSize = true;
-            this.lbOperator.Font = new System.Drawing.Font("微軟正黑體", 9F);
-            this.lbOperator.Location = new System.Drawing.Point(253, 26);
-            this.lbOperator.Name = "lbOperator";
-            this.lbOperator.Size = new System.Drawing.Size(60, 16);
-            this.lbOperator.TabIndex = 4;
-            this.lbOperator.Text = "Operator";
-            // 
-            // lbPass
-            // 
-            this.lbPass.AutoSize = true;
-            this.lbPass.BackColor = System.Drawing.Color.Transparent;
-            this.lbPass.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbPass.ForeColor = System.Drawing.Color.Green;
-            this.lbPass.Location = new System.Drawing.Point(217, 117);
-            this.lbPass.Name = "lbPass";
-            this.lbPass.Size = new System.Drawing.Size(64, 31);
-            this.lbPass.TabIndex = 6;
-            this.lbPass.Text = "Pass";
-            // 
-            // lbFail
-            // 
-            this.lbFail.AutoSize = true;
-            this.lbFail.BackColor = System.Drawing.Color.Transparent;
-            this.lbFail.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbFail.ForeColor = System.Drawing.Color.Maroon;
-            this.lbFail.Location = new System.Drawing.Point(102, 117);
-            this.lbFail.Name = "lbFail";
-            this.lbFail.Size = new System.Drawing.Size(54, 31);
-            this.lbFail.TabIndex = 7;
-            this.lbFail.Text = "Fail";
-            // 
-            // lbYield
-            // 
-            this.lbYield.AutoSize = true;
-            this.lbYield.BackColor = System.Drawing.Color.Transparent;
-            this.lbYield.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbYield.ForeColor = System.Drawing.Color.DarkCyan;
-            this.lbYield.Location = new System.Drawing.Point(344, 116);
-            this.lbYield.Name = "lbYield";
-            this.lbYield.Size = new System.Drawing.Size(73, 31);
-            this.lbYield.TabIndex = 8;
-            this.lbYield.Text = "Yield";
-            // 
-            // lbPassValue
-            // 
-            this.lbPassValue.AutoSize = true;
-            this.lbPassValue.BackColor = System.Drawing.Color.Transparent;
-            this.lbPassValue.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbPassValue.ForeColor = System.Drawing.Color.Green;
-            this.lbPassValue.Location = new System.Drawing.Point(278, 117);
-            this.lbPassValue.Name = "lbPassValue";
-            this.lbPassValue.Size = new System.Drawing.Size(28, 31);
-            this.lbPassValue.TabIndex = 10;
-            this.lbPassValue.Text = "0";
-            // 
-            // lbFailValue
-            // 
-            this.lbFailValue.AutoSize = true;
-            this.lbFailValue.BackColor = System.Drawing.Color.Transparent;
-            this.lbFailValue.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbFailValue.ForeColor = System.Drawing.Color.Maroon;
-            this.lbFailValue.Location = new System.Drawing.Point(152, 117);
-            this.lbFailValue.Name = "lbFailValue";
-            this.lbFailValue.Size = new System.Drawing.Size(28, 31);
-            this.lbFailValue.TabIndex = 11;
-            this.lbFailValue.Text = "0";
-            // 
-            // lbYieldValue
-            // 
-            this.lbYieldValue.AutoSize = true;
-            this.lbYieldValue.BackColor = System.Drawing.Color.Transparent;
-            this.lbYieldValue.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbYieldValue.ForeColor = System.Drawing.Color.DarkCyan;
-            this.lbYieldValue.Location = new System.Drawing.Point(411, 116);
-            this.lbYieldValue.Name = "lbYieldValue";
-            this.lbYieldValue.Size = new System.Drawing.Size(28, 31);
-            this.lbYieldValue.TabIndex = 12;
-            this.lbYieldValue.Text = "0";
-            // 
             // lbOrderNumberValue
             // 
             this.lbOrderNumberValue.AutoSize = true;
@@ -312,15 +210,25 @@
             this.lbOrderNumberValue.TabIndex = 13;
             this.lbOrderNumberValue.Text = "--";
             // 
-            // lbOperatorValue
+            // lbMeterialType
             // 
-            this.lbOperatorValue.AutoSize = true;
-            this.lbOperatorValue.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lbOperatorValue.Location = new System.Drawing.Point(378, 26);
-            this.lbOperatorValue.Name = "lbOperatorValue";
-            this.lbOperatorValue.Size = new System.Drawing.Size(18, 16);
-            this.lbOperatorValue.TabIndex = 17;
-            this.lbOperatorValue.Text = "--";
+            this.lbMeterialType.AutoSize = true;
+            this.lbMeterialType.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMeterialType.Location = new System.Drawing.Point(253, 0);
+            this.lbMeterialType.Name = "lbMeterialType";
+            this.lbMeterialType.Size = new System.Drawing.Size(86, 16);
+            this.lbMeterialType.TabIndex = 3;
+            this.lbMeterialType.Text = "Meterial Type";
+            // 
+            // lbMeterialTypeValue
+            // 
+            this.lbMeterialTypeValue.AutoSize = true;
+            this.lbMeterialTypeValue.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbMeterialTypeValue.Location = new System.Drawing.Point(378, 0);
+            this.lbMeterialTypeValue.Name = "lbMeterialTypeValue";
+            this.lbMeterialTypeValue.Size = new System.Drawing.Size(18, 16);
+            this.lbMeterialTypeValue.TabIndex = 16;
+            this.lbMeterialTypeValue.Text = "--";
             // 
             // lbDateTime
             // 
@@ -341,6 +249,98 @@
             this.lbDateTimeValue.Size = new System.Drawing.Size(18, 16);
             this.lbDateTimeValue.TabIndex = 18;
             this.lbDateTimeValue.Text = "--";
+            // 
+            // lbOperator
+            // 
+            this.lbOperator.AutoSize = true;
+            this.lbOperator.Font = new System.Drawing.Font("微軟正黑體", 9F);
+            this.lbOperator.Location = new System.Drawing.Point(253, 26);
+            this.lbOperator.Name = "lbOperator";
+            this.lbOperator.Size = new System.Drawing.Size(60, 16);
+            this.lbOperator.TabIndex = 4;
+            this.lbOperator.Text = "Operator";
+            // 
+            // lbOperatorValue
+            // 
+            this.lbOperatorValue.AutoSize = true;
+            this.lbOperatorValue.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbOperatorValue.Location = new System.Drawing.Point(378, 26);
+            this.lbOperatorValue.Name = "lbOperatorValue";
+            this.lbOperatorValue.Size = new System.Drawing.Size(18, 16);
+            this.lbOperatorValue.TabIndex = 17;
+            this.lbOperatorValue.Text = "--";
+            // 
+            // lbPass
+            // 
+            this.lbPass.AutoSize = true;
+            this.lbPass.BackColor = System.Drawing.Color.Transparent;
+            this.lbPass.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPass.ForeColor = System.Drawing.Color.Green;
+            this.lbPass.Location = new System.Drawing.Point(139, 100);
+            this.lbPass.Name = "lbPass";
+            this.lbPass.Size = new System.Drawing.Size(64, 31);
+            this.lbPass.TabIndex = 6;
+            this.lbPass.Text = "Pass";
+            // 
+            // lbFail
+            // 
+            this.lbFail.AutoSize = true;
+            this.lbFail.BackColor = System.Drawing.Color.Transparent;
+            this.lbFail.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbFail.ForeColor = System.Drawing.Color.Maroon;
+            this.lbFail.Location = new System.Drawing.Point(14, 100);
+            this.lbFail.Name = "lbFail";
+            this.lbFail.Size = new System.Drawing.Size(54, 31);
+            this.lbFail.TabIndex = 7;
+            this.lbFail.Text = "Fail";
+            // 
+            // lbYield
+            // 
+            this.lbYield.AutoSize = true;
+            this.lbYield.BackColor = System.Drawing.Color.Transparent;
+            this.lbYield.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbYield.ForeColor = System.Drawing.Color.DarkCyan;
+            this.lbYield.Location = new System.Drawing.Point(264, 100);
+            this.lbYield.Name = "lbYield";
+            this.lbYield.Size = new System.Drawing.Size(73, 31);
+            this.lbYield.TabIndex = 8;
+            this.lbYield.Text = "Yield";
+            // 
+            // lbPassValue
+            // 
+            this.lbPassValue.AutoSize = true;
+            this.lbPassValue.BackColor = System.Drawing.Color.Transparent;
+            this.lbPassValue.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbPassValue.ForeColor = System.Drawing.Color.Green;
+            this.lbPassValue.Location = new System.Drawing.Point(200, 100);
+            this.lbPassValue.Name = "lbPassValue";
+            this.lbPassValue.Size = new System.Drawing.Size(28, 31);
+            this.lbPassValue.TabIndex = 10;
+            this.lbPassValue.Text = "0";
+            // 
+            // lbFailValue
+            // 
+            this.lbFailValue.AutoSize = true;
+            this.lbFailValue.BackColor = System.Drawing.Color.Transparent;
+            this.lbFailValue.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbFailValue.ForeColor = System.Drawing.Color.Maroon;
+            this.lbFailValue.Location = new System.Drawing.Point(64, 100);
+            this.lbFailValue.Name = "lbFailValue";
+            this.lbFailValue.Size = new System.Drawing.Size(28, 31);
+            this.lbFailValue.TabIndex = 11;
+            this.lbFailValue.Text = "0";
+            // 
+            // lbYieldValue
+            // 
+            this.lbYieldValue.AutoSize = true;
+            this.lbYieldValue.BackColor = System.Drawing.Color.Transparent;
+            this.lbYieldValue.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbYieldValue.ForeColor = System.Drawing.Color.DarkCyan;
+            this.lbYieldValue.Location = new System.Drawing.Point(331, 100);
+            this.lbYieldValue.Name = "lbYieldValue";
+            this.lbYieldValue.Size = new System.Drawing.Size(28, 31);
+            this.lbYieldValue.TabIndex = 12;
+            this.lbYieldValue.Text = "0";
             // 
             // panel1
             // 
