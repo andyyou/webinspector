@@ -454,20 +454,6 @@ namespace PxP
         {
             if (IsFirstLoadConfig)
             {
-                string spath = Path.GetDirectoryName(
-                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
-                string sFullFilePath = spath + "sys.xml";
-                XDocument xdSystemXml = XDocument.Load(sFullFilePath);
-                XDocument XSysConf = xdSystemXml;
-
-                // 儲存 缺陷類型 gvSeries, gvFlawClass 相依 MapWindowVariable.DoffTypeGridSetup
-                MapWindowVariable.DoffTypeGridSetup.Clear();
-                IEnumerable<XElement> XDoffTypeGrid = XSysConf.Element("SystemConfig").Element("DoffTypeGrid").Elements("Column");
-                foreach (XElement el in XDoffTypeGrid)
-                {
-                    DoffGridColumns d = new DoffGridColumns(int.Parse(el.Element("Index").Value), el.Attribute("Name").Value, int.Parse(el.Element("Size").Value));
-                    MapWindowVariable.DoffTypeGridSetup.Add(d);
-                }
 
                 SystemVariable.ConfigFileName = cboxConfList.SelectedItem.ToString() + ".xml";
                 string path = Path.GetDirectoryName(
@@ -600,40 +586,9 @@ namespace PxP
                         tmp.DoffNum = ft.DoffNum;
                         TmpFlawTypeName.Add(tmp);
                     }
-
-                    bsFlawTypeName.DataSource = TmpFlawTypeName;
-                    gvSeries.DataSource = bsFlawTypeName;
                     
-                    gvSeries.AutoGenerateColumns = false;
-
-                    foreach (DoffGridColumns column in MapWindowVariable.DoffTypeGridSetup)
-                    {
-                        gvSeries.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
-                        gvSeries.Columns[column.ColumnName].HeaderText = column.HeaderText;
-                        gvSeries.Columns[column.ColumnName].DisplayIndex = column.Index;
-                        gvSeries.Columns[column.ColumnName].Width = column.Width;
-
-                        if (column.ColumnName == "Shape")
-                        {
-                            DataGridViewComboBoxColumn cboxShape = new DataGridViewComboBoxColumn();
-                            cboxShape.DataPropertyName = "Shape";
-                            cboxShape.HeaderText = column.HeaderText;
-                            cboxShape.DisplayIndex = column.Index;
-                            cboxShape.Width = column.Width;
-                            cboxShape.DataSource = EnumHelper.ToList(typeof(Shape));
-                            cboxShape.DisplayMember = "Value";
-                            cboxShape.ValueMember = "Value";
-
-                            this.gvSeries.Columns.Add(cboxShape);
-                        }
-                    }
-                    // Display and Change Order
-                    gvSeries.Columns["FlawType"].DisplayIndex = 0;
-                    gvSeries.Columns["Display"].Visible = false;
-                    gvSeries.Columns["Count"].Visible = false;
-                    gvSeries.Columns["DoffNum"].Visible = false;
-                    gvSeries.Columns["Shape"].Visible = false;
-                    gvSeries.Columns["JobNum"].Visible = false;
+                    bsFlawTypeName.DataSource = TmpFlawTypeName;
+                    
                 }
             }
         }

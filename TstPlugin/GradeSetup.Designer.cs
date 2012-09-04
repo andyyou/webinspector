@@ -486,6 +486,7 @@
             this.cboxGradeConfigFile.Name = "cboxGradeConfigFile";
             this.cboxGradeConfigFile.Size = new System.Drawing.Size(234, 20);
             this.cboxGradeConfigFile.TabIndex = 1;
+            this.cboxGradeConfigFile.SelectedIndexChanged += new System.EventHandler(this.cboxGradeConfigFile_SelectedIndexChanged);
             // 
             // lbGradeConfig
             // 

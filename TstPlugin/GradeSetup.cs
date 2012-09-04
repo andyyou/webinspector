@@ -22,7 +22,7 @@ namespace PxP
         private List<MarkSubPiece> TmpMarkSubPieces = GradeVariable.MarkGradeSubPieces;
         private List<RoiGrade> TmpColumnsGrid = GradeVariable.RoiColumnsGrid;
         private List<RoiGrade> TmpRowsGrid = GradeVariable.RoiRowsGrid;
-
+        private bool IsFirstLoadConfig = false;
         #endregion
 
         #region Constructor
@@ -31,6 +31,7 @@ namespace PxP
         {
             InitializeComponent();
             InitialzeAllCustomObject();
+            IsFirstLoadConfig = true;
         }
 
         ~GradeSetup()
@@ -310,6 +311,7 @@ namespace PxP
             GradeVariable.RoiColumnsGrid = TmpColumnsGrid;
             GradeVariable.RoiRowsGrid = TmpRowsGrid;
 
+            SystemVariable.GradeConfigFileName = cboxGradeConfigFile.Text;
             
             MessageBox.Show("Success");
         }
@@ -549,5 +551,90 @@ namespace PxP
         }
         
         #endregion
+
+        private void cboxGradeConfigFile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (IsFirstLoadConfig)
+            {
+                // Reload grade config
+                SystemVariable.GradeConfigFileName = cboxGradeConfigFile.SelectedItem.ToString() + ".xml";
+                SystemVariable.LoadGradeConfig();
+
+                // Radio button get default value
+                switch (GradeVariable.RoiMode)
+                {
+                    case 0:
+                        rbNoRoi.Checked = true;
+                        break;
+                    case 1:
+                        rbSymmetrical.Checked = true;
+                        break;
+                    default:
+                        rbNoRoi.Checked = true;
+                        break;
+                }
+
+                // Textbox get default value
+                if (GradeVariable.RoiGradeColumns > 0)
+                    tboxColumns.Text = GradeVariable.RoiGradeColumns.ToString();
+                if (GradeVariable.RoiGradeRows > 0)
+                    tboxRows.Text = GradeVariable.RoiGradeRows.ToString();
+
+                // Set cobobox get xml list in config folder
+                bsGradConfigList.DataSource = GetGradeConfList();
+                cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
+                cboxGradeConfigFile.SelectedItem = SystemVariable.GradeConfigFileName.ToString().Substring(0, SystemVariable.GradeConfigFileName.ToString().LastIndexOf("."));
+
+                // Set columns gridview get xml default value
+                bsColumns.DataSource = TmpColumnsGrid;
+                gvColumns.DataSource = bsColumns.DataSource;
+
+                // Set rows gridview get xml default vale
+                bsRows.DataSource = TmpRowsGrid;
+                gvRows.DataSource = bsRows.DataSource;
+
+                // Subpiece comobox get list
+                bsRoiList.DataSource = GetSubPieceList();
+                cboxSubPieceOfGrade.DataSource = bsRoiList.DataSource;
+                cboxSubPieceOfPoint.DataSource = bsRoiList.DataSource;
+
+                // Grade setting > Point get grid value for ROI-11, ROI-12 etc...
+                foreach (PointSubPiece p in TmpPointSubPieces)
+                {
+                    if (p.Name == cboxSubPieceOfPoint.Text)
+                        bsPointSubPiece.DataSource = p.Grades;
+                }
+
+                gvPoint.DataSource = bsPointSubPiece.DataSource;
+                gvPoint.Columns["ClassId"].Visible = false;
+                gvPoint.Columns["ClassName"].ReadOnly = true;
+                // Grade setting > Point get value of cobobox for enable 
+                cboxEnablePTS.Checked = GradeVariable.IsPointEnable;
+
+                // Grade setting > MarkGrade get value of cobobox for enable
+                cboxEnableGrade.Checked = GradeVariable.IsMarkGradeEnable;
+
+                // Grade setting > MarkGrade get grid value for ROI-11, ROI-12 etc...
+                foreach (MarkSubPiece m in TmpMarkSubPieces)
+                {
+                    if (m.Name == cboxSubPieceOfPoint.Text)
+                        bsMarkSubPiece.DataSource = m.Grades;
+                }
+                gvGrade.DataSource = bsMarkSubPiece.DataSource;
+                gvGrade.Columns["GradeName"].ReadOnly = true;
+
+                // Grade setting > pass or fail of cobobox for enable
+                cboxEnablePFS.Checked = GradeVariable.IsPassOrFailScoreEnable;
+
+                // Grade setting > pass or fail of textbox for get filter score
+                tboxFilterScore.Text = GradeVariable.PassOrFileScore.ToString();
+
+                // Set panel visiable
+                panelCreateGrid.Visible = !rbNoRoi.Checked;
+                gbPointSetting.Enabled = cboxEnablePTS.Checked;
+                gbGradeSetting.Enabled = cboxEnableGrade.Checked;
+                tboxFilterScore.Enabled = cboxEnablePFS.Checked;
+            }
+        }
     }
 }

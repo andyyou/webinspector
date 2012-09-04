@@ -1030,6 +1030,7 @@ namespace PxP
             // 組態檔繫結
             bsGradConfigList.DataSource = GetGradeConfList();
             cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
+            cboxGradeConfigFile.SelectedItem = SystemVariable.GradeConfigFileName;
 
             
         }
