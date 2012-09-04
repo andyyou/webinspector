@@ -208,7 +208,6 @@ namespace PxP
         
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            MapWindow mp = new MapWindow();
             this.Close();
         }
 
@@ -311,7 +310,9 @@ namespace PxP
             GradeVariable.RoiColumnsGrid = TmpColumnsGrid;
             GradeVariable.RoiRowsGrid = TmpRowsGrid;
 
-            SystemVariable.GradeConfigFileName = cboxGradeConfigFile.Text;
+            // Set cobobox get xml list in config folder
+            bsGradConfigList.DataSource = GetGradeConfList();
+            SystemVariable.GradeConfigFileName = cboxGradeConfigFile.Text + ".xml";
             
             MessageBox.Show("Success");
         }
@@ -576,14 +577,18 @@ namespace PxP
 
                 // Textbox get default value
                 if (GradeVariable.RoiGradeColumns > 0)
+                {
+                    gvColumns.DataSource = null;
+                    gvColumns.Rows.Clear();
                     tboxColumns.Text = GradeVariable.RoiGradeColumns.ToString();
+                }
                 if (GradeVariable.RoiGradeRows > 0)
+                {
+                    gvRows.DataSource = null;
+                    gvRows.Rows.Clear();
                     tboxRows.Text = GradeVariable.RoiGradeRows.ToString();
+                }
 
-                // Set cobobox get xml list in config folder
-                bsGradConfigList.DataSource = GetGradeConfList();
-                cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
-                cboxGradeConfigFile.SelectedItem = SystemVariable.GradeConfigFileName.ToString().Substring(0, SystemVariable.GradeConfigFileName.ToString().LastIndexOf("."));
 
                 // Set columns gridview get xml default value
                 bsColumns.DataSource = TmpColumnsGrid;
@@ -605,9 +610,6 @@ namespace PxP
                         bsPointSubPiece.DataSource = p.Grades;
                 }
 
-                gvPoint.DataSource = bsPointSubPiece.DataSource;
-                gvPoint.Columns["ClassId"].Visible = false;
-                gvPoint.Columns["ClassName"].ReadOnly = true;
                 // Grade setting > Point get value of cobobox for enable 
                 cboxEnablePTS.Checked = GradeVariable.IsPointEnable;
 
@@ -620,8 +622,6 @@ namespace PxP
                     if (m.Name == cboxSubPieceOfPoint.Text)
                         bsMarkSubPiece.DataSource = m.Grades;
                 }
-                gvGrade.DataSource = bsMarkSubPiece.DataSource;
-                gvGrade.Columns["GradeName"].ReadOnly = true;
 
                 // Grade setting > pass or fail of cobobox for enable
                 cboxEnablePFS.Checked = GradeVariable.IsPassOrFailScoreEnable;
@@ -634,7 +634,11 @@ namespace PxP
                 gbPointSetting.Enabled = cboxEnablePTS.Checked;
                 gbGradeSetting.Enabled = cboxEnableGrade.Checked;
                 tboxFilterScore.Enabled = cboxEnablePFS.Checked;
+
+                
             }
         }
+
+       
     }
 }

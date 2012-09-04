@@ -22,6 +22,8 @@ namespace PxP
 
         private NCartesianChart nChartMap;
         private FailList fl = null;
+        bool IsClickGradeSetup = false;
+
         
         #endregion
 
@@ -41,7 +43,9 @@ namespace PxP
             // 組態檔繫結
             bsGradConfigList.DataSource = GetGradeConfList();
             cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
-            cboxGradeConfigFile.SelectedItem = SystemVariable.ConfigFileName.ToString().Substring(0, SystemVariable.GradeConfigFileName.ToString().LastIndexOf("."));
+            SystemVariable.LoadConfig();
+            cboxGradeConfigFile.SelectedItem = SystemVariable.GradeConfigFileName.Substring(0, SystemVariable.GradeConfigFileName.LastIndexOf("."));
+
         }
 
         ~MapWindow()
@@ -1028,17 +1032,24 @@ namespace PxP
             gs.ShowDialog();
 
             // 組態檔繫結
-            bsGradConfigList.DataSource = GetGradeConfList();
+            IsClickGradeSetup = true;
+            bsGradConfigList.DataSource = GetGradeConfList(); 
             cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
-            cboxGradeConfigFile.SelectedItem = SystemVariable.GradeConfigFileName;
 
-            
         }
 
         private void cboxGradeConfigFile_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SystemVariable.GradeConfigFileName = cboxGradeConfigFile.SelectedValue + ".xml";
+            if (IsClickGradeSetup)
+            {
+                cboxGradeConfigFile.SelectedItem = SystemVariable.GradeConfigFileName.Substring(0, SystemVariable.GradeConfigFileName.LastIndexOf("."));
+            }
+            else
+            {
+                SystemVariable.GradeConfigFileName = cboxGradeConfigFile.SelectedValue + ".xml";
+            }
             SystemVariable.LoadGradeConfig();
+            IsClickGradeSetup = false;
         }
 
         private void btnFailList_Click(object sender, EventArgs e)
