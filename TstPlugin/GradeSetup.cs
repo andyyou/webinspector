@@ -207,6 +207,7 @@ namespace PxP
         
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            MapWindow mp = new MapWindow();
             this.Close();
         }
 
@@ -308,6 +309,8 @@ namespace PxP
             GradeVariable.PointSubPieces = TmpPointSubPieces;
             GradeVariable.RoiColumnsGrid = TmpColumnsGrid;
             GradeVariable.RoiRowsGrid = TmpRowsGrid;
+
+            
             MessageBox.Show("Success");
         }
 

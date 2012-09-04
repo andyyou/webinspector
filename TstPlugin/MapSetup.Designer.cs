@@ -93,11 +93,13 @@
             // 
             // cboxConfList
             // 
+            this.cboxConfList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxConfList.FormattingEnabled = true;
             this.cboxConfList.Location = new System.Drawing.Point(94, 16);
             this.cboxConfList.Name = "cboxConfList";
             this.cboxConfList.Size = new System.Drawing.Size(171, 20);
             this.cboxConfList.TabIndex = 1;
+            this.cboxConfList.SelectedIndexChanged += new System.EventHandler(this.cboxConfList_SelectedIndexChanged);
             // 
             // gbImgSettings
             // 

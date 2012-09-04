@@ -20,7 +20,7 @@ namespace PxP
 
         IList<FlawTypeNameExtend> TmpFlawTypeName;
         DataSet UnitsData = new DataSet();
-        
+        bool IsFirstLoadConfig = false;
         #endregion
 
         #region Constructor
@@ -29,6 +29,8 @@ namespace PxP
         {
             InitializeComponent();
             InitAllObject();
+            IsFirstLoadConfig = true;
+
         }
 
         ~MapSetup()
@@ -182,6 +184,7 @@ namespace PxP
                 XDocument XDoc = XDocument.Load(FullSystemPath);
                 XElement XConfFile = XDoc.Element("SystemConfig").Element("ConfFile");
                 XConfFile.Value = cboxConfList.SelectedItem.ToString();
+                SystemVariable.ConfigFileName = cboxConfList.SelectedItem.ToString() + ".xml";
                 XDoc.Save(FullSystemPath);
 
                 string ConfPath = Path.GetDirectoryName(
@@ -265,7 +268,7 @@ namespace PxP
                 MapWindowVariable.MapWindowController.SetMapAxis();
                 MapWindowThreadStatus.IsPageRefresh = true;
                 PxPTab.MapThreadEvent.Set();
-                MessageBox.Show("設定已套用！");
+                MessageBox.Show("Success");
             }
             catch (Exception ex)
             {
@@ -446,5 +449,193 @@ namespace PxP
         }
     
         #endregion
+
+        private void cboxConfList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (IsFirstLoadConfig)
+            {
+                string spath = Path.GetDirectoryName(
+                Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\sys_conf\\";
+                string sFullFilePath = spath + "sys.xml";
+                XDocument xdSystemXml = XDocument.Load(sFullFilePath);
+                XDocument XSysConf = xdSystemXml;
+
+                // 儲存 缺陷類型 gvSeries, gvFlawClass 相依 MapWindowVariable.DoffTypeGridSetup
+                MapWindowVariable.DoffTypeGridSetup.Clear();
+                IEnumerable<XElement> XDoffTypeGrid = XSysConf.Element("SystemConfig").Element("DoffTypeGrid").Elements("Column");
+                foreach (XElement el in XDoffTypeGrid)
+                {
+                    DoffGridColumns d = new DoffGridColumns(int.Parse(el.Element("Index").Value), el.Attribute("Name").Value, int.Parse(el.Element("Size").Value));
+                    MapWindowVariable.DoffTypeGridSetup.Add(d);
+                }
+
+                SystemVariable.ConfigFileName = cboxConfList.SelectedItem.ToString() + ".xml";
+                string path = Path.GetDirectoryName(
+                    Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName) + "\\..\\Parameter Files\\CPxP\\conf\\";
+                string FullFilePath = string.Format("{0}{1}", path, SystemVariable.ConfigFileName);
+                XDocument xdSetupXml = XDocument.Load(FullFilePath);
+                XDocument XConf = xdSetupXml;
+                XElement MapVariable = XConf.Element("Config").Element("MapVariable");
+                try
+                {
+                    PxPVariable.ImgRowsSet = int.Parse(MapVariable.Element("ImgRowsSet").Value);
+                    PxPVariable.ImgColsSet = int.Parse(MapVariable.Element("ImgColsSet").Value);
+                    MapWindowVariable.MapProportion = int.Parse(MapVariable.Element("MapProportion").Value);
+                    MapWindowVariable.ShowGridSet = (int.Parse(MapVariable.Element("ShowGridSet").Value) == 1) ? true : false;
+                    MapWindowVariable.MapGridSet = int.Parse(MapVariable.Element("MapGridSet").Value);
+                    MapWindowVariable.MapMDSet = double.Parse(MapVariable.Element("MapMDSet").Value);
+                    MapWindowVariable.MapCDSet = double.Parse(MapVariable.Element("MapCDSet").Value);
+                    MapWindowVariable.SeriesSet = int.Parse(MapVariable.Element("SeriesSet").Value);
+                    MapWindowVariable.BottomAxe = int.Parse(MapVariable.Element("BottomAxe").Value);
+                    MapWindowVariable.MDInver = int.Parse(MapVariable.Element("MDInver").Value);
+                    MapWindowVariable.CDInver = int.Parse(MapVariable.Element("CDInver").Value);
+                    MapWindowVariable.ShowFlag = int.Parse(MapVariable.Element("ShowFlag").Value);
+                    MapWindowVariable.LastMapCDConvertion = double.Parse(MapVariable.Element("LastMapCDConvertion").Value);
+                    MapWindowVariable.LastMapMDConvertion = double.Parse(MapVariable.Element("LastMapMDConvertion").Value);
+
+                    PxPVariable.PageSize = PxPVariable.ImgRowsSet * PxPVariable.ImgColsSet;
+                }
+                catch (Exception ex)
+                {
+                    PxPVariable.ImgRowsSet = 2;
+                    PxPVariable.ImgColsSet = 2;
+                    MapWindowVariable.MapProportion = 0;
+                    MapWindowVariable.ShowGridSet = true;
+                    MapWindowVariable.MapGridSet = 1;
+                    MapWindowVariable.MapMDSet = 3;
+                    MapWindowVariable.MapCDSet = 3;
+                    MapWindowVariable.SeriesSet = 0;
+                    MapWindowVariable.BottomAxe = 0;
+                    MapWindowVariable.MDInver = 0;
+                    MapWindowVariable.CDInver = 0;
+                    MapWindowVariable.LastMapCDConvertion = 1.00;
+                    MapWindowVariable.LastMapMDConvertion = 1.00;
+                }
+
+                IEnumerable<XElement> xMapFlawTypeName = XConf.Element("Config").Element("MapVariable").Elements("FlawTypeName");
+                try
+                {
+                    PxPVariable.FlawTypeName.Clear();
+                    foreach (XElement el in xMapFlawTypeName)
+                    {
+                        FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                        tmp.Display = (int.Parse(el.Element("Display").Value) == 1) ? true : false;
+                        tmp.Color = el.Element("Color").Value.ToString();
+                        tmp.Name = el.Element("Name").Value.ToString();
+                        tmp.Shape = ((Shape)Enum.Parse(typeof(Shape), el.Element("Shape").Value.ToString(), false)).ToGraphic();
+
+                        tmp.FlawType = int.Parse(el.Element("FlawType").Value.ToString());
+                        PxPVariable.FlawTypeName.Add(tmp);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show("載入 /CPxP/conf/setup.xml :  MapDoffTypeGrid \n" + ex.Message);
+                }
+
+                ndImgCols.Value = PxPVariable.ImgColsSet;
+                ndImgRows.Value = PxPVariable.ImgRowsSet;
+
+                cboxMapSize.SelectedIndex = MapWindowVariable.MapProportion;  // 紀錄 Map 比例 0->1:1, 2->2:1, 2->4:3, 3->3:4, 4->16:9
+
+                rbMapGridOff.Checked = !MapWindowVariable.ShowGridSet;
+                rbMapGridOn.Checked = MapWindowVariable.ShowGridSet;
+                switch (MapWindowVariable.SeriesSet)
+                {
+                    case 0:  // 形伏
+                        rbSharp.Checked = true;
+                        break;
+                    case 1:  // 字母
+                        rbLetter.Checked = true;
+                        break;
+                }
+
+                switch (MapWindowVariable.MapGridSet)
+                {
+                    case 0:  // EachCellSize
+                        rbFixCellSize.Checked = true;
+                        tboxFixSizeCD.Text = MapWindowVariable.MapCDSet.ToString();
+                        tboxFixSizeMD.Text = MapWindowVariable.MapMDSet.ToString();
+                        tboxCountSizeCD.Text = "";
+                        tboxCountSizeMD.Text = "";
+                        break;
+
+                    case 1:  // EachCellCount
+                        rbCountSize.Checked = true;
+                        tboxFixSizeCD.Text = "";
+                        tboxFixSizeMD.Text = "";
+                        tboxCountSizeCD.Text = MapWindowVariable.MapCDSet.ToString();
+                        tboxCountSizeMD.Text = MapWindowVariable.MapMDSet.ToString();
+                        break;
+                }
+
+                tboxFixSizeCD.Enabled = rbFixCellSize.Checked;
+                tboxFixSizeMD.Enabled = rbFixCellSize.Checked;
+                tboxCountSizeCD.Enabled = rbCountSize.Checked;
+                tboxCountSizeMD.Enabled = rbCountSize.Checked;
+
+                cboxButtomAxe.SelectedIndex = MapWindowVariable.BottomAxe;
+
+                cbCDInverse.Checked = (MapWindowVariable.CDInver == 1) ? true : false;
+                cbMDInverse.Checked = (MapWindowVariable.MDInver == 1) ? true : false;
+
+                // Change Specify Cell Size Unit Label
+                lbSCCD.Text = PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map CD"]].ItemArray[1].ToString();
+                lbSCMD.Text = PxPVariable.UnitsData.Tables["unit"].Rows[PxPVariable.UnitsKeys["Flaw Map MD"]].ItemArray[1].ToString();
+
+                // Add List here and binding to datagridvew
+                if (PxPVariable.FlawTypeName != null && PxPVariable.FlawTypeName.Count > 0)
+                {
+                    TmpFlawTypeName = new List<FlawTypeNameExtend>();
+                    foreach (FlawTypeNameExtend ft in PxPVariable.FlawTypeName)
+                    {
+                        FlawTypeNameExtend tmp = new FlawTypeNameExtend();
+                        tmp.Color = ft.Color;
+                        tmp.FlawType = ft.FlawType;
+                        tmp.Name = ft.Name;
+                        tmp.Shape = ft.Shape;
+                        tmp.Display = ft.Display;
+                        tmp.Count = ft.Count;
+                        tmp.JobNum = ft.JobNum;
+                        tmp.DoffNum = ft.DoffNum;
+                        TmpFlawTypeName.Add(tmp);
+                    }
+
+                    bsFlawTypeName.DataSource = TmpFlawTypeName;
+                    gvSeries.DataSource = bsFlawTypeName;
+                    
+                    gvSeries.AutoGenerateColumns = false;
+
+                    foreach (DoffGridColumns column in MapWindowVariable.DoffTypeGridSetup)
+                    {
+                        gvSeries.Columns[column.ColumnName].SortMode = DataGridViewColumnSortMode.Automatic;
+                        gvSeries.Columns[column.ColumnName].HeaderText = column.HeaderText;
+                        gvSeries.Columns[column.ColumnName].DisplayIndex = column.Index;
+                        gvSeries.Columns[column.ColumnName].Width = column.Width;
+
+                        if (column.ColumnName == "Shape")
+                        {
+                            DataGridViewComboBoxColumn cboxShape = new DataGridViewComboBoxColumn();
+                            cboxShape.DataPropertyName = "Shape";
+                            cboxShape.HeaderText = column.HeaderText;
+                            cboxShape.DisplayIndex = column.Index;
+                            cboxShape.Width = column.Width;
+                            cboxShape.DataSource = EnumHelper.ToList(typeof(Shape));
+                            cboxShape.DisplayMember = "Value";
+                            cboxShape.ValueMember = "Value";
+
+                            this.gvSeries.Columns.Add(cboxShape);
+                        }
+                    }
+                    // Display and Change Order
+                    gvSeries.Columns["FlawType"].DisplayIndex = 0;
+                    gvSeries.Columns["Display"].Visible = false;
+                    gvSeries.Columns["Count"].Visible = false;
+                    gvSeries.Columns["DoffNum"].Visible = false;
+                    gvSeries.Columns["Shape"].Visible = false;
+                    gvSeries.Columns["JobNum"].Visible = false;
+                }
+            }
+        }
     }
 }

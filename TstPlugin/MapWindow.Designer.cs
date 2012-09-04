@@ -628,7 +628,7 @@
         private System.Windows.Forms.Label lbDateTimeValue;
         private System.Windows.Forms.Label lbPageTotal;
         private System.Windows.Forms.Label lbNothing;
-        private System.Windows.Forms.ComboBox cboxGradeConfigFile;
+        public System.Windows.Forms.ComboBox cboxGradeConfigFile;
         private System.Windows.Forms.Label lbGradeConfig;
         private System.Windows.Forms.Label lbTotalScore;
         private System.Windows.Forms.Label lbTotalScoreValue;

@@ -1026,6 +1026,12 @@ namespace PxP
         {
             GradeSetup gs = new GradeSetup();
             gs.ShowDialog();
+
+            // 組態檔繫結
+            bsGradConfigList.DataSource = GetGradeConfList();
+            cboxGradeConfigFile.DataSource = bsGradConfigList.DataSource;
+
+            
         }
 
         private void cboxGradeConfigFile_SelectedIndexChanged(object sender, EventArgs e)
